@@ -5,10 +5,8 @@ import sqlite3
 from datetime import datetime
 import io
 import requests
-
 from streamlit_mic_recorder import mic_recorder
 import speech_recognition as sr
-from pydub import AudioSegment
 from deep_translator import GoogleTranslator
 from gtts import gTTS
 
@@ -183,24 +181,10 @@ if audio:
     try:
 
         st.info("Converting voice into text...")
-
-        audio_data = io.BytesIO(
-            audio["bytes"]
-        )
-
-        sound = AudioSegment.from_file(
-            audio_data
-        )
-
-        sound = sound.set_frame_rate(16000)
-
-        sound = sound.set_channels(1)
-
-        sound.export(
-            "voice.wav",
-            format="wav"
-        )
-
+        
+        with open("voice.wav", "wb") as f:
+            f.write(audio["bytes"])
+        
         recognizer = sr.Recognizer()
 
         with sr.AudioFile("voice.wav") as source:
@@ -217,7 +201,7 @@ if audio:
         st.write(text)
 
         question = text.lower()
-                # =====================================
+        # =====================================
         # AI Farming Assistant
         # =====================================
 
@@ -343,7 +327,7 @@ if audio:
     except Exception as e:
 
         st.error(f"Error: {e}")
-        # =====================================
+# =====================================
 # Weather Information Module
 # =====================================
 
@@ -538,7 +522,7 @@ if st.button(
     else:
 
         st.info("No previous queries found.")
-        # =====================================
+# =====================================
 # Close Database Connection
 # =====================================
 
