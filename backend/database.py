@@ -1,3 +1,8 @@
+# NOTE: This file is NOT used by the Flask app (app.py).
+# The Flask app does not use SQLite for call sessions.
+# This module creates the farmer profile database schema and is
+# kept for future use (e.g. a dashboard or admin panel).
+
 import sqlite3
 
 def create_database():

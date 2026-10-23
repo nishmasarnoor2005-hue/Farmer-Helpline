@@ -1,15 +1,53 @@
+# ── Python ──────────────────────────────────────────────
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 
+# ── Environment / secrets ────────────────────────────────
 .env
 
+# ── Databases ────────────────────────────────────────────
 *.db
 *.sqlite3
 
+# ── Audio / media ────────────────────────────────────────
 *.wav
 *.mp3
+*.webm
+*.ogg
+*.flac
+converted_audio.wav
+farmer_voice.wav
+farmer_reply.mp3
+farmer_response.mp3
+tts_test.mp3
+temp_call.wav
+voice.wav
 
-*.log
-
+# ── Upload / audio serve folders ─────────────────────────
 uploads/
+audio/
+
+# ── Logs ─────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Dev artifacts / junk ─────────────────────────────────
+1
+cd
+tree.txt
+python_files_short.txt
+cloudflared.exe
+
+# ── Kiro agent internal ──────────────────────────────────
+.agents/
+
+# ── Whisper model cache (large files) ────────────────────
+*.bin
+*.pt
+
+# ── OS ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

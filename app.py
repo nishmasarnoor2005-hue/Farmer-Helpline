@@ -1,530 +1,406 @@
-import streamlit as st
-import pandas as pd
 import os
-import sqlite3
-from datetime import datetime
-import io
-import requests
-from streamlit_mic_recorder import mic_recorder
-import speech_recognition as sr
-from deep_translator import GoogleTranslator
-from gtts import gTTS
+import uuid
+import re
+import time
 
+from flask import Flask, render_template, request, jsonify, send_from_directory
+from faster_whisper import WhisperModel
+from google import genai
+from google.genai import types
+from dotenv import load_dotenv
 
-# =====================================
-# Page Configuration
-# =====================================
+from services.assistant import get_reply, reset_history
+from voice.text_to_speech import speak
 
-st.set_page_config(
-    page_title="Intelligent IVR-Based Farmer Helpline",
-    page_icon="🌾",
-    layout="wide"
+load_dotenv()
+
+# =========================================================
+# FLASK APP
+# =========================================================
+
+app = Flask(__name__)
+
+# =========================================================
+# ABSOLUTE PATHS
+# =========================================================
+
+BASE_DIR      = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+AUDIO_FOLDER  = os.path.join(BASE_DIR, "audio")
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(AUDIO_FOLDER,  exist_ok=True)
+
+# =========================================================
+# WHISPER MODEL
+# =========================================================
+
+print("Loading Whisper medium model...")
+whisper_model = WhisperModel(
+    "medium",
+    device="cpu",
+    compute_type="int8",
+    cpu_threads=4
 )
+print("Whisper model loaded!")
+
+# =========================================================
+# GEMINI CLIENT
+# =========================================================
+
+gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+GEMINI_MODEL  = "gemini-3.5-flash"
+
+# =========================================================
+# LANGUAGE MAPS
+# =========================================================
+
+# Name → ISO code  (what Gemini returns → what Whisper needs)
+LANG_NAME_TO_CODE = {
+    "kannada":   "kn",
+    "english":   "en",
+    "hindi":     "hi",
+    "malayalam": "ml",
+    "tamil":     "ta",
+    "telugu":    "te",
+    "marathi":   "mr",
+    "urdu":      "ur",
+}
+
+SUPPORTED_CODES = set(LANG_NAME_TO_CODE.values())
+
+LANG_CODE_TO_NAME = {
+    "kn": "Kannada",
+    "en": "English",
+    "hi": "Hindi",
+    "ml": "Malayalam",
+    "ta": "Tamil",
+    "te": "Telugu",
+    "mr": "Marathi",
+    "ur": "Urdu",
+}
+
+def get_language_name(code):
+    return LANG_CODE_TO_NAME.get(code, "English")
 
 
-# =====================================
-# Database
-# =====================================
+# =========================================================
+# STEP 1 — GEMINI DETECTS LANGUAGE FROM AUDIO DIRECTLY
+# This is the key fix: we ask Gemini to listen to the raw audio
+# instead of relying on Whisper's mis-transcribed text.
+# =========================================================
 
-conn = sqlite3.connect(
-    "farmer_helpline.db",
-    check_same_thread=False
-)
+def detect_language_from_audio(audio_path: str) -> str:
+    """
+    Upload the audio to Gemini and ask it to identify the spoken language.
+    Returns an ISO language code (e.g. 'kn', 'hi').
+    Falls back to 'kn' (Kannada) as the default for this app's audience.
+    """
+    try:
+        print("   Uploading audio to Gemini for language detection...")
 
-cursor = conn.cursor()
+        # Upload the audio file
+        with open(audio_path, "rb") as f:
+            audio_bytes = f.read()
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS farmers(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT,
-    mobile TEXT,
-    location TEXT,
-    language TEXT,
-    crop TEXT
-)
-""")
+        # Use inline audio data
+        response = gemini_client.models.generate_content(
+            model=GEMINI_MODEL,
+            contents=[
+                types.Part.from_bytes(
+                    data=audio_bytes,
+                    mime_type="audio/webm",
+                ),
+                (
+                    "Listen to this audio carefully.\n"
+                    "Identify ONLY the spoken language.\n"
+                    "Reply with exactly ONE word from this list: "
+                    "Kannada, English, Hindi, Malayalam, Tamil, Telugu, Marathi, Urdu\n"
+                    "Do not say anything else. Just one word."
+                ),
+            ],
+            config=types.GenerateContentConfig(
+                temperature=0.0,
+                max_output_tokens=5,
+            ),
+        )
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS queries(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    question TEXT,
-    response TEXT,
-    date_time TEXT
-)
-""")
+        detected = response.text.strip().lower().split()[0]
+        code = LANG_NAME_TO_CODE.get(detected)
 
-conn.commit()
+        if code:
+            print(f"   ✅ Gemini audio detection: '{detected}' → {code}")
+            return code
+        else:
+            print(f"   ⚠️  Gemini returned unexpected: '{detected}' — defaulting to kn")
+            return "kn"
 
-
-# =====================================
-# Title
-# =====================================
-
-st.title("🌾 Intelligent IVR-Based Farmer Helpline")
-
-st.write(
-    "AI-based multilingual farmer assistance system using Speech Recognition and Generative AI."
-)
+    except Exception as e:
+        print(f"   ⚠️  Gemini audio detection failed: {e}")
+        return "kn"   # Default to Kannada for this helpline's primary audience
 
 
-# =====================================
-# Farmer Registration
-# =====================================
+# =========================================================
+# STEP 2 — WHISPER TRANSCRIPTION WITH FORCED LANGUAGE
+# Now that we know the language, Whisper transcribes correctly.
+# =========================================================
 
-st.subheader("👨‍🌾 Farmer Registration Module")
+# Noise gate — segments with no_speech_prob above this are discarded
+NO_SPEECH_THRESHOLD = 0.6
 
-with st.form("registration"):
 
-    name = st.text_input("👨‍🌾 Farmer Name")
-
-    mobile = st.text_input("📱 Mobile Number")
-
-    location = st.text_input("📍 Village / Location")
-
-    language = st.selectbox(
-        "🗣 Preferred Language",
-        [
-            "Kannada",
-            "Telugu",
-            "Tamil",
-            "Malayalam",
-            "Hindi",
-            "English"
-        ]
+def transcribe_with_language(audio_path: str, language_code: str) -> str:
+    """
+    Transcribe audio with the language forced.
+    Filters out background noise using Whisper's no_speech_prob score.
+    Returns clean transcribed text.
+    """
+    segments, _ = whisper_model.transcribe(
+        audio_path,
+        beam_size=5,
+        vad_filter=True,
+        vad_parameters=dict(
+            min_silence_duration_ms=400,
+            speech_pad_ms=200,
+        ),
+        condition_on_previous_text=False,
+        language=language_code,   # FORCED — no guessing
+        temperature=0.0,
+        no_speech_threshold=NO_SPEECH_THRESHOLD,   # noise gate
+        compression_ratio_threshold=2.0,            # filter hallucinations
+        log_prob_threshold=-0.8,                    # filter low-confidence output
     )
 
-    crop = st.text_input("🌱 Main Crop")
+    clean_parts = []
+    for seg in segments:
+        # Additional noise gate: skip segment if Whisper is not confident
+        if seg.no_speech_prob > NO_SPEECH_THRESHOLD:
+            print(f"   🔇 Skipping noisy segment (no_speech_prob={seg.no_speech_prob:.2f}): {seg.text[:30]}")
+            continue
+        clean_parts.append(seg.text.strip())
 
-    register = st.form_submit_button("Register Farmer")
+    return " ".join(clean_parts).strip()
 
 
-if register:
+# =========================================================
+# HALLUCINATION CLEANER
+# Whisper sometimes outputs repeated characters/syllables
+# (e.g. ಲ್ಲ್ಲ್ಲ್ಲ್ಲ or lllll) when audio quality is poor.
+# This removes them and sends the cleaned text to Gemini
+# to reconstruct the intended meaning.
+# =========================================================
 
-    if name and mobile and location and crop:
+def clean_hallucination(text: str, language_code: str) -> str:
+    """
+    Detect and clean Whisper hallucinations:
+    - Repeated Unicode combining characters (virama clusters in Kannada etc.)
+    - Repeated Latin characters
+    - Then ask Gemini to reconstruct the intended sentence if needed.
+    """
 
-        farmer = pd.DataFrame(
-            {
-                "Name":[name],
-                "Mobile":[mobile],
-                "Location":[location],
-                "Language":[language],
-                "Crop":[crop]
-            }
-        )
+    # 1. Remove runs of 3+ identical characters (e.g. ್ಲ್ಲ್ಲ or lllll)
+    cleaned = re.sub(r'(.)\1{2,}', r'\1\1', text)
 
-        if os.path.exists("farmers.csv"):
+    # 2. Remove runs of repeated Kannada/Indic syllable clusters
+    #    Pattern: same consonant+virama repeating 3+ times
+    cleaned = re.sub(r'([\u0C80-\u0CFF][\u0CCD]){3,}', '', cleaned)
+    cleaned = re.sub(r'([\u0D00-\u0D7F][\u0D4D]){3,}', '', cleaned)  # Malayalam
+    cleaned = re.sub(r'([\u0900-\u097F][\u094D]){3,}', '', cleaned)  # Hindi
 
-            old = pd.read_csv("farmers.csv")
+    # 3. Collapse multiple spaces
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
 
-            farmer = pd.concat(
-                [old, farmer],
-                ignore_index=True
+    # 4. If text changed significantly, ask Gemini to reconstruct meaning
+    if len(cleaned) < len(text) * 0.7:
+        lang_name = get_language_name(language_code)
+        print(f"   🔧 Hallucination detected. Asking Gemini to reconstruct...")
+        try:
+            response = gemini_client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=(
+                    f"This is a noisy speech transcription in {lang_name} with repeated characters removed.\n"
+                    f"Reconstruct the most likely intended sentence in {lang_name}.\n"
+                    f"Reply with ONLY the corrected sentence, nothing else.\n\n"
+                    f"Noisy text: {cleaned}"
+                ),
+                config=types.GenerateContentConfig(
+                    temperature=0.1,
+                    max_output_tokens=100,
+                ),
             )
+            reconstructed = response.text.strip()
+            print(f"   ✅ Reconstructed: {reconstructed}")
+            return reconstructed
+        except Exception as e:
+            print(f"   ⚠️  Reconstruction failed: {e}")
+            return cleaned
 
-        farmer.to_csv(
-            "farmers.csv",
-            index=False
-        )
-
-        cursor.execute(
-            """
-            INSERT INTO farmers
-            (name,mobile,location,language,crop)
-
-            VALUES (?,?,?,?,?)
-            """,
-            (
-                name,
-                mobile,
-                location,
-                language,
-                crop
-            )
-        )
-
-        conn.commit()
-
-        st.success("✅ Farmer Registered Successfully!")
-
-        st.dataframe(farmer)
-
-    else:
-
-        st.warning("Please fill all details.")
+    return cleaned
 
 
-# =====================================
-# Voice Module
-# =====================================
+# =========================================================
+# HOME PAGE
+# =========================================================
 
-st.divider()
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-st.subheader("🎤 Ask Your Farming Question")
 
-st.write("Record your farming problem using voice.")
+# =========================================================
+# PROCESS FARMER VOICE
+# =========================================================
 
-audio = mic_recorder(
-    start_prompt="🎤 Start Recording",
-    stop_prompt="⏹ Stop Recording",
-    key="voice"
-)
+@app.route("/process_audio", methods=["POST"])
+def process_audio():
 
-if audio:
-
-    st.success("✅ Voice Recorded Successfully!")
-
-    st.audio(
-        audio["bytes"],
-        format="audio/wav"
-    )
+    request_id     = uuid.uuid4().hex
+    input_path     = os.path.join(UPLOAD_FOLDER, f"farmer_voice_{request_id}.webm")
+    audio_filename = f"farmer_reply_{request_id}.mp3"
+    audio_dest     = os.path.join(AUDIO_FOLDER, audio_filename)
 
     try:
 
-        st.info("Converting voice into text...")
-        
-        with open("voice.wav", "wb") as f:
-            f.write(audio["bytes"])
-        
-        recognizer = sr.Recognizer()
+        # -------------------------------------------------
+        # RECEIVE AUDIO
+        # -------------------------------------------------
 
-        with sr.AudioFile("voice.wav") as source:
+        if "audio" not in request.files:
+            return jsonify({"success": False, "error": "No audio received"})
 
-            voice = recognizer.record(source)
+        audio_file = request.files["audio"]
 
-        text = recognizer.recognize_google(
-            voice,
-            language="en-IN"
-        )
+        if audio_file.filename == "":
+            return jsonify({"success": False, "error": "Empty audio file"})
 
-        st.success("📝 Your Question")
+        audio_file.save(input_path)
+        print(f"\n🎙️  Audio received [{request_id[:8]}]")
 
-        st.write(text)
+        # -------------------------------------------------
+        # STEP 1 — Gemini identifies language from audio
+        # -------------------------------------------------
 
-        question = text.lower()
-        # =====================================
-        # AI Farming Assistant
-        # =====================================
+        print("⏳ Step 1: Detecting language from audio (Gemini)...")
+        language_code = detect_language_from_audio(input_path)
+        language_name = get_language_name(language_code)
+        print(f"   Language confirmed: {language_code} ({language_name})")
 
-        st.divider()
+        # -------------------------------------------------
+        # STEP 2 — Whisper transcribes with forced language + noise gate
+        # -------------------------------------------------
 
-        st.subheader("🤖 AI Farming Assistant")
+        print(f"⏳ Step 2: Transcribing as {language_name} (Whisper)...")
+        text = transcribe_with_language(input_path, language_code)
+        print(f"   Raw transcription: {text[:80]}")
 
-        if "yellow" in question or "leaf" in question:
+        if not text:
+            return jsonify({
+                "success": False,
+                "error": "No clear speech detected. Please speak closer to the microphone."
+            })
 
-            response = """
-🌱 Possible reasons:
+        # Clean hallucinations (repeated characters from poor audio)
+        text = clean_hallucination(text, language_code)
+        print(f"   Clean text: {text[:80]}")
 
-• Nitrogen deficiency
-• Excess water
-• Pest or disease attack
+        # -------------------------------------------------
+        # GET AI REPLY
+        # -------------------------------------------------
 
-✅ Recommended actions:
+        print("⏳ Step 3: Getting AI reply (Gemini)...")
+        try:
+            reply = get_reply(text, language_code)
+        except Exception as e:
+            print(f"   Assistant Error: {e}")
+            reply = "Sorry farmer, I could not process your question. Please try again."
 
-• Check soil moisture
-• Apply balanced fertilizer
-• Inspect leaves for pests
-"""
+        print(f"   Reply: {reply[:80]}")
 
-        elif "pest" in question or "insect" in question:
+        # -------------------------------------------------
+        # TEXT TO SPEECH
+        # -------------------------------------------------
 
-            response = """
-🐛 Pest Control Advice
+        print("⏳ Step 4: Generating voice (Edge TTS)...")
+        result = speak(reply, language_code, output_path=audio_dest)
 
-• Inspect crops regularly
-• Remove infected leaves
-• Use suitable organic pesticides
-"""
+        if not result or not os.path.exists(audio_dest):
+            return jsonify({"success": False, "error": "AI voice file was not created"})
 
-        elif "water" in question or "irrigation" in question:
+        print("✅ Done.\n")
 
-            response = """
-💧 Irrigation Advice
-
-• Avoid overwatering
-• Maintain proper soil moisture
-• Use drip irrigation
-"""
-
-        elif "fertilizer" in question:
-
-            response = """
-🌿 Fertilizer Advice
-
-• Perform soil testing
-• Use balanced NPK fertilizer
-• Avoid excessive chemicals
-"""
-
-        else:
-
-            response = """
-🌾 General Farming Advice
-
-• Monitor crop health regularly
-• Maintain irrigation
-• Use quality seeds
-"""
-
-        language_code = {
-            "Kannada": "kn",
-            "Telugu": "te",
-            "Tamil": "ta",
-            "Malayalam": "ml",
-            "Hindi": "hi",
-            "English": "en"
-        }
-
-        selected_language = language_code[language]
-
-        if selected_language == "en":
-
-            translated_response = response
-
-        else:
-
-            translated_response = GoogleTranslator(
-                source="en",
-                target=selected_language
-            ).translate(response)
-
-        st.success("AI Recommendation")
-
-        st.write(translated_response)
-
-        cursor.execute(
-            """
-            INSERT INTO queries
-            (question,response,date_time)
-
-            VALUES (?,?,?)
-            """,
-            (
-                text,
-                translated_response,
-                datetime.now().strftime("%d-%m-%Y %H:%M")
-            )
-        )
-
-        conn.commit()
-
-        # =====================================
-        # Text To Speech
-        # =====================================
-
-        st.divider()
-
-        st.subheader("🔊 AI Voice Response")
-
-        tts = gTTS(
-            text=translated_response,
-            lang=selected_language
-        )
-
-        tts.save("farmer_response.mp3")
-
-        st.audio("farmer_response.mp3")
+        return jsonify({
+            "success":       True,
+            "text":          text,
+            "language":      language_name,
+            "language_code": language_code,
+            "reply":         reply,
+            "audio_url":     f"/audio/{audio_filename}",
+            "request_id":    request_id,
+        })
 
     except Exception as e:
+        print(f"\n❌ SERVER ERROR: {e}")
+        return jsonify({"success": False, "error": str(e)})
 
-        st.error(f"Error: {e}")
-# =====================================
-# Weather Information Module
-# =====================================
-
-st.divider()
-
-st.subheader("🌦 Weather Information")
-
-city = st.text_input(
-    "📍 Enter Village / City Name"
-)
-
-API_KEY = "b938ffa4fdada0d8a9e6e636c44f8b80"
-
-if st.button("🌦 Get Weather", key="weather_btn"):
-
-    if city:
-
-        url = (
-            f"https://api.openweathermap.org/data/2.5/weather?"
-            f"q={city}&appid={API_KEY}&units=metric"
-        )
-
-        result = requests.get(url)
-
-        data = result.json()
-
-        if data.get("cod") == 200:
-
-            temp = data["main"]["temp"]
-            humidity = data["main"]["humidity"]
-            condition = data["weather"][0]["description"]
-
-            st.success("✅ Weather Details")
-
-            st.write(f"🌡 Temperature: {temp} °C")
-            st.write(f"💧 Humidity: {humidity}%")
-            st.write(f"☁ Condition: {condition}")
-
-            st.subheader("🌱 Farming Advice")
-
-            if temp > 35:
-
-                st.info(
-                    "🔥 High temperature. Increase irrigation."
-                )
-
-            elif "rain" in condition.lower():
-
-                st.info(
-                    "🌧 Rain expected. Avoid extra watering."
-                )
-
-            else:
-
-                st.info(
-                    "🌾 Weather is suitable for farming."
-                )
-
-        else:
-
-            st.error("❌ Location not found")
-
-    else:
-
-        st.warning("Please enter a city or village name.")
+    finally:
+        # Always clean up the uploaded audio
+        if os.path.exists(input_path):
+            try:
+                os.remove(input_path)
+            except Exception:
+                pass
 
 
-# =====================================
-# Crop Market Price Module
-# =====================================
+# =========================================================
+# CLEANUP AUDIO AFTER PLAYBACK
+# =========================================================
 
-st.divider()
-
-st.subheader("💰 Crop Market Price Information")
-
-crop_prices = {
-
-    "Tomato": {
-        "price": 35,
-        "market": "Mysore APMC"
-    },
-
-    "Potato": {
-        "price": 28,
-        "market": "Mysore APMC"
-    },
-
-    "Rice": {
-        "price": 45,
-        "market": "Mandya Market"
-    },
-
-    "Onion": {
-        "price": 32,
-        "market": "Mysore APMC"
-    },
-
-    "Sugarcane": {
-        "price": 380,
-        "market": "Hassan Market"
-    },
-
-    "Maize": {
-        "price": 24,
-        "market": "Chikkamagaluru Market"
-    }
-
-}
-
-selected_crop = st.selectbox(
-    "🌱 Select Crop",
-    list(crop_prices.keys())
-)
-
-if st.button(
-    "💰 Check Market Price",
-    key="market_btn"
-):
-
-    price_data = crop_prices[selected_crop]
-
-    price = price_data["price"]
-    market = price_data["market"]
-
-    st.success("✅ Current Market Information")
-
-    st.write(f"🌱 Crop: {selected_crop}")
-    st.write(f"💰 Price: ₹{price}/kg")
-    st.write(f"📍 Market: {market}")
-
-    st.subheader("🤖 AI Selling Advice")
-
-    if price >= 35:
-
-        st.info("""
-✅ Price is good.
-
-Recommendation:
-
-• Consider selling now.
-• Compare nearby markets.
-• Avoid unnecessary storage.
-""")
-
-    elif price >= 25:
-
-        st.info("""
-⚠ Average price.
-
-Recommendation:
-
-• Wait for a few days.
-• Sell partially if needed.
-• Monitor daily prices.
-""")
-
-    else:
-
-        st.info("""
-❌ Low market price.
-
-Recommendation:
-
-• Store the crop if possible.
-• Wait for a better price.
-• Explore alternative markets.
-""")
+@app.route("/cleanup_audio", methods=["POST"])
+def cleanup_audio():
+    data     = request.get_json(silent=True) or {}
+    filename = data.get("filename", "")
+    if filename.startswith("farmer_reply_") and filename.endswith(".mp3"):
+        path = os.path.join(AUDIO_FOLDER, filename)
+        try:
+            os.remove(path)
+        except Exception:
+            pass
+    return jsonify({"success": True})
 
 
-# =====================================
-# Farmer Query History
-# =====================================
+# =========================================================
+# RESET CALL
+# =========================================================
 
-st.divider()
+@app.route("/reset_call", methods=["POST"])
+def reset_call():
+    reset_history()
+    return jsonify({"success": True})
 
-st.subheader("📜 Farmer Query History")
 
-if st.button(
-    "View Previous Queries",
-    key="history_btn"
-):
+# =========================================================
+# SERVE AUDIO
+# =========================================================
 
-    history = pd.read_sql_query(
-        "SELECT * FROM queries",
-        conn
+@app.route("/audio/<filename>")
+def get_audio(filename):
+    return send_from_directory(AUDIO_FOLDER, filename)
+
+
+# =========================================================
+# START SERVER
+# =========================================================
+
+if __name__ == "__main__":
+    print("\n" + "=" * 60)
+    print("📞 AI FARMER HELPLINE SERVER STARTED")
+    print("=" * 60)
+    print("\n🌐 Open this in your browser:")
+    print("http://127.0.0.1:5000")
+    print("\n🎙️  Browser microphone interface ready.\n")
+
+    app.run(
+        debug=False,
+        host="0.0.0.0",
+        port=5000
     )
-
-    if len(history) > 0:
-
-        st.dataframe(history)
-
-    else:
-
-        st.info("No previous queries found.")
-# =====================================
-# Close Database Connection
-# =====================================
-
-conn.close()
-        
