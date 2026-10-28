@@ -18,6 +18,8 @@ from google.genai import types
 from dotenv import load_dotenv
 
 from services.assistant import get_reply, reset_history
+from services import location_extractor
+from services import weather_service
 from voice.text_to_speech import speak
 from frontend.login import AdminUser, verify_admin
 from frontend.dashboard import get_dashboard_data, get_interaction_history, service_health
@@ -287,8 +289,16 @@ def clean_hallucination(text: str, language_code: str) -> str:
 
 
 # =========================================================
-# HOME PAGE
+# WEATHER KEYWORDS (triggers location + weather lookup)
 # =========================================================
+
+WEATHER_KEYWORDS = [
+    "weather", "rain", "temperature", "forecast", "climate",
+    "mausam", "barish", "garmi", "thand", "paani",
+]
+
+
+
 
 @app.route("/")
 def home():
@@ -366,14 +376,34 @@ def process_audio():
         print(f"   Clean text: {text[:80]}")
 
         # -------------------------------------------------
-        # GET AI REPLY
+        # GET AI REPLY (with optional weather context)
         # -------------------------------------------------
+
+        # Check whether the transcript mentions weather-related keywords
+        text_lower = text.lower()
+        context_data = None
+        if any(kw in text_lower for kw in WEATHER_KEYWORDS):
+            print("⏳ Weather keyword detected — looking up location & weather...")
+            try:
+                loc = location_extractor.extract_location(text)
+                if loc:
+                    print(f"   Location found: {loc.get('address')}")
+                    weather_result = weather_service.get_weather(loc)
+                    if weather_result:
+                        context_data = {"weather": weather_result}
+                        print(f"   Weather: {weather_result.get('temperature')}°C, {weather_result.get('description')}")
+                    else:
+                        print("   ⚠️  Weather fetch returned None — proceeding without weather context")
+                else:
+                    print("   ⚠️  No location found in transcript — proceeding without weather context")
+            except Exception as weather_err:
+                print(f"   ⚠️  Weather lookup error (non-fatal): {weather_err}")
 
         print("⏳ Step 3: Getting AI reply (Gemini)...")
         reply_status = "success"
         error_cat = None
         try:
-            reply = get_reply(text, language_code)
+            reply = get_reply(text, language_code, context_data)
         except Exception as e:
             print(f"   Assistant Error: {e}")
             reply = "Sorry farmer, I could not process your question. Please try again."

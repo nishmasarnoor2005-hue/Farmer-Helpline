@@ -64,8 +64,8 @@ _history = []
 MAX_HISTORY = 6  # Keep last 6 turns (3 farmer + 3 AI)
 
 
-def _build_prompt(farmer_text: str, language_code: str) -> str:
-    """Build the full prompt with conversation history."""
+def _build_prompt(farmer_text: str, language_code: str, context_data: dict | None = None) -> str:
+    """Build the full prompt with conversation history and optional context data."""
 
     language_name = LANGUAGE_NAMES.get(language_code, "English")
 
@@ -75,8 +75,21 @@ def _build_prompt(farmer_text: str, language_code: str) -> str:
         for turn in _history[-MAX_HISTORY:]:
             history_text += f"Farmer: {turn['farmer']}\nAssistant: {turn['reply']}\n"
 
+    # Inject verified weather context so Gemini never invents values
+    weather_block = ""
+    if context_data and context_data.get("weather"):
+        w = context_data["weather"]
+        weather_block = (
+            "\n\n[WEATHER CONTEXT — use ONLY this data, do NOT invent or estimate values]\n"
+            f"Location: {w.get('location')}\n"
+            f"Temp: {w.get('temperature')}°C\n"
+            f"Condition: {w.get('description')}\n"
+            f"Humidity: {w.get('humidity')}%"
+        )
+
     prompt = (
         f"{SYSTEM_PROMPT}"
+        f"{weather_block}"
         f"{history_text}"
         f"\nFarmer's language: {language_name} (code: {language_code})"
         f"\nFarmer says: {farmer_text}"
@@ -90,13 +103,16 @@ def _build_prompt(farmer_text: str, language_code: str) -> str:
 # MAIN REPLY FUNCTION
 # =========================================================
 
-def get_reply(text: str, language: str) -> str:
+def get_reply(text: str, language: str, context_data: dict | None = None) -> str:
     """
     Get an AI-generated reply from Gemini for the farmer's query.
 
     Args:
         text: Transcribed text of what the farmer said.
         language: ISO language code detected by Whisper (e.g. 'kn', 'hi').
+        context_data: Optional dict with extra context (e.g. {'weather': {...}}).
+                      When provided, the data is injected into the prompt so
+                      Gemini uses real values rather than inventing them.
 
     Returns:
         A reply string in the farmer's language.
@@ -105,7 +121,7 @@ def get_reply(text: str, language: str) -> str:
     global _history
 
     try:
-        prompt = _build_prompt(text, language)
+        prompt = _build_prompt(text, language, context_data)
 
         response = client.models.generate_content(
             model=MODEL,
