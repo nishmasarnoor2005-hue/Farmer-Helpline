@@ -756,6 +756,75 @@ def admin_dashboard():
 
 
 # =========================================================
+# TELEPHONY ROUTES (Mock adapter — real Twilio pending credentials)
+# See docs/TELEPHONY_SETUP.md
+# =========================================================
+
+@app.route("/telephony/status", methods=["GET"])
+def telephony_status():
+    """Report telephony provider status (no auth required)."""
+    return jsonify({
+        "provider": "mock",
+        "status": "active",
+        "note": (
+            "Real telephony pending Twilio credentials — "
+            "see docs/TELEPHONY_SETUP.md"
+        ),
+    })
+
+
+@app.route("/telephony/incoming", methods=["POST"])
+def telephony_incoming():
+    """
+    Start a new mock call session.
+
+    Accepts optional JSON body with caller metadata.
+    Returns the session_id for subsequent /telephony/respond calls.
+    """
+    from services.telephony.mock_adapter import MockAdapter
+
+    call_data = request.get_json(silent=True) or {}
+    adapter = MockAdapter()
+    session_id = adapter.handle_incoming_call(call_data)
+
+    # Store the adapter in app context keyed by session_id so /respond can use it.
+    # We use a simple module-level dict as a lightweight in-process store.
+    _telephony_sessions[session_id] = adapter
+
+    return jsonify({
+        "session_id": session_id,
+        "status": "active",
+        "message": "Mock call started",
+    })
+
+
+@app.route("/telephony/respond", methods=["POST"])
+def telephony_respond():
+    """
+    Send a text message into a mock call session and receive an echo response.
+
+    Request body: {"session_id": str, "message": str}
+    """
+    data = request.get_json(silent=True) or {}
+    session_id = data.get("session_id", "")
+    message = data.get("message", "")
+
+    if session_id not in _telephony_sessions:
+        return jsonify({"error": "Unknown session_id"}), 400
+
+    return jsonify({
+        "session_id": session_id,
+        "response": f"Mock response: {message}",
+        "note": "Real audio pipeline pending telephony integration",
+    })
+
+
+# In-process session store for mock telephony adapter instances.
+# Keyed by session_id; populated by /telephony/incoming.
+_telephony_sessions: dict = {}
+
+
+# =========================================================
 # START SERVER
 # =========================================================
 
