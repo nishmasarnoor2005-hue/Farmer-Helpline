@@ -2,7 +2,7 @@
 Tests for services/intent_service.py
 """
 import pytest
-from services.intent_service import classify_intent, IntentClassifier
+from services.intent_service import classify_intent, IntentClassifier, load_training_data, evaluate
 
 
 class TestIntentClassifier:
@@ -75,3 +75,49 @@ class TestIntentClassifier:
         assert "confidence" in result
         assert "method" in result
         assert "match_count" in result
+
+
+class TestTrainingDataset:
+
+    def test_load_training_data_returns_list(self):
+        """load_training_data() must return a list."""
+        data = load_training_data()
+        assert isinstance(data, list)
+
+    def test_load_training_data_min_size(self):
+        """Dataset must contain at least 80 examples."""
+        data = load_training_data()
+        assert len(data) >= 80, f"Expected >= 80 entries, got {len(data)}"
+
+    def test_each_item_has_required_keys(self):
+        """Every item must have 'text', 'language', and 'intent' keys."""
+        data = load_training_data()
+        for i, item in enumerate(data):
+            assert "text" in item, f"Item {i} missing 'text'"
+            assert "language" in item, f"Item {i} missing 'language'"
+            assert "intent" in item, f"Item {i} missing 'intent'"
+
+    def test_evaluate_returns_dict_with_required_keys(self):
+        """evaluate() must return a dict containing all required keys."""
+        result = evaluate()
+        assert isinstance(result, dict)
+        for key in ("accuracy", "per_class", "total_examples", "test_examples", "method"):
+            assert key in result, f"Missing key '{key}' in evaluate() result"
+
+    def test_evaluate_accuracy_in_range(self):
+        """Accuracy value must be between 0.0 and 1.0 inclusive."""
+        result = evaluate()
+        assert 0.0 <= result["accuracy"] <= 1.0, (
+            f"Accuracy out of range: {result['accuracy']}"
+        )
+
+    def test_evaluate_method_field(self):
+        """evaluate() method field must be 'rule_based_evaluation'."""
+        result = evaluate()
+        assert result["method"] == "rule_based_evaluation"
+
+    def test_evaluate_example_counts_consistent(self):
+        """test_examples must be <= total_examples and > 0."""
+        result = evaluate()
+        assert result["test_examples"] > 0
+        assert result["test_examples"] <= result["total_examples"]

@@ -3,17 +3,98 @@ Intent Classifier Service
 --------------------------
 Rule-based intent detection for farmer voice queries.
 
-DATASET_STATUS: No labeled dataset is available for ML training.
-All classification is rule-based (keyword matching) until a labeled
-dataset with 'intent'/'label' columns is provided.
+DATASET_STATUS: Hand-crafted dataset available (80+ examples).
+All classification is rule-based (keyword matching).
 """
 
 from __future__ import annotations
+import json
+import os
 
 # ---------------------------------------------------------------
 # Dataset status — checked by tests and the forecast service
 # ---------------------------------------------------------------
-DATASET_STATUS = "No labeled dataset available. Rule-based fallback only."
+DATASET_STATUS = "Hand-crafted dataset: 80+ examples, 8 intents, 4 languages. Rule-based classifier, not ML-trained."
+
+# Path to the hand-crafted training dataset
+_DATASET_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "intent_training_data.json")
+
+
+def load_training_data() -> list[dict]:
+    """
+    Load the hand-crafted labeled intent dataset from disk.
+
+    Returns
+    -------
+    list of dicts, each with keys: 'text', 'language', 'intent'.
+    """
+    with open(_DATASET_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def evaluate(test_fraction: float = 0.2) -> dict:
+    """
+    Evaluate the rule-based classifier against the hand-crafted dataset.
+
+    Uses a deterministic split: the last int(len * test_fraction) entries
+    (by index) form the test set — no random shuffling.
+
+    Parameters
+    ----------
+    test_fraction : float
+        Fraction of dataset to use as test set (default 0.2).
+
+    Returns
+    -------
+    dict with keys:
+        accuracy        : float
+        per_class       : dict[str, dict]  — precision/recall per intent
+        total_examples  : int
+        test_examples   : int
+        method          : str
+    """
+    data = load_training_data()
+    total = len(data)
+    n_test = int(total * test_fraction)
+    test_set = data[total - n_test:]
+
+    # Counters for precision/recall: {intent: {tp, fp, fn}}
+    counts: dict[str, dict[str, int]] = {}
+    for item in data:
+        intent = item["intent"]
+        if intent not in counts:
+            counts[intent] = {"tp": 0, "fp": 0, "fn": 0}
+
+    correct = 0
+    for item in test_set:
+        true_intent = item["intent"]
+        predicted = _classifier.classify(item["text"])["intent"]
+        if predicted == true_intent:
+            correct += 1
+            counts.setdefault(true_intent, {"tp": 0, "fp": 0, "fn": 0})
+            counts[true_intent]["tp"] += 1
+        else:
+            counts.setdefault(true_intent, {"tp": 0, "fp": 0, "fn": 0})
+            counts.setdefault(predicted, {"tp": 0, "fp": 0, "fn": 0})
+            counts[true_intent]["fn"] += 1
+            counts[predicted]["fp"] += 1
+
+    accuracy = correct / n_test if n_test > 0 else 0.0
+
+    per_class: dict[str, dict[str, float]] = {}
+    for intent, c in counts.items():
+        tp, fp, fn = c["tp"], c["fp"], c["fn"]
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        per_class[intent] = {"precision": precision, "recall": recall}
+
+    return {
+        "accuracy": accuracy,
+        "per_class": per_class,
+        "total_examples": total,
+        "test_examples": n_test,
+        "method": "rule_based_evaluation",
+    }
 
 # ---------------------------------------------------------------
 # Intent keyword definitions
