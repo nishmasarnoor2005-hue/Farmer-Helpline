@@ -24,6 +24,7 @@ from services import weather_service
 from services import market_service
 from services import scheme_service
 from services.intent_service import classify_intent
+from services.forecast_service import get_price_forecast, _MARKET_DATA as _FORECAST_DATA
 from voice.text_to_speech import speak
 from frontend.login import AdminUser, verify_admin
 from frontend.dashboard import get_dashboard_data, get_interaction_history, service_health
@@ -583,6 +584,21 @@ def process_audio():
                     print("   ⚠️  No matching market data found for query")
             except Exception as market_err:
                 print(f"   ⚠️  Market lookup error (non-fatal): {market_err}")
+
+            # Price forecast (historical statistics) — extract crop from text
+            try:
+                known_crops = list({row["crop"] for row in _FORECAST_DATA})
+                matched_crop = next(
+                    (c for c in known_crops if c in text_lower), None
+                )
+                if matched_crop:
+                    forecast_result = get_price_forecast(matched_crop)
+                    if context_data is None:
+                        context_data = {}
+                    context_data["price_forecast"] = forecast_result
+                    print(f"   Forecast data: available={forecast_result.get('available')} crop={matched_crop}")
+            except Exception as forecast_err:
+                print(f"   ⚠️  Forecast lookup error (non-fatal): {forecast_err}")
 
         # Government scheme lookup: intent OR keyword match
         if detected_intent == "government_scheme" or any(kw in text_lower for kw in SCHEME_KEYWORDS):

@@ -1,74 +1,144 @@
 """
-Price Forecast Service — STUB
-------------------------------
-Forecasting is not yet implemented. A minimum of 2 years of daily
-historical price records is required to build a reliable model.
+Price Forecast Service — Historical Statistics
+-----------------------------------------------
+Provides statistical summaries from historical sample data loaded from
+market_prices_sample.csv. This is NOT a trained forecasting model.
 
-The market_prices_sample.csv file in this project contains only
-representative sample rows (29 data rows) — far too few for
-time-series forecasting.
-
-When adequate data becomes available:
-  1. Populate a time-series dataset with at least 730 daily price rows
-     per crop/market combination.
-  2. Replace the body of get_price_forecast() with an actual model
-     (e.g. Prophet, ARIMA, or a simple linear extrapolation).
-  3. Update DATASET_STATUS to reflect the new data source.
+When adequate data becomes available (2+ years of daily records per
+crop/market combination), replace the statistics logic with an actual
+time-series model (e.g. Prophet, ARIMA).
 """
 
 from __future__ import annotations
 import csv
 import os
+import statistics
 
-DATASET_STATUS = "No adequate historical dataset available for forecasting."
+DATASET_STATUS = (
+    "Historical sample data: ~29 rows, Karnataka markets, 2023-2024. "
+    "Statistical summary only — not a trained forecasting model."
+)
 
-_DATA_FILE = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "market_prices_sample.csv")
+_DATA_FILE = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), "data", "market_prices_sample.csv"
+)
 
+# ---------------------------------------------------------------------------
+# Load CSV at import time
+# ---------------------------------------------------------------------------
 
-def _count_data_months() -> int:
+def _load_csv() -> list[dict]:
+    """Load market_prices_sample.csv and return a list of row dicts.
+
+    Skips comment lines (starting with #) and the header row.
+    Normalises crop/commodity name to lowercase stripped.
+    Returns an empty list if the file is missing or unreadable.
     """
-    Count the number of non-comment, non-header rows in
-    market_prices_sample.csv as a rough proxy for data volume.
-    Returns 0 if the file is missing or unreadable.
-    """
-    count = 0
+    rows: list[dict] = []
     try:
         with open(_DATA_FILE, encoding="utf-8", newline="") as fh:
-            for line in fh:
-                stripped = line.strip()
-                if stripped and not stripped.startswith("#") and not stripped.startswith("crop"):
-                    count += 1
+            reader = csv.DictReader(
+                (line for line in fh if not line.strip().startswith("#"))
+            )
+            for row in reader:
+                # Normalise the crop column (CSV header is 'crop')
+                row["crop"] = row.get("crop", "").strip().lower()
+                row["market"] = row.get("market", "").strip()
+                rows.append(row)
     except Exception:
         pass
-    return count
+    return rows
 
 
-def get_price_forecast(crop: str, market: str = None) -> dict:
-    """
-    Return a stub forecast response for the given crop and market.
+_MARKET_DATA: list[dict] = _load_csv()
 
-    This function will ALWAYS return available=False until a proper
-    historical dataset is loaded and a model is trained.
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
+def get_price_forecast(crop: str, market: str | None = None) -> dict:
+    """Return historical price statistics for a given crop and optional market.
 
     Parameters
     ----------
     crop : str
-        Crop name (e.g. 'tomato', 'paddy').
+        Crop name (case-insensitive, partial match).
     market : str, optional
-        Market/mandi name (e.g. 'Mysore', 'Bangalore').
+        Market/mandi name (case-insensitive, exact match).
 
     Returns
     -------
-    dict:
-        available             : False
-        reason                : Human-readable explanation
-        data_available_months : int — rows found in sample CSV
+    dict
+        If enough data is found (≥3 rows):
+            available, crop, market, mean_price, min_price, max_price,
+            price_unit, data_points, date_range_start, date_range_end,
+            disclaimer, method, is_live
+        Otherwise:
+            available=False, reason
     """
+    crop_norm = crop.strip().lower()
+    market_norm = market.strip().lower() if market else None
+
+    # Filter by crop (partial, case-insensitive)
+    matched = [
+        row for row in _MARKET_DATA
+        if crop_norm in row["crop"] or row["crop"] in crop_norm
+    ]
+
+    # Further filter by market if specified
+    if market_norm:
+        matched = [
+            row for row in matched
+            if row["market"].lower() == market_norm
+        ]
+
+    if len(matched) < 3:
+        return {
+            "available": False,
+            "reason": "Insufficient historical data for this crop/market combination",
+        }
+
+    # Parse modal prices (skip rows with invalid/missing values)
+    modal_prices: list[float] = []
+    for row in matched:
+        try:
+            modal_prices.append(float(row["modal_price"]))
+        except (ValueError, KeyError):
+            pass
+
+    if len(modal_prices) < 3:
+        return {
+            "available": False,
+            "reason": "Insufficient historical data for this crop/market combination",
+        }
+
+    mean_price = round(statistics.mean(modal_prices), 2)
+    min_price  = round(min(modal_prices), 2)
+    max_price  = round(max(modal_prices), 2)
+    std_price  = round(statistics.stdev(modal_prices) if len(modal_prices) > 1 else 0.0, 2)  # noqa: F841 (available for callers)
+
+    # Date range
+    dates = sorted(
+        row["date"].strip() for row in matched if row.get("date", "").strip()
+    )
+    date_range_start = dates[0] if dates else "N/A"
+    date_range_end   = dates[-1] if dates else "N/A"
+
     return {
-        "available": False,
-        "reason": (
-            "Insufficient historical data for reliable forecasting. "
-            "Minimum 2 years of daily price records required."
+        "available":        True,
+        "crop":             crop,
+        "market":           market if market else "all markets in sample",
+        "mean_price":       mean_price,
+        "min_price":        min_price,
+        "max_price":        max_price,
+        "price_unit":       "INR per quintal",
+        "data_points":      len(modal_prices),
+        "date_range_start": date_range_start,
+        "date_range_end":   date_range_end,
+        "disclaimer": (
+            "This is a statistical summary of historical sample data, "
+            "NOT a price forecast. Do not use for financial decisions."
         ),
-        "data_available_months": _count_data_months(),
+        "method":  "historical_statistics",
+        "is_live": False,
     }

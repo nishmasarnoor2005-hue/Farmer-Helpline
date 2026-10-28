@@ -123,11 +123,31 @@ def _build_prompt(farmer_text: str, language_code: str, context_data: dict | Non
             + "\n".join(lines)
         )
 
+    # Inject price forecast / historical statistics block
+    forecast_block = ""
+    if context_data and context_data.get("price_forecast"):
+        pf = context_data["price_forecast"]
+        if pf.get("available"):
+            forecast_block = (
+                "\n\n## Historical Price Statistics (Sample Data — Not a Live Forecast)\n"
+                f"{pf.get('crop')}: mean={pf.get('mean_price')}, "
+                f"min={pf.get('min_price')}, max={pf.get('max_price')} INR/quintal "
+                f"over {pf.get('data_points')} records "
+                f"({pf.get('date_range_start')} to {pf.get('date_range_end')}). "
+                f"{pf.get('disclaimer')}"
+            )
+        else:
+            forecast_block = (
+                "\n\n## Price Data\n"
+                "Insufficient historical data for this crop."
+            )
+
     prompt = (
         f"{SYSTEM_PROMPT}"
         f"{weather_block}"
         f"{market_block}"
         f"{scheme_block}"
+        f"{forecast_block}"
         f"{history_text}"
         f"\nFarmer's language: {language_name} (code: {language_code})"
         f"\nFarmer says: {farmer_text}"
