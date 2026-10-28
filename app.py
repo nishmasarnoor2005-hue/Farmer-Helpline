@@ -23,6 +23,7 @@ from services import location_extractor
 from services import weather_service
 from services import market_service
 from services import scheme_service
+from services.intent_service import classify_intent
 from voice.text_to_speech import speak
 from frontend.login import AdminUser, verify_admin
 from frontend.dashboard import get_dashboard_data, get_interaction_history, service_health
@@ -527,13 +528,24 @@ def process_audio():
         print(f"   Clean text: {text[:80]}")
 
         # -------------------------------------------------
-        # GET AI REPLY (with optional weather context)
+        # INTENT CLASSIFICATION (rule-based)
         # -------------------------------------------------
 
-        # Check whether the transcript mentions weather-related keywords
+        intent_result = classify_intent(text, language_code)
+        detected_intent = intent_result["intent"]
+        intent_method   = intent_result["method"]   # always 'rule_based'
+        print(f"   Intent: {detected_intent} (confidence={intent_result['confidence']:.1f}, method={intent_method})")
+
+        # -------------------------------------------------
+        # GET AI REPLY (with optional context data)
+        # Intent classifier drives routing; keyword lists serve as fallback.
+        # -------------------------------------------------
+
         text_lower = text.lower()
         context_data = None
-        if any(kw in text_lower for kw in WEATHER_KEYWORDS):
+
+        # Weather lookup: intent OR keyword match
+        if detected_intent == "weather" or any(kw in text_lower for kw in WEATHER_KEYWORDS):
             print("⏳ Weather keyword detected — looking up location & weather...")
             try:
                 loc = location_extractor.extract_location(text)
@@ -550,10 +562,8 @@ def process_audio():
             except Exception as weather_err:
                 print(f"   ⚠️  Weather lookup error (non-fatal): {weather_err}")
 
-        # --------------------------------------------------
-        # MARKET PRICE LOOKUP (non-fatal)
-        # --------------------------------------------------
-        if any(kw in text_lower for kw in MARKET_KEYWORDS):
+        # Market price lookup: intent OR keyword match
+        if detected_intent == "market_price" or any(kw in text_lower for kw in MARKET_KEYWORDS):
             print("⏳ Market keyword detected — searching market prices...")
             try:
                 market_results = market_service.search_market_prices(text_lower)
@@ -567,10 +577,8 @@ def process_audio():
             except Exception as market_err:
                 print(f"   ⚠️  Market lookup error (non-fatal): {market_err}")
 
-        # --------------------------------------------------
-        # GOVERNMENT SCHEME LOOKUP (non-fatal)
-        # --------------------------------------------------
-        if any(kw in text_lower for kw in SCHEME_KEYWORDS):
+        # Government scheme lookup: intent OR keyword match
+        if detected_intent == "government_scheme" or any(kw in text_lower for kw in SCHEME_KEYWORDS):
             print("⏳ Scheme keyword detected — searching government schemes...")
             try:
                 scheme_results = scheme_service.search_schemes(text_lower)
@@ -621,7 +629,7 @@ def process_audio():
                 session_id=call_session_id,
                 language=language_code,
                 transcript=text,
-                intent="unknown",
+                intent=detected_intent,
                 assistant_response=reply,
                 status=reply_status,
                 latency_dict={
