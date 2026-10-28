@@ -2,6 +2,7 @@ import os
 import uuid
 import re
 import time
+import threading
 
 from flask import (
     Flask, render_template, request, jsonify,
@@ -135,6 +136,63 @@ def get_language_name(code):
 
 
 # =========================================================
+# CONCURRENCY GUARD — one lock per browser session
+# Prevents a second /process_audio from hitting Whisper/Gemini
+# while the first is still running.
+# =========================================================
+
+_session_locks: dict = {}      # session_id → threading.Lock
+_locks_mutex = threading.Lock()  # guards _session_locks itself
+
+
+def _get_session_lock(session_id: str) -> threading.Lock:
+    """Return the per-session lock, creating it on first use."""
+    with _locks_mutex:
+        if session_id not in _session_locks:
+            _session_locks[session_id] = threading.Lock()
+        return _session_locks[session_id]
+
+
+def _release_session_lock(session_id: str) -> None:
+    """Release and remove the lock for a session."""
+    with _locks_mutex:
+        lock = _session_locks.pop(session_id, None)
+    if lock:
+        try:
+            lock.release()
+        except RuntimeError:
+            pass  # already released
+
+
+# =========================================================
+# GEMINI RETRY HELPER
+# Retries on transient 503 / timeout errors only.
+# =========================================================
+
+def _gemini_with_retry(fn, *args, max_retries: int = 2, **kwargs):
+    """
+    Call fn(*args, **kwargs).  On 503 / timeout / connection error,
+    wait 1 s and retry up to max_retries times.
+    Non-retryable errors (400, 401, 403, …) are re-raised immediately.
+    """
+    retryable_hints = ("503", "timeout", "unavailable", "connection")
+    last_exc = None
+    for attempt in range(max_retries + 1):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as exc:
+            msg = str(exc).lower()
+            is_retryable = any(hint in msg for hint in retryable_hints)
+            if not is_retryable:
+                raise
+            last_exc = exc
+            if attempt < max_retries:
+                print(f"   ⚠️  Gemini transient error (attempt {attempt + 1}): {exc} — retrying in 1 s")
+                time.sleep(1)
+    raise last_exc  # exhausted retries
+
+
+# =========================================================
 # STEP 1 — GEMINI DETECTS LANGUAGE FROM AUDIO DIRECTLY
 # This is the key fix: we ask Gemini to listen to the raw audio
 # instead of relying on Whisper's mis-transcribed text.
@@ -154,26 +212,29 @@ def detect_language_from_audio(audio_path: str) -> str:
             audio_bytes = f.read()
 
         # Use inline audio data
-        response = gemini_client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=[
-                types.Part.from_bytes(
-                    data=audio_bytes,
-                    mime_type="audio/webm",
+        def _detect_call():
+            return gemini_client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=[
+                    types.Part.from_bytes(
+                        data=audio_bytes,
+                        mime_type="audio/webm",
+                    ),
+                    (
+                        "Listen to this audio carefully.\n"
+                        "Identify ONLY the spoken language.\n"
+                        "Reply with exactly ONE word from this list: "
+                        "Kannada, English, Hindi, Malayalam, Tamil, Telugu, Marathi, Urdu\n"
+                        "Do not say anything else. Just one word."
+                    ),
+                ],
+                config=types.GenerateContentConfig(
+                    temperature=0.0,
+                    max_output_tokens=5,
                 ),
-                (
-                    "Listen to this audio carefully.\n"
-                    "Identify ONLY the spoken language.\n"
-                    "Reply with exactly ONE word from this list: "
-                    "Kannada, English, Hindi, Malayalam, Tamil, Telugu, Marathi, Urdu\n"
-                    "Do not say anything else. Just one word."
-                ),
-            ],
-            config=types.GenerateContentConfig(
-                temperature=0.0,
-                max_output_tokens=5,
-            ),
-        )
+            )
+
+        response = _gemini_with_retry(_detect_call)
 
         detected = response.text.strip().lower().split()[0]
         code = LANG_NAME_TO_CODE.get(detected)
@@ -265,19 +326,22 @@ def clean_hallucination(text: str, language_code: str) -> str:
         lang_name = get_language_name(language_code)
         print(f"   🔧 Hallucination detected. Asking Gemini to reconstruct...")
         try:
-            response = gemini_client.models.generate_content(
-                model=GEMINI_MODEL,
-                contents=(
-                    f"This is a noisy speech transcription in {lang_name} with repeated characters removed.\n"
-                    f"Reconstruct the most likely intended sentence in {lang_name}.\n"
-                    f"Reply with ONLY the corrected sentence, nothing else.\n\n"
-                    f"Noisy text: {cleaned}"
-                ),
-                config=types.GenerateContentConfig(
-                    temperature=0.1,
-                    max_output_tokens=100,
-                ),
-            )
+            def _reconstruct_call():
+                return gemini_client.models.generate_content(
+                    model=GEMINI_MODEL,
+                    contents=(
+                        f"This is a noisy speech transcription in {lang_name} with repeated characters removed.\n"
+                        f"Reconstruct the most likely intended sentence in {lang_name}.\n"
+                        f"Reply with ONLY the corrected sentence, nothing else.\n\n"
+                        f"Noisy text: {cleaned}"
+                    ),
+                    config=types.GenerateContentConfig(
+                        temperature=0.1,
+                        max_output_tokens=100,
+                    ),
+                )
+
+            response = _gemini_with_retry(_reconstruct_call)
             reconstructed = response.text.strip()
             print(f"   ✅ Reconstructed: {reconstructed}")
             return reconstructed
@@ -318,6 +382,37 @@ def process_audio():
     audio_filename = f"farmer_reply_{request_id}.mp3"
     audio_dest     = os.path.join(AUDIO_FOLDER, audio_filename)
 
+    # We need the session-based ID early so we can acquire its lock.
+    # Flask's `session` is only available inside a request context, which we
+    # are already inside here, so this is safe.
+    call_session_id = session.get("call_session_id")
+    if not call_session_id:
+        call_session_id = uuid.uuid4().hex
+        session["call_session_id"] = call_session_id
+        db.create_session(call_session_id, channel="browser")
+
+    # -------------------------------------------------
+    # CONCURRENCY GUARD — one in-flight request per session
+    # -------------------------------------------------
+    session_lock = _get_session_lock(call_session_id)
+    lock_acquired = session_lock.acquire(blocking=False)
+    if not lock_acquired:
+        # Already processing — return a voice-friendly TTS 429
+        error_msg = "Already processing — please wait"
+        busy_audio = f"farmer_reply_busy_{request_id}.mp3"
+        busy_dest  = os.path.join(AUDIO_FOLDER, busy_audio)
+        try:
+            speak(error_msg, "en", output_path=busy_dest)
+        except Exception:
+            pass
+        resp = jsonify({
+            "success":   False,
+            "error":     error_msg,
+            "audio_url": f"/audio/{busy_audio}" if os.path.exists(busy_dest) else None,
+        })
+        resp.status_code = 429
+        return resp
+
     try:
 
         # -------------------------------------------------
@@ -335,12 +430,38 @@ def process_audio():
         audio_file.save(input_path)
         print(f"\n🎙️  Audio received [{request_id[:8]}]")
 
-        # Retrieve (or lazily create) the DB session for this call
-        call_session_id = session.get("call_session_id")
-        if not call_session_id:
-            call_session_id = uuid.uuid4().hex
-            session["call_session_id"] = call_session_id
-            db.create_session(call_session_id, channel="browser")
+        # -------------------------------------------------
+        # INPUT VALIDATION — size check
+        # -------------------------------------------------
+        file_size = os.path.getsize(input_path)
+
+        if file_size < 5_000:
+            err_msg = "Audio too short — please speak for at least 1 second"
+            short_audio = f"farmer_reply_short_{request_id}.mp3"
+            short_dest  = os.path.join(AUDIO_FOLDER, short_audio)
+            try:
+                speak(err_msg, "en", output_path=short_dest)
+            except Exception:
+                pass
+            return jsonify({
+                "success":   False,
+                "error":     err_msg,
+                "audio_url": f"/audio/{short_audio}" if os.path.exists(short_dest) else None,
+            })
+
+        if file_size > 6_000_000:
+            err_msg = "Audio too long — please keep under 60 seconds"
+            long_audio = f"farmer_reply_long_{request_id}.mp3"
+            long_dest  = os.path.join(AUDIO_FOLDER, long_audio)
+            try:
+                speak(err_msg, "en", output_path=long_dest)
+            except Exception:
+                pass
+            return jsonify({
+                "success":   False,
+                "error":     err_msg,
+                "audio_url": f"/audio/{long_audio}" if os.path.exists(long_dest) else None,
+            })
 
         # -------------------------------------------------
         # STEP 1 — Gemini identifies language from audio
@@ -403,7 +524,7 @@ def process_audio():
         reply_status = "success"
         error_cat = None
         try:
-            reply = get_reply(text, language_code, context_data)
+            reply = _gemini_with_retry(get_reply, text, language_code, context_data)
         except Exception as e:
             print(f"   Assistant Error: {e}")
             reply = "Sorry farmer, I could not process your question. Please try again."
@@ -466,6 +587,9 @@ def process_audio():
         return jsonify({"success": False, "error": str(e)})
 
     finally:
+        # Release the per-session concurrency lock (only if we acquired it)
+        if lock_acquired:
+            _release_session_lock(call_session_id)
         # Always clean up the uploaded audio
         if os.path.exists(input_path):
             try:
