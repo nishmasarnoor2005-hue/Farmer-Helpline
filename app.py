@@ -21,6 +21,8 @@ from dotenv import load_dotenv
 from services.assistant import get_reply, reset_history
 from services import location_extractor
 from services import weather_service
+from services import market_service
+from services import scheme_service
 from voice.text_to_speech import speak
 from frontend.login import AdminUser, verify_admin
 from frontend.dashboard import get_dashboard_data, get_interaction_history, service_health
@@ -361,6 +363,34 @@ WEATHER_KEYWORDS = [
     "mausam", "barish", "garmi", "thand", "paani",
 ]
 
+# =========================================================
+# MARKET KEYWORDS (triggers market price lookup)
+# =========================================================
+
+MARKET_KEYWORDS = [
+    "price", "market", "rate", "sell", "mandi", "selling",
+    # Kannada
+    "\u0bac\u0bc6\u0bb2\u0bc6",  # ಬೆಲೆ (price)
+    "\u0cae\u0cbe\u0cb0\u0cc1\u0c95\u0c9f\u0ccd\u0c9f\u0cc6",  # ಮಾರುಕಟ್ಟೆ (market)
+    # Hindi
+    "\u0926\u093e\u092e",  # दाम (price)
+    "\u092c\u093e\u091c\u093e\u0930",  # बाजार (market)
+]
+
+# =========================================================
+# SCHEME KEYWORDS (triggers government scheme lookup)
+# =========================================================
+
+SCHEME_KEYWORDS = [
+    "scheme", "yojana", "subsidy", "loan", "insurance",
+    "pm kisan", "kisan", "pmfby", "fasal bima",
+    # Kannada
+    "\u0caf\u0ccb\u0c9c\u0ca8\u0cc6",  # ಯೋಜನೆ (scheme)
+    "\u0cb8\u0cbe\u0cb2",  # ಸಾಲ (loan)
+    # Hindi
+    "\u092f\u094b\u091c\u0928\u093e",  # योजना (scheme)
+]
+
 
 
 
@@ -519,6 +549,40 @@ def process_audio():
                     print("   ⚠️  No location found in transcript — proceeding without weather context")
             except Exception as weather_err:
                 print(f"   ⚠️  Weather lookup error (non-fatal): {weather_err}")
+
+        # --------------------------------------------------
+        # MARKET PRICE LOOKUP (non-fatal)
+        # --------------------------------------------------
+        if any(kw in text_lower for kw in MARKET_KEYWORDS):
+            print("⏳ Market keyword detected — searching market prices...")
+            try:
+                market_results = market_service.search_market_prices(text_lower)
+                if market_results:
+                    if context_data is None:
+                        context_data = {}
+                    context_data["market_data"] = market_results
+                    print(f"   Market data: {len(market_results)} crop(s) found")
+                else:
+                    print("   ⚠️  No matching market data found for query")
+            except Exception as market_err:
+                print(f"   ⚠️  Market lookup error (non-fatal): {market_err}")
+
+        # --------------------------------------------------
+        # GOVERNMENT SCHEME LOOKUP (non-fatal)
+        # --------------------------------------------------
+        if any(kw in text_lower for kw in SCHEME_KEYWORDS):
+            print("⏳ Scheme keyword detected — searching government schemes...")
+            try:
+                scheme_results = scheme_service.search_schemes(text_lower)
+                if scheme_results:
+                    if context_data is None:
+                        context_data = {}
+                    context_data["scheme_data"] = scheme_results
+                    print(f"   Scheme data: {len(scheme_results)} scheme(s) found")
+                else:
+                    print("   ⚠️  No matching schemes found for query")
+            except Exception as scheme_err:
+                print(f"   ⚠️  Scheme lookup error (non-fatal): {scheme_err}")
 
         print("⏳ Step 3: Getting AI reply (Gemini)...")
         reply_status = "success"

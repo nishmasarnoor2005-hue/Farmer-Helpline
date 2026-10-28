@@ -87,9 +87,47 @@ def _build_prompt(farmer_text: str, language_code: str, context_data: dict | Non
             f"Humidity: {w.get('humidity')}%"
         )
 
+    # Inject verified market price context (historical AGMARKNET data)
+    market_block = ""
+    if context_data and context_data.get("market_data"):
+        prices = context_data["market_data"]
+        lines = []
+        for p in prices[:3]:  # Limit to 3 crops to keep prompt concise
+            lines.append(
+                f"  {p.get('crop', '').title()}: "
+                f"Min {p.get('min_price')} – Max {p.get('max_price')} – "
+                f"Modal {p.get('modal_price')} {p.get('unit')} "
+                f"(as of {p.get('data_date')})"
+            )
+        market_block = (
+            "\n\n[MARKET PRICE CONTEXT — historical data from AGMARKNET; "
+            "tell farmer these are reference ranges, not today's live prices]\n"
+            + "\n".join(lines)
+            + f"\nSource: {prices[0].get('source_url')}"
+        )
+
+    # Inject government scheme context (official .gov.in sourced data)
+    scheme_block = ""
+    if context_data and context_data.get("scheme_data"):
+        schemes = context_data["scheme_data"]
+        lines = []
+        for s in schemes[:2]:  # Limit to 2 schemes to keep prompt concise
+            lines.append(
+                f"  {s.get('name')}: {s.get('benefits', '')[:120]} "
+                f"Apply: {s.get('application_method', '')[:80]} "
+                f"URL: {s.get('official_url')}"
+            )
+        scheme_block = (
+            "\n\n[GOVERNMENT SCHEME CONTEXT — official data; "
+            "always direct farmer to official URL for current details]\n"
+            + "\n".join(lines)
+        )
+
     prompt = (
         f"{SYSTEM_PROMPT}"
         f"{weather_block}"
+        f"{market_block}"
+        f"{scheme_block}"
         f"{history_text}"
         f"\nFarmer's language: {language_name} (code: {language_code})"
         f"\nFarmer says: {farmer_text}"
