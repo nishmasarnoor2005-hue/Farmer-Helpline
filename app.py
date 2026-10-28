@@ -3,7 +3,7 @@ import uuid
 import re
 import time
 
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, session
 from faster_whisper import WhisperModel
 from google import genai
 from google.genai import types
@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 from services.assistant import get_reply, reset_history
 from voice.text_to_speech import speak
+import backend.database as db
 
 load_dotenv()
 
@@ -19,6 +20,10 @@ load_dotenv()
 # =========================================================
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-insecure-key-change-in-prod")
+
+# Initialise DB tables (preserves existing records)
+db.init_db()
 
 # =========================================================
 # ABSOLUTE PATHS
@@ -276,14 +281,25 @@ def process_audio():
         audio_file.save(input_path)
         print(f"\n🎙️  Audio received [{request_id[:8]}]")
 
+        # Retrieve (or lazily create) the DB session for this call
+        call_session_id = session.get("call_session_id")
+        if not call_session_id:
+            call_session_id = uuid.uuid4().hex
+            session["call_session_id"] = call_session_id
+            db.create_session(call_session_id, channel="browser")
+
         # -------------------------------------------------
         # STEP 1 — Gemini identifies language from audio
         # -------------------------------------------------
+
+        t0 = time.perf_counter()
 
         print("⏳ Step 1: Detecting language from audio (Gemini)...")
         language_code = detect_language_from_audio(input_path)
         language_name = get_language_name(language_code)
         print(f"   Language confirmed: {language_code} ({language_name})")
+
+        t1 = time.perf_counter()
 
         # -------------------------------------------------
         # STEP 2 — Whisper transcribes with forced language + noise gate
@@ -292,6 +308,8 @@ def process_audio():
         print(f"⏳ Step 2: Transcribing as {language_name} (Whisper)...")
         text = transcribe_with_language(input_path, language_code)
         print(f"   Raw transcription: {text[:80]}")
+
+        t2 = time.perf_counter()
 
         if not text:
             return jsonify({
@@ -308,13 +326,19 @@ def process_audio():
         # -------------------------------------------------
 
         print("⏳ Step 3: Getting AI reply (Gemini)...")
+        reply_status = "success"
+        error_cat = None
         try:
             reply = get_reply(text, language_code)
         except Exception as e:
             print(f"   Assistant Error: {e}")
             reply = "Sorry farmer, I could not process your question. Please try again."
+            reply_status = "error"
+            error_cat = "gemini_reply"
 
         print(f"   Reply: {reply[:80]}")
+
+        t3 = time.perf_counter()
 
         # -------------------------------------------------
         # TEXT TO SPEECH
@@ -323,10 +347,35 @@ def process_audio():
         print("⏳ Step 4: Generating voice (Edge TTS)...")
         result = speak(reply, language_code, output_path=audio_dest)
 
+        t4 = time.perf_counter()
+
         if not result or not os.path.exists(audio_dest):
             return jsonify({"success": False, "error": "AI voice file was not created"})
 
         print("✅ Done.\n")
+
+        # -------------------------------------------------
+        # LOG INTERACTION TO DB (non-fatal)
+        # -------------------------------------------------
+        try:
+            db.log_interaction(
+                session_id=call_session_id,
+                language=language_code,
+                transcript=text,
+                intent="unknown",
+                assistant_response=reply,
+                status=reply_status,
+                latency_dict={
+                    "total_latency_ms":   int((t4 - t0) * 1000),
+                    "gemini_detect_ms":   int((t1 - t0) * 1000),
+                    "whisper_ms":         int((t2 - t1) * 1000),
+                    "gemini_reply_ms":    int((t3 - t2) * 1000),
+                    "tts_ms":             int((t4 - t3) * 1000),
+                },
+                error_category=error_cat,
+            )
+        except Exception as db_err:
+            print(f"⚠️  DB log_interaction error (non-fatal): {db_err}")
 
         return jsonify({
             "success":       True,
@@ -375,6 +424,9 @@ def cleanup_audio():
 @app.route("/reset_call", methods=["POST"])
 def reset_call():
     reset_history()
+    new_session_id = uuid.uuid4().hex
+    session["call_session_id"] = new_session_id
+    db.create_session(new_session_id, channel="browser")
     return jsonify({"success": True})
 
 
