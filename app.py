@@ -768,6 +768,56 @@ def admin_dashboard():
 
 
 # =========================================================
+# HEALTH ENDPOINT (FR-17)
+# =========================================================
+
+@app.route("/health", methods=["GET"])
+def health():
+    """
+    System health check.
+    Returns component status without exposing env values, stack traces,
+    or internal paths.
+    """
+    from datetime import datetime as _datetime
+
+    # --- DB check ---
+    try:
+        import sqlite3 as _sqlite3
+        conn = _sqlite3.connect(str(db.DB_PATH))
+        conn.execute("SELECT 1 FROM call_sessions")
+        conn.close()
+        db_status = "ok"
+    except Exception:
+        db_status = "error"
+
+    # --- Gemini key check (presence only, never the value) ---
+    gemini_key_status = (
+        "configured"
+        if os.environ.get("GEMINI_API_KEY", "").strip()
+        else "missing"
+    )
+
+    # --- Edge TTS check ---
+    try:
+        import edge_tts as _edge_tts  # noqa: F401
+        edge_tts_status = "ok"
+    except Exception:
+        edge_tts_status = "error"
+
+    # --- Whisper check ---
+    whisper_status = "loaded" if whisper_model is not None else "error"
+
+    return jsonify({
+        "status":     "ok",
+        "db":         db_status,
+        "gemini_key": gemini_key_status,
+        "edge_tts":   edge_tts_status,
+        "whisper":    whisper_status,
+        "timestamp":  _datetime.utcnow().isoformat() + "Z",
+    })
+
+
+# =========================================================
 # TELEPHONY ROUTES (Mock adapter — real Twilio pending credentials)
 # See docs/TELEPHONY_SETUP.md
 # =========================================================
