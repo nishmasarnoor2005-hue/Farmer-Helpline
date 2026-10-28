@@ -38,6 +38,13 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-insecure-key-change-in-prod")
 
+# Security: warn if running with a weak/default secret key outside debug mode
+if not app.debug and app.secret_key in (None, "", "dev", "secret", "change-me", "dev-insecure-key-change-in-prod"):
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "SECURITY: Using default/weak secret key — set FLASK_SECRET_KEY in .env for production"
+    )
+
 # Upload size cap (10 MB)
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
@@ -678,12 +685,17 @@ def process_audio():
 def cleanup_audio():
     data     = request.get_json(silent=True) or {}
     filename = data.get("filename", "")
-    if filename.startswith("farmer_reply_") and filename.endswith(".mp3"):
-        path = os.path.join(AUDIO_FOLDER, filename)
-        try:
-            os.remove(path)
-        except Exception:
-            pass
+    # Prevent path traversal: use only the basename and verify the resolved
+    # path stays inside AUDIO_FOLDER before deleting.
+    safe_name = os.path.basename(filename)
+    if safe_name.startswith("farmer_reply_") and safe_name.endswith(".mp3"):
+        candidate = os.path.realpath(os.path.join(AUDIO_FOLDER, safe_name))
+        allowed   = os.path.realpath(AUDIO_FOLDER)
+        if candidate.startswith(allowed + os.sep) or candidate == allowed:
+            try:
+                os.remove(candidate)
+            except Exception:
+                pass
     return jsonify({"success": True})
 
 
