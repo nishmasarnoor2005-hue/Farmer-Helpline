@@ -3,7 +3,15 @@ import uuid
 import re
 import time
 
-from flask import Flask, render_template, request, jsonify, send_from_directory, session
+from flask import (
+    Flask, render_template, request, jsonify,
+    send_from_directory, session, redirect, url_for, flash,
+)
+from flask_login import (
+    LoginManager, login_user, logout_user, login_required, current_user,
+)
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from faster_whisper import WhisperModel
 from google import genai
 from google.genai import types
@@ -11,6 +19,8 @@ from dotenv import load_dotenv
 
 from services.assistant import get_reply, reset_history
 from voice.text_to_speech import speak
+from frontend.login import AdminUser, verify_admin
+from frontend.dashboard import get_dashboard_data, get_interaction_history, service_health
 import backend.database as db
 
 load_dotenv()
@@ -21,6 +31,39 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-insecure-key-change-in-prod")
+
+# Upload size cap (10 MB)
+app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
+
+# Harden session cookie
+app.config["SESSION_COOKIE_HTTPONLY"] = True
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+# =========================================================
+# FLASK-LOGIN
+# =========================================================
+
+login_manager = LoginManager(app)
+login_manager.login_view = "admin_login"
+
+
+@login_manager.user_loader
+def load_user(user_id: str):
+    if user_id == "admin":
+        return AdminUser()
+    return None
+
+
+# =========================================================
+# RATE LIMITER
+# =========================================================
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=[],
+    storage_uri="memory://",
+)
 
 # Initialise DB tables (preserves existing records)
 db.init_db()
@@ -257,6 +300,7 @@ def home():
 # =========================================================
 
 @app.route("/process_audio", methods=["POST"])
+@limiter.limit(lambda: os.environ.get("RATE_LIMIT_PROCESS", "10 per minute"))
 def process_audio():
 
     request_id     = uuid.uuid4().hex
@@ -437,6 +481,52 @@ def reset_call():
 @app.route("/audio/<filename>")
 def get_audio(filename):
     return send_from_directory(AUDIO_FOLDER, filename)
+
+
+# =========================================================
+# ADMIN AUTHENTICATION & DASHBOARD
+# =========================================================
+
+@app.route("/admin/login", methods=["GET", "POST"])
+@limiter.limit("5 per minute")
+def admin_login():
+    if current_user.is_authenticated:
+        return redirect(url_for("admin_dashboard"))
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        user = verify_admin(username, password)
+        if user:
+            login_user(user)
+            return redirect(url_for("admin_dashboard"))
+        flash("Invalid credentials")
+        # Return 401 so tests can assert the status code on failure
+        return render_template("admin/login.html"), 401
+
+    return render_template("admin/login.html")
+
+
+@app.route("/admin/logout", methods=["POST"])
+@login_required
+def admin_logout():
+    logout_user()
+    return redirect(url_for("admin_login"))
+
+
+@app.route("/admin/dashboard")
+@login_required
+def admin_dashboard():
+    page = request.args.get("page", 1, type=int)
+    metrics = get_dashboard_data()
+    history = get_interaction_history(page=page, per_page=20)
+    health = service_health()
+    return render_template(
+        "admin/dashboard.html",
+        metrics=metrics,
+        history=history,
+        health=health,
+    )
 
 
 # =========================================================
