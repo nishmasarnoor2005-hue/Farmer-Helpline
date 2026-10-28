@@ -142,5 +142,89 @@
     "official_url": "https://agriinfra.dac.gov.in",
     "source_verified_date": "2024-01-01",
     "status": "active"
+  },
+  {
+    "id": "ysr_rythu_bharosa",
+    "name": "YSR Rythu Bharosa",
+    "authority": "Department of Agriculture and Cooperation, Government of Andhra Pradesh",
+    "applicable_states": ["Andhra Pradesh"],
+    "eligibility": "All farmer families owning cultivable land in Andhra Pradesh, including tenant farmers. Refer to official source for current eligibility criteria and exclusions.",
+    "benefits": "Investment support of Rs. 13,500 per year per farmer family (includes central PM-KISAN component and state top-up), paid in two instalments. Refer to official source for current amounts.",
+    "application_method": "Farmers are enrolled through village-level revenue records. Contact local Village Revenue Officer (VRO) or Agriculture Extension Officer, or visit ap.gov.in for details.",
+    "official_url": "https://apagrisnet.gov.in",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
+  },
+  {
+    "id": "ap_rythubandhu_crop_insurance",
+    "name": "Andhra Pradesh Comprehensive Crop Insurance Scheme",
+    "authority": "Department of Agriculture and Cooperation, Government of Andhra Pradesh",
+    "applicable_states": ["Andhra Pradesh"],
+    "eligibility": "Farmers cultivating notified crops in Andhra Pradesh. Loanee farmers enrolled through banks; non-loanee farmers may enrol voluntarily. Refer to official source for current details.",
+    "benefits": "State-level implementation of crop insurance providing financial support against crop loss due to natural calamities, pests, and diseases. Refer to official source for current premium rates and indemnity levels.",
+    "application_method": "Apply through nearest bank branch, Common Service Centre, or contact District Agriculture Officer in Andhra Pradesh.",
+    "official_url": "https://apagrisnet.gov.in",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
+  },
+  {
+    "id": "tn_uzhavar_sandhai",
+    "name": "Uzhavar Sandhai (Farmers Market Scheme)",
+    "authority": "Department of Agricultural Marketing, Government of Tamil Nadu",
+    "applicable_states": ["Tamil Nadu"],
+    "eligibility": "Farmers in Tamil Nadu who wish to sell their produce directly to consumers without intermediaries. Registration with local agriculture office required.",
+    "benefits": "Direct market access for farmers through dedicated Uzhavar Sandhai outlets, eliminating middlemen and ensuring better price realisation. Farmers retain full sale proceeds.",
+    "application_method": "Register with local Agriculture Department or contact District Agricultural Marketing Officer in Tamil Nadu. Visit tn.gov.in for scheme details.",
+    "official_url": "https://www.tn.gov.in/tnagmark",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
+  },
+  {
+    "id": "tn_crop_insurance",
+    "name": "Tamil Nadu Crop Insurance Scheme (TNCIS)",
+    "authority": "Department of Agriculture, Government of Tamil Nadu",
+    "applicable_states": ["Tamil Nadu"],
+    "eligibility": "All farmers in Tamil Nadu growing notified crops. Small and marginal farmers receive additional premium subsidy. Refer to official source for current details.",
+    "benefits": "Financial compensation for crop loss due to drought, flood, pest attack, and other natural calamities. State government subsidises a portion of the premium for small and marginal farmers. Refer to official source for current rates.",
+    "application_method": "Apply through the Village Agriculture Assistant (VAA) or nearest Primary Agricultural Cooperative Credit Society (PACCS). Contact District Agriculture Office for details.",
+    "official_url": "https://www.tn.gov.in/department/agriculture",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
+  },
+  {
+    "id": "gopinath_munde_shetkari_vima",
+    "name": "Gopinath Munde Shetkari Apghat Vima Yojana",
+    "authority": "Department of Agriculture, Government of Maharashtra",
+    "applicable_states": ["Maharashtra"],
+    "eligibility": "Farmers aged 10 to 75 years registered in Maharashtra land records. Covers accidental death or permanent disability. Refer to official source for current eligibility.",
+    "benefits": "Accidental insurance cover of Rs. 2,00,000 in case of accidental death or permanent total disability. Partial disability covered at Rs. 1,00,000. Refer to official source for current amounts.",
+    "application_method": "Premium is paid by the state government on behalf of farmers. In case of claim, apply through District Superintendent of Agriculture. Visit mahadbt.maharashtra.gov.in for details.",
+    "official_url": "https://mahadbt.maharashtra.gov.in",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
+  },
+  {
+    "id": "jalyukt_shivar_abhiyan",
+    "name": "Jalyukt Shivar Abhiyan",
+    "authority": "Water Conservation Department, Government of Maharashtra",
+    "applicable_states": ["Maharashtra"],
+    "eligibility": "Farmers in drought-prone villages of Maharashtra. Village selection is made by the state government based on water scarcity. Refer to official source for current details.",
+    "benefits": "Water conservation infrastructure such as farm ponds, bunding, check dams, and stream deepening to make villages water-neutral and improve irrigation availability for farmers.",
+    "application_method": "Beneficiary villages are identified by the state government. Contact local Panchayat or District Collector's office for village-level implementation details.",
+    "official_url": "https://jalyuktshivar.maharashtra.gov.in",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
+  },
+  {
+    "id": "pm_aasha",
+    "name": "Pradhan Mantri Annadata Aay SanraksHan Abhiyan (PM-AASHA)",
+    "authority": "Ministry of Agriculture and Farmers Welfare, Government of India",
+    "applicable_states": ["All India"],
+    "eligibility": "Farmers growing notified oilseed, pulses, and copra crops in states/districts that opt to implement the scheme component. Refer to official source for current notified crops and states.",
+    "benefits": "Price support to farmers to protect against distress sale below Minimum Support Price (MSP) through three components: Price Support Scheme (PSS), Price Deficiency Payment Scheme (PDPS), and Pilot Private Procurement and Stockist Scheme (PPPS). Refer to official source for current details.",
+    "application_method": "Procurement is conducted by state-designated agencies when market prices fall below MSP. Register with local Agriculture Department or cooperative society for enrolment.",
+    "official_url": "https://agricoop.nic.in",
+    "source_verified_date": "2025-01-14",
+    "status": "active"
   }
 ]
