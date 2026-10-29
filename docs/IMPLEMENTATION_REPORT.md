@@ -114,6 +114,93 @@ Test modules:
 
 ---
 
+## Session Update — 2025-01-14
+
+### Tasks Completed This Session
+
+| Task | Status |
+|------|--------|
+| Health endpoint (`/health`) | COMPLETED |
+| Intent training dataset + evaluation harness | COMPLETED |
+| Price statistics / forecast service (`services/forecast_service.py`) | COMPLETED |
+| Government scheme catalogue expansion | COMPLETED |
+| UX improvements (admin dashboard, session display) | COMPLETED |
+| AGMARKNET live-API check (connectivity + error handling) | PARTIALLY COMPLETED — blocked on credentials |
+
+### Task Details
+
+**Health endpoint** — COMPLETED  
+A `/health` route was added to `app.py`. It returns a JSON object with `status`, `timestamp`, `whisper`, `db`, and `gemini_key` fields. The `gemini_key` field reports `configured` or `missing` without echoing the key value. Database connectivity is verified on every request.
+
+**Intent dataset + evaluation** — COMPLETED  
+`services/intent_service.py` was extended with `load_training_data()` and `evaluate()` functions. A bundled dataset of labeled examples covers English, Kannada, Hindi, and other supported languages across all intent categories. `evaluate()` reports accuracy, per-intent breakdown, and example counts.
+
+**Price statistics / forecast service** — COMPLETED  
+`services/forecast_service.py` was added. It derives historical statistics (mean, min, max, stddev) from `data/market_prices.csv` and returns them as a structured forecast. The method is reported as `historical_statistics` and `is_live` is always `false`. Market filtering by district is supported.
+
+**Scheme catalogue expansion** — COMPLETED  
+`data/schemes.json` was expanded with additional national and state-level schemes. Each entry includes `official_url` and `verified_date` fields. Search supports keyword and state-level filtering and returns at most 3 results.
+
+**UX improvements** — COMPLETED  
+Admin dashboard template and `frontend/dashboard.py` were updated: session metadata is displayed, recent interactions table is improved, and error states are handled gracefully.
+
+**AGMARKNET live-API check** — PARTIALLY COMPLETED  
+`services/market_service.py` was updated to attempt a live fetch from `api.data.gov.in` when `DATA_GOV_IN_API_KEY` is set in the environment. Without a valid key the service falls back to the CSV dataset. The endpoint was confirmed unreachable with `demo_key` (timeout). Full live integration is BLOCKED pending registration at <https://data.gov.in/user/register>.
+
+### Test Results — 2025-01-14
+
+```
+109 passed, 0 failed, 14 warnings (deprecation only)
+Platform: win32, Python 3.12.10, pytest 9.2.0
+Duration: ~19.64 s
+```
+
+New test files added this session:
+
+| New Module | Tests | Result |
+|------------|-------|--------|
+| test_health.py | 14 | PASS |
+| test_forecast.py | 12 | PASS |
+| test_intent.py (additions: TestTrainingDataset) | +7 | PASS |
+
+Full module breakdown after this session:
+
+| Module | Tests | Result |
+|--------|-------|--------|
+| test_auth.py | 7 | PASS |
+| test_database.py | 8 | PASS |
+| test_forecast.py | 12 | PASS |
+| test_health.py | 14 | PASS |
+| test_intent.py | 18 | PASS |
+| test_location.py | 4 | PASS |
+| test_market_schemes.py | 17 | PASS |
+| test_rate_limit.py | 2 | PASS |
+| test_telephony.py | 14 | PASS |
+| test_voice_pipeline.py | 5 | PASS |
+| test_weather.py | 4 | PASS |
+| **Total** | **109** | **ALL PASS** |
+
+### Overall Completion Estimate
+
+| Area | Estimate |
+|------|----------|
+| Core voice pipeline (ASR → intent → response → TTS) | 85% |
+| Market price service (CSV-backed, static) | 70% |
+| Market price service (live AGMARKNET) | 15% — blocked on credentials |
+| Price forecasting / statistics | 60% — historical stats only, no live data |
+| Government scheme catalogue | 80% |
+| Intent classifier (rule-based) | 75% — no ML model yet |
+| Health endpoint | 100% |
+| Admin UI | 75% |
+| Telephony (mock) | 90% |
+| Telephony (real Twilio) | 10% — blocked on credentials |
+| **Overall project** | **~62%** |
+
+> Estimate methodology: weighted average across areas by complexity. Live data
+> integrations and ML components are the largest remaining gaps.
+
+---
+
 ## Running the Application
 
 **Windows CMD:**
