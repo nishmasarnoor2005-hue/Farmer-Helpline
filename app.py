@@ -3,10 +3,20 @@ import uuid
 import re
 import time
 import threading
+import secrets
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+# Load .env FIRST — before any other project imports read os.environ
+from dotenv import load_dotenv
+_ENV_FILE = Path(__file__).resolve().parent / ".env"
+load_dotenv(dotenv_path=_ENV_FILE, override=True)
 
 from flask import (
     Flask, render_template, request, jsonify,
     send_from_directory, session, redirect, url_for, flash,
+    stream_with_context, Response,
 )
 from flask_login import (
     LoginManager, login_user, logout_user, login_required, current_user,
@@ -29,8 +39,9 @@ from voice.text_to_speech import speak
 from frontend.login import AdminUser, verify_admin
 from frontend.dashboard import get_dashboard_data, get_interaction_history, service_health
 import backend.database as db
+from services.realtime.provider_factory import get_provider as _get_rt_provider
 
-load_dotenv()
+# .env already loaded at module top — no second call needed
 
 # =========================================================
 # FLASK APP
@@ -83,6 +94,43 @@ limiter = Limiter(
 db.init_db()
 
 # =========================================================
+# REAL-TIME VOICE — SESSION STORE
+# Keys are short-lived opaque tokens (never logged).
+# Each value is a dict with:
+#   session_id  — internal UUID for DB logging
+#   ip          — client IP at session creation time
+#   created_at  — datetime (UTC)
+#   expires_at  — datetime (UTC)
+#   language_code — detected / set language for this session
+#   cancelled   — bool, set True by /realtime/cancel
+# =========================================================
+
+_rt_sessions: dict = {}          # token → session_dict
+_rt_sessions_lock = threading.Lock()
+
+_REALTIME_SESSION_TTL = int(os.environ.get("REALTIME_SESSION_TTL_SECONDS", "300"))
+
+
+def _rt_session_expiry_loop() -> None:
+    """Background thread: evict expired realtime session tokens every 60 s."""
+    import time as _time
+    while True:
+        _time.sleep(60)
+        now = datetime.now(timezone.utc)
+        with _rt_sessions_lock:
+            expired = [tok for tok, info in _rt_sessions.items()
+                       if info.get("expires_at", now) < now]
+            for tok in expired:
+                del _rt_sessions[tok]
+
+if not app.config.get("TESTING", False):
+    threading.Thread(
+        target=_rt_session_expiry_loop,
+        daemon=True,
+        name="rt-session-expiry",
+    ).start()
+
+# =========================================================
 # ABSOLUTE PATHS
 # =========================================================
 
@@ -97,9 +145,9 @@ os.makedirs(AUDIO_FOLDER,  exist_ok=True)
 # WHISPER MODEL
 # =========================================================
 
-print("Loading Whisper medium model...")
+print("Loading Whisper small model...")
 whisper_model = WhisperModel(
-    "medium",
+    "small",          # small = 3-5s on CPU vs 8-20s for medium
     device="cpu",
     compute_type="int8",
     cpu_threads=4
@@ -111,7 +159,7 @@ print("Whisper model loaded!")
 # =========================================================
 
 gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-GEMINI_MODEL  = "gemini-3.5-flash"
+GEMINI_MODEL  = "gemini-flash-lite-latest"
 
 # =========================================================
 # LANGUAGE MAPS
@@ -201,6 +249,27 @@ def _gemini_with_retry(fn, *args, max_retries: int = 2, **kwargs):
                 print(f"   ⚠️  Gemini transient error (attempt {attempt + 1}): {exc} — retrying in 1 s")
                 time.sleep(1)
     raise last_exc  # exhausted retries
+
+
+# =========================================================
+# SESSION LANGUAGE CACHE
+# After the first turn we already know the farmer's language.
+# Skip Gemini audio detection on subsequent turns of the same call.
+# =========================================================
+_session_language_cache: dict = {}   # call_session_id → language_code
+_cache_mutex = threading.Lock()
+
+def _get_cached_language(session_id: str):
+    with _cache_mutex:
+        return _session_language_cache.get(session_id)
+
+def _cache_language(session_id: str, language_code: str):
+    with _cache_mutex:
+        _session_language_cache[session_id] = language_code
+
+def _clear_language_cache(session_id: str):
+    with _cache_mutex:
+        _session_language_cache.pop(session_id, None)
 
 
 # =========================================================
@@ -333,9 +402,11 @@ def clean_hallucination(text: str, language_code: str) -> str:
     cleaned = re.sub(r'\s+', ' ', cleaned).strip()
 
     # 4. If text changed significantly, ask Gemini to reconstruct meaning
-    if len(cleaned) < len(text) * 0.7:
+    # Only do this if more than 40% was stripped AND text is very short
+    # (avoids a slow Gemini call for minor cleanup)
+    if len(cleaned) < len(text) * 0.6 and len(cleaned) < 30:
         lang_name = get_language_name(language_code)
-        print(f"   🔧 Hallucination detected. Asking Gemini to reconstruct...")
+        print(f"   🔧 Severe hallucination detected. Asking Gemini to reconstruct...")
         try:
             def _reconstruct_call():
                 return gemini_client.models.generate_content(
@@ -503,21 +574,30 @@ def process_audio():
             })
 
         # -------------------------------------------------
-        # STEP 1 — Gemini identifies language from audio
-        #           (skipped if language_override is set)
+        # STEP 1 — Language detection (cached after first turn)
         # -------------------------------------------------
 
         t0 = time.perf_counter()
 
         language_override = session.get("language_override", "auto")
+        cached_lang = _get_cached_language(call_session_id)
+
         if language_override and language_override != "auto":
+            # Manual override from UI
             language_code = language_override
             language_name = get_language_name(language_code)
-            print(f"⏳ Step 1: Language override in effect — using {language_code} ({language_name})")
+            print(f"⏳ Step 1: Language override — {language_code} ({language_name})")
+        elif cached_lang:
+            # Already detected in a previous turn of this call — skip Gemini
+            language_code = cached_lang
+            language_name = get_language_name(language_code)
+            print(f"⏳ Step 1: Language cached — {language_code} ({language_name}) [skipping Gemini detect]")
         else:
+            # First turn — ask Gemini
             print("⏳ Step 1: Detecting language from audio (Gemini)...")
             language_code = detect_language_from_audio(input_path)
             language_name = get_language_name(language_code)
+            _cache_language(call_session_id, language_code)
             print(f"   Language confirmed: {language_code} ({language_name})")
 
         t1 = time.perf_counter()
@@ -622,6 +702,7 @@ def process_audio():
             except Exception as scheme_err:
                 print(f"   ⚠️  Scheme lookup error (non-fatal): {scheme_err}")
 
+        print("⏳ Step 3: Getting AI reply (Gemini)...")
         print("⏳ Step 3: Getting AI reply (Gemini)...")
         reply_status = "success"
         error_cat = None
@@ -754,6 +835,10 @@ def cleanup_audio():
 def reset_call():
     reset_history()
     new_session_id = uuid.uuid4().hex
+    # Clear language cache for the old session
+    old_session_id = session.get("call_session_id")
+    if old_session_id:
+        _clear_language_cache(old_session_id)
     session["call_session_id"] = new_session_id
     db.create_session(new_session_id, channel="browser")
     return jsonify({"success": True})
@@ -992,6 +1077,242 @@ def telephony_respond():
             "response": f"Mock response: {message}",
             "note": "Real audio pipeline pending telephony integration",
         })
+
+
+# =========================================================
+# REAL-TIME VOICE ROUTES (FEAT-002)
+# Feature-flagged behind REALTIME_VOICE_ENABLED=true.
+# All token values are treated as secrets — never logged.
+# =========================================================
+
+def _validate_rt_token(req):
+    """
+    Read the X-Session-Token header, validate it against _rt_sessions.
+
+    Returns (token, session_info) on success.
+    Aborts with HTTP 401 if the token is missing, unknown, or expired.
+    Never logs the token value.
+    """
+    from flask import abort
+    token = req.headers.get("X-Session-Token", "")
+    if not token:
+        abort(401, description="Missing X-Session-Token header")
+
+    with _rt_sessions_lock:
+        info = _rt_sessions.get(token)
+
+    if not info:
+        abort(401, description="Invalid or expired session token")
+
+    if info.get("expires_at", datetime.now(timezone.utc)) < datetime.now(timezone.utc):
+        with _rt_sessions_lock:
+            _rt_sessions.pop(token, None)
+        abort(401, description="Session token has expired")
+
+    return token, info
+
+
+@app.route("/realtime/session", methods=["POST"])
+@limiter.limit("5 per minute")
+def realtime_create_session():
+    """
+    Create a short-lived realtime voice session token.
+
+    Returns 503 when REALTIME_VOICE_ENABLED != 'true'.
+    Returns 200 with {session_id, expires_in, capabilities} when enabled.
+    Token value is NEVER logged.
+    """
+    enabled = os.environ.get("REALTIME_VOICE_ENABLED", "false").strip().lower()
+    if enabled != "true":
+        return jsonify({
+            "error":      "realtime_disabled",
+            "legacy_url": "/process_audio",
+        }), 503
+
+    token      = secrets.token_urlsafe(32)
+    session_id = uuid.uuid4().hex
+    now        = datetime.now(timezone.utc)
+    expires_at = now.__class__.fromtimestamp(
+        now.timestamp() + _REALTIME_SESSION_TTL, tz=timezone.utc
+    )
+    client_ip = request.remote_addr or "unknown"
+
+    with _rt_sessions_lock:
+        _rt_sessions[token] = {
+            "session_id":    session_id,
+            "ip":            client_ip,
+            "created_at":    now,
+            "expires_at":    expires_at,
+            "language_code": "kn",
+            "cancelled":     False,
+        }
+
+    # Create a DB session record (non-fatal)
+    try:
+        db.create_session(session_id, channel="realtime")
+    except Exception as _db_err:
+        print(f"⚠️  realtime_create_session: DB record failed (non-fatal): {_db_err}")
+
+    return jsonify({
+        "session_id":  session_id,
+        "token":       token,
+        "expires_in":  _REALTIME_SESSION_TTL,
+        "capabilities": {
+            "provider":    os.environ.get("REALTIME_PROVIDER", "chunked_tts"),
+            "streaming":   False,
+            "barge_in":    True,
+        },
+    }), 200
+
+
+@app.route("/realtime/audio", methods=["POST"])
+def realtime_audio():
+    """
+    Accept audio bytes and stream back SSE events via the provider pipeline.
+
+    Requires X-Session-Token header.
+    Expects multipart form with an 'audio' field.
+    Returns text/event-stream.
+    """
+    token, session_info = _validate_rt_token(request)
+    session_id    = session_info["session_id"]
+    language_code = session_info.get("language_code", "kn")
+
+    if "audio" not in request.files:
+        return jsonify({"error": "No audio field in request"}), 400
+
+    audio_bytes = request.files["audio"].read()
+
+    # Log to DB with status='processing' (non-fatal)
+    interaction_id = uuid.uuid4().hex
+    try:
+        db.log_interaction(
+            session_id=session_id,
+            language=language_code,
+            transcript="",
+            intent="realtime",
+            assistant_response="",
+            status="processing",
+            latency_dict={},
+        )
+    except Exception:
+        pass
+
+    provider = _get_rt_provider()
+    if provider is None:
+        return jsonify({"error": "realtime_disabled", "legacy_url": "/process_audio"}), 503
+
+    def _sse_generator():
+        final_status = "success"
+        try:
+            for event_dict in provider.process_audio_stream(
+                audio_bytes, session_id, language_code
+            ):
+                # Also honour a cancel set via /realtime/cancel endpoint
+                with _rt_sessions_lock:
+                    cancelled = _rt_sessions.get(token, {}).get("cancelled", False)
+                if cancelled:
+                    provider.cancel_response(session_id)
+                    yield "data: " + json.dumps({
+                        "type": "error", "data": "cancelled", "turn_id": ""
+                    }) + "\n\n"
+                    final_status = "interrupted"
+                    return
+
+                if event_dict.get("type") == "error":
+                    final_status = "interrupted" if event_dict.get("data") == "cancelled" else "error"
+
+                yield "data: " + json.dumps(event_dict) + "\n\n"
+
+                if event_dict.get("type") == "done":
+                    return
+
+        except Exception as exc:
+            final_status = "error"
+            yield "data: " + json.dumps(
+                {"type": "error", "data": str(exc), "turn_id": ""}
+            ) + "\n\n"
+        finally:
+            # Update DB status (non-fatal)
+            try:
+                db.log_interaction(
+                    session_id=session_id,
+                    language=language_code,
+                    transcript="",
+                    intent="realtime",
+                    assistant_response="",
+                    status=final_status,
+                    latency_dict={},
+                )
+            except Exception:
+                pass
+
+    return Response(
+        stream_with_context(_sse_generator()),
+        mimetype="text/event-stream",
+        headers={
+            "Cache-Control":    "no-cache",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@app.route("/realtime/cancel", methods=["POST"])
+def realtime_cancel():
+    """Cancel the active provider response for the current session."""
+    token, session_info = _validate_rt_token(request)
+    session_id = session_info["session_id"]
+
+    with _rt_sessions_lock:
+        if token in _rt_sessions:
+            _rt_sessions[token]["cancelled"] = True
+
+    provider = _get_rt_provider()
+    if provider is not None:
+        try:
+            provider.cancel_response(session_id)
+        except Exception:
+            pass
+
+    return jsonify({"cancelled": True}), 200
+
+
+@app.route("/realtime/session", methods=["DELETE"])
+def realtime_end_session():
+    """End a realtime session, removing it from the token store."""
+    token, session_info = _validate_rt_token(request)
+    session_id = session_info["session_id"]
+
+    with _rt_sessions_lock:
+        _rt_sessions.pop(token, None)
+
+    try:
+        db.end_session(session_id)
+    except Exception:
+        pass
+
+    return jsonify({"ended": True}), 200
+
+
+@app.route("/realtime/config", methods=["GET"])
+def realtime_config():
+    """
+    Return current realtime voice configuration (no auth required).
+    VAD and barge-in parameters are read from environment with safe defaults.
+    streaming_honest documents that this provider does NOT do true streaming.
+    """
+    return jsonify({
+        "provider":               os.environ.get("REALTIME_PROVIDER", "chunked_tts"),
+        "vad_threshold":          float(os.environ.get("REALTIME_VAD_THRESHOLD", "0.5")),
+        "min_speech_ms":          int(os.environ.get("REALTIME_VAD_MIN_SPEECH_MS", "250")),
+        "min_silence_ms":         int(os.environ.get("REALTIME_VAD_MIN_SILENCE_MS", "400")),
+        "pre_speech_pad_ms":      int(os.environ.get("REALTIME_VAD_PRE_SPEECH_PAD_MS", "100")),
+        "barge_in_debounce_ms":   int(os.environ.get("REALTIME_BARGE_IN_DEBOUNCE_MS", "180")),
+        "barge_in_cooldown_ms":   int(os.environ.get("REALTIME_BARGE_IN_COOLDOWN_MS", "300")),
+        "session_ttl_seconds":    _REALTIME_SESSION_TTL,
+        "streaming_honest":       False,
+        "realtime_voice_enabled": os.environ.get("REALTIME_VOICE_ENABLED", "false").lower() == "true",
+    }), 200
 
 
 # =========================================================
