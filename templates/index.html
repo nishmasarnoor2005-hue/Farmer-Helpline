@@ -465,6 +465,47 @@
         <button class="btn btn-end"  id="endBtn"  title="End Call" hidden>📵</button>
     </div>
 
+    <!-- Real-Time Voice Panel (hidden by default, shown when REALTIME_VOICE_ENABLED=true) -->
+    <div id="realtime-panel" style="display:none; margin-top:16px; padding:12px; border:1px solid #4CAF50; border-radius:8px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+        <input type="checkbox" id="realtimeModeToggle">
+        <span>&#x26A1; Real-Time Mode</span>
+      </label>
+      <div id="rtStatus" style="margin-top:8px;font-size:0.9em;color:#666;">Idle</div>
+      <button id="rtStartBtn" disabled style="margin-top:8px;padding:6px 16px;">Start Real-Time</button>
+    </div>
+    {% if realtime_enabled %}
+    <script>
+      document.getElementById('realtime-panel').style.display = 'block';
+      const rtToggle = document.getElementById('realtimeModeToggle');
+      const rtStartBtn = document.getElementById('rtStartBtn');
+      let rtController = null;
+      rtToggle.addEventListener('change', async function() {
+        if (this.checked) {
+          rtStartBtn.disabled = false;
+        } else {
+          rtStartBtn.disabled = true;
+          if (rtController) { await rtController.stop(); rtController = null; }
+        }
+      });
+      rtStartBtn.addEventListener('click', async function() {
+        if (!rtController) {
+          const { RealtimeVoiceController } = await import('/static/js/realtime_voice.js');
+          rtController = new RealtimeVoiceController({
+            statusEl: document.getElementById('rtStatus'),
+            startBtnEl: rtStartBtn,
+            onTranscript: (t) => console.log('Transcript:', t),
+            onError: (e) => console.error('RT Error:', e)
+          });
+          await rtController.start();
+        } else {
+          await rtController.stop();
+          rtController = null;
+        }
+      });
+    </script>
+    {% endif %}
+
 </div>
 
 <script>

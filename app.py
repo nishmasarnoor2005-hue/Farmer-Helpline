@@ -476,7 +476,10 @@ SCHEME_KEYWORDS = [
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template(
+        "index.html",
+        realtime_enabled=os.getenv("REALTIME_VOICE_ENABLED", "false").lower() == "true",
+    )
 
 
 # =========================================================
