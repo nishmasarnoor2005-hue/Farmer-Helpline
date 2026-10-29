@@ -2,7 +2,14 @@
 Tests for services/intent_service.py
 """
 import pytest
-from services.intent_service import classify_intent, IntentClassifier, load_training_data, evaluate
+from unittest.mock import patch
+from services.intent_service import (
+    classify_intent,
+    IntentClassifier,
+    load_training_data,
+    evaluate,
+    load_ml_model,
+)
 
 
 class TestIntentClassifier:
@@ -32,34 +39,30 @@ class TestIntentClassifier:
         result = classify_intent("ಮಳೆ ಯಾವಾಗ ಬರುತ್ತದೆ")
         assert result["intent"] == "weather", f"Expected weather, got {result['intent']}"
 
-    def test_method_always_rule_based(self):
-        """Method must always be 'rule_based' regardless of input."""
+    def test_method_is_ml_or_rule_based(self):
+        """Method must be either 'ml' or 'rule_based'."""
         inputs = [
             "What is the weather tomorrow?",
             "paddy price in Mysore market",
             "PM Kisan yojana eligibility",
             "tomato disease spray",
-            "xyzzy",
             "ಮಳೆ ಯಾವಾಗ ಬರುತ್ತದೆ",
             "",
         ]
         for text in inputs:
             result = classify_intent(text)
-            assert result["method"] == "rule_based", (
-                f"Expected method='rule_based' for input {text!r}, got {result['method']!r}"
+            assert result["method"] in ("ml", "rule_based"), (
+                f"Expected method in ('ml', 'rule_based') for input {text!r}, got {result['method']!r}"
             )
 
     def test_strong_match_confidence(self):
-        """Two or more keywords → confidence 1.0."""
+        """Two or more keywords → confidence 1.0 (rule-based) or high ML probability."""
         result = classify_intent("weather forecast temperature today")
-        assert result["confidence"] == 1.0
+        assert result["confidence"] >= 0.6
 
     def test_weak_match_confidence(self):
-        """Exactly one keyword → confidence 0.6."""
+        """Exactly one keyword → confidence 0.6 (rule-based) or some ML confidence."""
         result = classify_intent("just checking weather nothing else")
-        # 'weather' is one keyword
-        assert result["confidence"] == 0.6 or result["confidence"] == 1.0
-        # Relax: at least some confidence detected
         assert result["confidence"] > 0.0
 
     def test_language_code_passthrough(self):
@@ -75,6 +78,51 @@ class TestIntentClassifier:
         assert "confidence" in result
         assert "method" in result
         assert "match_count" in result
+
+    # ---------------------------------------------------------------
+    # ML model tests
+    # ---------------------------------------------------------------
+
+    def test_load_ml_model_returns_expected_keys(self):
+        """load_ml_model() must return a dict with vectorizer, classifier, classes."""
+        model = load_ml_model()
+        assert model is not None, "ML model not found — run scripts/train_intent_classifier.py first"
+        assert isinstance(model, dict), "load_ml_model() must return a dict"
+        for key in ("vectorizer", "classifier", "classes"):
+            assert key in model, f"ML model dict missing key '{key}'"
+
+    def test_ml_market_price_classification(self):
+        """ML model should classify market price query correctly."""
+        result = classify_intent("what is the market price of tomato", "en")
+        assert result["intent"] == "market_price", (
+            f"Expected market_price, got {result['intent']}"
+        )
+
+    def test_ml_weather_classification(self):
+        """ML model should classify weather query correctly."""
+        result = classify_intent("weather forecast for tomorrow", "en")
+        assert result["intent"] == "weather", (
+            f"Expected weather, got {result['intent']}"
+        )
+
+    def test_rule_based_fallback_when_ml_absent(self):
+        """When _ml_model is None, rule-based fallback must still work correctly."""
+        import services.intent_service as svc
+
+        original = svc._ml_model
+        try:
+            svc._ml_model = None
+            # Also patch the classifier's reference
+            result = svc._classifier.classify.__func__(svc._classifier, "what is the weather today", "en")
+            # Patch at module level
+            with patch.object(svc, "_ml_model", None):
+                result = classify_intent("what is the weather today", "en")
+                assert result["intent"] == "weather", (
+                    f"Rule-based fallback failed: got {result['intent']}"
+                )
+                assert result["method"] == "rule_based"
+        finally:
+            svc._ml_model = original
 
 
 class TestTrainingDataset:

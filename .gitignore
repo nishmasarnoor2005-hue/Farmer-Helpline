@@ -48,6 +48,9 @@ cloudflared.exe
 *.bin
 *.pt
 
+# ── Trained ML models ────────────────────────────────────
+models/*.joblib
+
 # ── OS ───────────────────────────────────────────────────
 .DS_Store
 Thumbs.db

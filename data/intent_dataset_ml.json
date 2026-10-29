@@ -1,0 +1,5797 @@
+[
+  {
+    "text": "asking about the root wilt disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "വ്യാപാരി എവിടെ കാണും",
+    "language": "ml",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about the beneficiary  status of pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about manure and fertilizer, spacing, size of the pit for malbhog.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "where should I sell my crop for the best price",
+    "language": "en",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about the control of stem rot disease in cabbage",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the control measure against late blight disease in potato crop cultivation.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the fertilizer doses in terms of per bigha of land to be applied in the main filed for sali rice cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query regarding selling of jute fibre.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "querry regarding rainfall forecasting in dhemali district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about control of spotted wilt in tomato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "want to know whether hybrid rice seed supplied by government is suitable or not",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of yellow stem borer pest attcak in paddy",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure against rhizome rot disease in ginger.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure of late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "02 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "08 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking market price in tinsukia",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the control meausre against fungal wilt in tomato crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for market mandi",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "when should I sow paddy seeds",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the control measure against leaf eating caterpillars in cauliflower crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the control measure against late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "02 jun rainfall(mm) : 0 temp(max/min):0.0  / 0.0  humidity(max/min)0.0  / 0.0  wind:0.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the late sown sali rice variety",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojna",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "farmer asked a query regarding sowing time and seed rate of pea.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "haan sahi hai",
+    "language": "hi",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking market price of ginger",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n29 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the control measure against late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "DAP and potash for groundnut crop",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "registration as farmer fro selling paddy through the fci",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n29 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the nutrient management in coconut and fertilizer doses in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about seed rate & sowing time of sesamum",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the seed treatment in rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the control measure against rice case worm in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "25 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the market price of paddy.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure of yellow stem borer pest attack in boro rice.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "टमाटर की पत्तियां पीली हो रही हैं",
+    "language": "hi",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about protection measure of late blight",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for predicted rainfall and temperature",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 5th year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control red rot disease in sugarcane.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "how to apply for PM KISAN yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer dose for top dressing of urea in sali rice.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about seed bed preparation of hybrid rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of fruit rot disease in orange",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the management of blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about market price of vermicompost(vermex)",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against wilting of leaves in chilli crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n05 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for type of crops to be grown in kharif rather than sali paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the fungal wilt  disease in tomato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 3rd year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about market price of hybrid boro rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query regarding availing of subsidised tractor from rkvy scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "control of leaf blast in paddy seedlings",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for any crop booster name to be sprayed in his knol-khol crop cultivation filed for a better yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for fertlizer doses in terms of per bigha of land for mustard crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "നെൽകൃഷി ജലസേചനം എങ്ങനെ",
+    "language": "ml",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure of fruit rot disease in bottle gourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan maan dhan scheme.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "crop insurance details and eligibility",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against rice case worm in paddy crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "control measure of phytophthora leaf rot disease in betel vine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for radish crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the rice cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "25 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the rain forecast",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t3.0\t25.2  / 19.0\t99.0  / 99.0\t3.7\n06 may\t17.0\t29.0  / 21.0\t64.0  / 0\t5.0\n07 may\t6.0\t32.0  / 21.0\t43.0  / 0\t6.0\n08 may\t11.0\t32.0  / 21.0\t45.0  / 0\t4.0\n09 may\t15.0\t32.0  / 22.0\t46.0  / 0\t5.0\n10 may\t26.0\t32.0  / 22.0\t52.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ശരി",
+    "language": "ml",
+    "intent": "unknown"
+  },
+  {
+    "text": "asked about land selling for agriculture government",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "31 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t5.1\t0.0  / 0.0\t0.0  / 0.0\t0.0\n06 may\t9.0\t26.0  / 21.0\t60.0  / 0\t12.0\n07 may\t5.0\t28.0  / 21.0\t54.0  / 0\t12.0\n08 may\t6.0\t28.0  / 21.0\t51.0  / 0\t8.0\n09 may\t21.0\t28.0  / 21.0\t51.0  / 0\t13.0\n10 may\t20.0\t29.0  / 22.0\t55.0  / 0\t13.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about control measure of blight disease in black gram",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "मेरी फसल को क्या हुआ",
+    "language": "hi",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n01 may\t13.9\t0.0  / 20.1\t0.0  / 0.0\t0.0\n02 may\t22.0\t33.0  / 22.0\t52.0  / 0\t3.0\n03 may\t9.0\t32.0  / 22.0\t47.0  / 0\t3.0\n04 may\t7.0\t28.0  / 21.0\t67.0  / 0\t4.0\n05 may\t21.0\t35.0  / 22.0\t39.0  / 0\t7.0\n06 may\t31.0\t28.0  / 21.0\t81.0  / 0\t4.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about seedbed preparation of hybrid rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about cost price of exotic breed of piglet for buying",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the control measure against field crickets and cut worms in potato crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about leaf spot disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the tuber distance to sow for potato crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ഇന്ന് മഴ ഉണ്ടോ",
+    "language": "ml",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan maan dhan scheme.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the cultivation of boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the management of insect pest in cabbage.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses requirement to cultivate bitter gourd in a land of 1 bigha.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer dose for dap along with other in paddy",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan installment.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "09 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n27 apr\t0\t0  / 0\t0  / 0\t0\n28 apr\t3.0\t33.0  / 22.0\t45.0  / 0\t17.0\n29 apr\t5.0\t31.0  / 21.0\t54.0  / 0\t16.0\n30 apr\t7.0\t30.0  / 21.0\t57.0  / 0\t15.0\n01 may\t8.0\t30.0  / 21.0\t60.0  / 0\t6.0\n02 may\t38.0\t30.0  / 20.0\t58.0  / 0\t14.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "തക്കാളി ചെടി ഉണങ്ങുന്നു",
+    "language": "ml",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about selling of rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "tomato market rate today in Bangalore",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "aasking for the manures and fertilizer dosages in terms of per bigha of land to cultivate turmeric.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "04 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure of bacterial wilt disease in brinjal.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "PM KISAN yojana kya hai",
+    "language": "hi",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the current market rate of rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the control measure against late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures & fertilizer doses in terms of per bigha of land for bottle gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about control of bud rot disease in coconut",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan instalment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "brown spots and blight on paddy",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the insect problem in bottle gourd.\napply dursban 30 ec @ 2ml / l of water , 3 spray at 5 days interval or \napply ustaad @ 2ml / l of water , 3 spray at 5 days interval",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about availability of paddy seed",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "farmer asking query regarding selling of paddy seeds.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "control measure of aphid pest attack in cowpea",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control of rhizome rot disease in ginger",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "querry regarding blight infection in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t39.0\t26.0  / 22.0\t77.0  / 0\t6.0\n07 may\t43.0\t27.0  / 21.0\t65.0  / 0\t6.0\n08 may\t36.0\t30.0  / 22.0\t48.0  / 0\t7.0\n09 may\t66.0\t30.0  / 22.0\t52.0  / 0\t5.0\n10 may\t65.0\t30.0  / 22.0\t57.0  / 0\t6.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of in terms of per bigha of land for potato crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "27 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "humidity levels in Bangalore today",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the price of mini power tiller at subsidy rate",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the irrigation requirement of wheat",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of fruit rot disease in bottle gourd",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about market price of maize",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "control measure of late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for sowing time of wheat",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about control measure of blight and insects",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "control measure of phytophthora leaf rot disease in betelvine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t19.0\t27.0  / 20.0\t60.0  / 0\t10.0\n07 may\t4.0\t29.0  / 21.0\t49.0  / 0\t12.0\n08 may\t3.0\t29.0  / 21.0\t47.0  / 0\t10.0\n09 may\t18.0\t29.0  / 21.0\t47.0  / 0\t10.0\n10 may\t13.0\t29.0  / 21.0\t52.0  / 0\t14.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about name of msp selling point",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure against stem rot disease in dolichos bean.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "നെല്ലിന് ഏത് വളം ഇടണം",
+    "language": "ml",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure against blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses requirement for a seed bed of 10 metre in length & 1.25 metre in width to raise seedlings of boro rice.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about seedbed preparation of boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n25 apr\t0\t0  / 0\t0  / 0\t0\n25 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the insects pest problem in cow pea",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "തക്കാളി വില ഇന്ന് മാർക്കറ്റിൽ",
+    "language": "ml",
+    "intent": "market_price"
+  },
+  {
+    "text": "control measure of late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "farmer asked about a complaint regarding the higher rate of fertilizer in the market.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "telling that he has 5o kilograms (approx) of ginger in hand. now as the price is low in the market, he wants to go for preservation of his stock to sell later when the price goes up. asking the procedure of preservation.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure of fruit rot disease in bottle gourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about control measure of brown spot",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the control measure against rice case worm in paddy cutivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the cultivation practices of boro rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "07 jun rainfall(mm) : 0 temp(max/min):33.6  / 21.0  humidity(max/min)70.0  / 81.0  wind:0.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for any crop booster chemical name to be sprayed in his ridge gourd crop cultivation for a better yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about plant protection in seed bed of rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about adhar updation in pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query regarding market price of paddy",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query regarding kisan loan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking that he is not getting 5th installment of pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about phomopsis blight & fruit rot of brinjal cultivation.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the prcedure for selling paddy to fci.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the urea fertilizer required for papaya plant.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control fruit rot disease in chilli.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for any protective measure to be adopted against pest attack to be taken in the seed bed.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "01 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "want to know regarding blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "farmer asking query regarding seed rate of sali rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan installment.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "enquired about the control measures of black rot disease of cauliflower",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the seedling dip treatment and fertilizer dose of boro paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "apni fasal ki sahi kimat kaise mile",
+    "language": "hi",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about dose of urea dap mop",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against thrips attack in garlic crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "shukriya",
+    "language": "hi",
+    "intent": "unknown"
+  },
+  {
+    "text": "നാളെ കാലാവസ്ഥ എങ്ങനെ",
+    "language": "ml",
+    "intent": "weather"
+  },
+  {
+    "text": "no",
+    "language": "en",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking about the control of leaf blast in paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the insects pest problem in ridge gourd",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about selling of rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for bitter gourd crop cultivation and the procedure of its application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding cultitural practice of paddy seedlings",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asked about application of micronutrient. spray npk 19 all. 2 times at 15days interval mixing 10gm in 1 liter of water.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ಬೆಳೆಗೆ ರೋಗ ಬಂದಿದೆ ಔಷಧ ಏನು",
+    "language": "kn",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the management of insect pest in brinjal.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asked about seed bad preparation of hybrid paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "kisaan ke liye sarkar ki yojana",
+    "language": "hi",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding yellow rust diseases in wheat",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "government subsidy for seeds and fertilizer",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the sowing time boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for potato crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking some crop booster for paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control of leaf spot disease in cucumber",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the reliable source of rice seed variety ranjit.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the paddy cultivation preactices",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "what is the weather today",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asked about price and marketing of rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking that he will cultivate rice next year and wants to know market price for more value.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "fasal mein bimari ke lakshan",
+    "language": "hi",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosage for a seed bed of 10 metre long and 125 centi metre width to raise seedlings of boro rice.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding overdose of fertilizer ( urea )on paddy field",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control phytophthora leaf rot disease in betel vine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ഹലോ",
+    "language": "ml",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking about automatic sms regarding market rate",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query regarding  pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about market related sms by kissan sms portal:-\"kharuapatia market/ commodity cabbage/ quental 2100/ date 01-11-14",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "kharidar kaise dhundhe apni fasal ke liye",
+    "language": "hi",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the spraying of nitrogenous fertilizer in sali paddy nursery.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "will it rain tomorrow in Mysore",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding pm kisan samman nidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "control of rice hispa in paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n05 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against field crickets and cut worms in cabbage crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "08 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "aphid pest infestation on vegetable crop",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about use of multimicronutrient in paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan registration",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ರೈತರಿಗೆ ಯಾವ ಯೋಜನೆಗಳಿವೆ",
+    "language": "kn",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the use og green harvest all crops.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of rice hispa in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "25 may rainfall(mm) : 18.0 temp(max/min):0.0  / 17.6  humidity(max/min)0.0  / 96.0  wind:1.9",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the amount @ time of top dressing of urea & potash in paddy (boro)",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control of fruit rot disease in chillies",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about mandi price of arecanut",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the transplanting time of rice seedlings",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control  measure to control bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan man dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "seed treatment in sali paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about cultivation practices of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for some good recommended ahu rice vatiety names of tall type suitable for cultivation in his zone.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about leaf yellowing disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಸರಿ ಆಯಿತು",
+    "language": "kn",
+    "intent": "unknown"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 3rd year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control of rhizome rot disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the control measure against mosaic disease in chilli crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan man dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "കീടം നെൽച്ചെടി തിന്നുന്നു",
+    "language": "ml",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the market rate of farm mechinary equipment",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "what is the selling price of maize",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm fasal bima yojana.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "what is the price of onion today",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about nursery bed preparation, varieties, time of sowing, spacing, manure and fertilizer of cabbage",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against fungal wilt disease in brinjal crop cultivation.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the use of green harvest all crops in chilli.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the soil treatment before planting of the crop",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the bacterial wilting disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosages in terms of per bigha of land to cultivate potato crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about leaf spot disease of paddy",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "08 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding karak nath [ local name - kali - mahi ]breed of chicken - it is aindigenous breed of hyderabad , andhra pradesh -- meat & coat  colour is darkish[ black ] in colour - management  is almost same with layer / broiler -  daily feed consumption is  higher then the other breed due to the boy weight & size , the high price of meat is due to the protein quality & palatability of the kali mahi , , besides the managemental cost , the vaccine are same with layer vaccination [ f1 , ibd, crd , fowl pox,  ifactious coryza & egg drop syndrome ]",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "--asking about where to visit for the registration of pradhan mantri fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "aaj barish hogi kya",
+    "language": "hi",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n29 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regegarding  pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the market price for tomato",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the paddy cultivation practices",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about fertilizer does inurea@18kg/bigha,ssp @33kg/bigha,mop mustard oil seed culture",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "യൂറിയ എത്ര അളവ് നൽകണം",
+    "language": "ml",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about insurance schemes for farmers.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ಧನ್ಯವಾದ",
+    "language": "kn",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses and its procedure of application in terms of per bigha of land for okra crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about bhoot jolokia price in market and plant required for i bigha of land and about solar pumps",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "lear to moderate cloudy sky with 0-5 octa will prevail\r\nduring next 5 days. 3.0, 5.0 and 8.0 mm rainfall is predicted\r\non 15\r\nth\r\n, 16\r\nth and 17\r\nth april. mainly south-easterly wind\r\nwith a speed of 3.0-5.0 kmph is expected. maximum\r\ntemperature is predicted as 33.0, 33.0, 29.0, 29.0 and\r\n29.0°c and minimum as 18.0, 18.0, 17.0, 17.0 and 17.0°c\r\n13th, 14\r\nth, 15\r\nth, 16\r\nth and 17\r\nth april, 2016 respectively.\r\nmorning and evening relative humidity will be around 75-\r\n89% and 25-41% during next 5 days..",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose to be applied in the 4th year stage of his orange trees",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about hybrid seed for boro paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "02 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asked about marketing and gst of selling the goods outside the state.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "telling that he has around 2000 kilo grams of potato in hand and now as the price of potato is dipping, he wants to preserve it and to sell those whenever the price goes up. so, asking what to do and how to preserve.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure of phythophthora leaf rot disease in betel vine",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the cost of tomato in golaghat market",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "ಮಾರುಕಟ್ಟೆ ಎಲ್ಲಿದೆ ಹತ್ತಿರ",
+    "language": "kn",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about the cultivation practice and hyv of sali rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "want to know regarding blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 3rd year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "31 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "regarding the high difference in the price of urea in the market.the shopkeepers are selling urea  at a much higher price than the printed price",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the black gram sowing time with varieties suitable to grow.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for treatment of stem rot disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses requirement to cultivate ridge gourd in a land of 1 bigha.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "06 jun rainfall(mm) : 0 temp(max/min):28.6  / 20.5  humidity(max/min)83.0  / 85.0  wind:1.9",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm fasal bima yojana registration",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the insects pest problem in rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about blight disease in potato and fungal disease of cabbage",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n03 may\t47.3\t30.4  / 20.4\t0.0  / 0.0\t0.0\n04 may\t3.0\t27.0  / 22.0\t67.0  / 0\t12.0\n05 may\t143.0\t31.0  / 21.0\t44.0  / 0\t10.0\n06 may\t24.0\t26.0  / 19.0\t66.0  / 0\t12.0\n07 may\t10.0\t27.0  / 20.0\t55.0  / 0\t10.0\n08 may\t7.0\t29.0  / 21.0\t47.0  / 0\t11.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the control measure against rice stem borer in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan registration.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the nutrient management and fertilizer doses in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "querry regarding rainfall forecasting in barpeta",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about registration of pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "good morning",
+    "language": "en",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking about the nutrient management and fertilizer doses  in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about market price of brinjal",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the market price of turmeric",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t0\t29.0  / 22.0\t54.0  / 0\t3.0\n07 may\t0\t33.0  / 21.0\t41.0  / 0\t2.0\n08 may\t0\t31.0  / 22.0\t50.0  / 0\t3.0\n09 may\t0\t32.0  / 23.0\t46.0  / 0\t4.0\n10 may\t0\t32.0  / 23.0\t44.0  / 0\t3.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n02 may\t27.0\t29.0  / 17.0\t65.0  / 90.0\t0.0\n03 may\t96.0\t28.0  / 20.0\t48.0  / 0\t6.0\n04 may\t24.0\t25.0  / 21.0\t68.0  / 0\t10.0\n05 may\t78.0\t26.0  / 20.0\t68.0  / 0\t5.0\n06 may\t15.0\t25.0  / 19.0\t70.0  / 0\t11.0\n07 may\t15.0\t28.0  / 20.0\t54.0  / 0\t9.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 3rd year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the fertilizer and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asked wearher vitamine and insectiside can be sprayed at the same time",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for any govt. approved marketing organization to sell the produce.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages in terms of per tree of arecanut.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "gehu ka mandi bhav batao",
+    "language": "hi",
+    "intent": "market_price"
+  },
+  {
+    "text": "ಬೆಳೆ ಎಲ್ಲಿ ಮಾರಬೇಕು ಹೆಚ್ಚು ಬೆಲೆಗೆ",
+    "language": "kn",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about where to visit for the registration of pradhan mantri fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the recommended potash fertilizer dose in rice",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan registration",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in brinjal",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n24 apr\t0\t32.0  / 0.0\t0.0  / 0.0\t0.0\n25 apr\t0\t28.0  / 18.0\t33.0  / 0\t4.0\n26 apr\t0\t29.0  / 20.0\t32.0  / 0\t4.0\n27 apr\t4.0\t29.0  / 20.0\t32.0  / 0\t4.0\n28 apr\t25.0\t27.0  / 19.0\t45.0  / 0\t3.0\n29 apr\t27.0\t25.0  / 17.0\t63.0  / 0\t6.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control of late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about availability of urea fertilizer",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the planting and row distance of paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of stem rot disease in smooth gourd",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for knol-khol crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the automatic mandi rate of potato",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "धान की बुआई कब करें",
+    "language": "hi",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "regarding stem borer pest attack in paddy crop",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control  measure to control fungal wilt disease in tomato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding selling of paddy.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about control measure of brown spot",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t19.0\t27.0  / 20.0\t60.0  / 0\t10.0\n07 may\t4.0\t29.0  / 21.0\t49.0  / 0\t12.0\n08 may\t3.0\t29.0  / 21.0\t47.0  / 0\t10.0\n09 may\t18.0\t29.0  / 21.0\t47.0  / 0\t10.0\n10 may\t13.0\t29.0  / 21.0\t52.0  / 0\t14.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "16 may rainfall(mm) : 6.3 temp(max/min):30.0  / 21.0  humidity(max/min)91.0  / 92.0  wind:0.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the leaf spot disease in betel vine",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಮಾರಾಟ ದರ ತಿಳಿಸಿ",
+    "language": "kn",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for selling out of fish stock",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the fertilizer doses in brinjal(urea given in early stage )",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "control measure of blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "call related to  pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the seed rate for mustard cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about bihar pm kisan scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about contact for buying of duckling and market price of duckling for rearing.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses requirement for a seed bed of 10 metre in length & 1.25 metre in width to raise seedlings of boro rice.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ജൈവ വളം ഏത് ഉപയോഗിക്കണം",
+    "language": "ml",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query about manure and fertilizer doses.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n27 apr\t0\t0.0  / 22.4\t0.0  / 0.0\t0.0\n28 apr\t5.0\t32.0  / 21.0\t53.0  / 0\t9.0\n29 apr\t6.0\t30.0  / 21.0\t62.0  / 0\t8.0\n30 apr\t8.0\t29.0  / 20.0\t62.0  / 0\t8.0\n01 may\t9.0\t28.0  / 20.0\t65.0  / 0\t4.0\n02 may\t44.0\t28.0  / 20.0\t68.0  / 0\t9.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses  to be applied in terms of per bigha of land for ridge gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about fertilizer dose of npk in hybrid boro rice",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the  paddy cultivation practices and control gandhi bug",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n05 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the insects pest problem in chillies",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking water soluble nitrogenous fertilizer for rice",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure of fruit rot disease in cucumber.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "qury regarding harvesting and storage of wheat for dairy purose.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about different government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control leaf blast in boro rice cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "06 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "querry regarding rainfall forecasting in sivsagar district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query about manure and fertilizer of garlic.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojna",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the reason for not availing pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asked about urea and ssp/dap dosage",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the fertilizer dose of seedling bed of rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the reason for not availing pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about rainfall and  temperature of udalguri district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "insect pest problem",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n02 may\t0\t0  / 0\t0  / 0\t0\n03 may\t89.0\t27.0  / 22.0\t67.0  / 0\t4.0\n04 may\t51.0\t27.0  / 22.0\t62.0  / 0\t5.0\n05 may\t163.0\t30.0  / 20.0\t48.0  / 0\t8.0\n06 may\t33.0\t24.0  / 21.0\t75.0  / 0\t4.0\n07 may\t47.0\t23.0  / 21.0\t74.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "19 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the use of multiplex paddy special in boro rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure of early blight disease attack in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding application of manures and fertilizers in cucumber",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding hot use urea, super and potash.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ಈರುಳ್ಳಿ ಬೆಲೆ ಎಷ್ಟು ಇಂದು",
+    "language": "kn",
+    "intent": "market_price"
+  },
+  {
+    "text": "fasal kahan beche sabse achhe daam par",
+    "language": "hi",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about the control measure against blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking fungal spray disease of vetal vine",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the pm kisan maan dhan  yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about cost of urea,dap & mop",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about issue related to pm kisan samman nidhi scheme.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the recommended time of sowing of potato crops.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the psot harvest mangement of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manure and fertilizer dosage for litchi to be applied in the 10th year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about market price of goods and vegetables.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the fertilizers and manure doses in terms of per bigha of land to cultivate cucumber.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the field crops that are grown in rabi season.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "post harvest management rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the paddy cultivation practices",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the recommended  fertilizer dose for boro rice cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land to cultivate okra.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ಸಾವಯವ ಗೊಬ್ಬರ ಯಾವುದು ಒಳ್ಳೆಯದು",
+    "language": "kn",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about present rate in market",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about application of npk after application of urea, ssp and mop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query about update of ifsc code for pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "10 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the cultivation practices of sali rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses and its procedure of application in terms of per bigha of land for okra crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "farmer asking query regarding sowing time seed rate of bajra.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "control measure of late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "insects eating my rice plants",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the nutrient management and fertilizer doses in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "how much urea should I apply for wheat",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding procurement of fodder crops seeds",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ಮಣ್ಣಿಗೆ ತಕ್ಕ ಬೆಳೆ ಯಾವುದು",
+    "language": "kn",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of fruit rot disease in chillies",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about contact number of sprice noard for marketing purpose",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query regarding pm kisan samman nidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n13 apr\t0\t29.2  / 0.0\t85.0  / 0.0\t3.7\n14 apr\t6.0\t32.0  / 21.0\t39.0  / 0\t3.0\n15 apr\t10.0\t32.0  / 21.0\t39.0  / 0\t3.0\n16 apr\t6.0\t31.0  / 21.0\t43.0  / 0\t5.0\n17 apr\t0\t33.0  / 21.0\t42.0  / 0\t5.0\n18 apr\t5.0\t33.0  / 22.0\t42.0  / 0\t4.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure against rice bug infestation in sali paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure of fruit rot disease in bottle gourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t34.5  / 21.5\t41.0  / 46.0\t16.7\n27 apr\t11.0\t36.0  / 22.0\t37.0  / 0\t3.0\n28 apr\t10.0\t33.0  / 21.0\t43.0  / 0\t2.0\n29 apr\t16.0\t29.0  / 20.0\t67.0  / 0\t3.0\n30 apr\t18.0\t29.0  / 20.0\t66.0  / 0\t2.0\n01 may\t21.0\t28.0  / 20.0\t69.0  / 0\t2.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the crop growth booster for ridge gourd",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "where is the price highest for wheat",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the cultivation practice of sali rice .",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosage for a seed bed of 10 metre long and 125 centi metre width to raise seedlings of boro rice.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ತಾಪಮಾನ ಎಷ್ಟಿದೆ ಇಂದು",
+    "language": "kn",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against aphids and saw fly in mustard crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asked about market for selling rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about fertilizer dose and micro nutrient application in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "pyaaz ka bhav kya hai aaj",
+    "language": "hi",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the seed treatment of paddy in wet method",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "control measure of fruit rot disease in bottle gourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding  croulier & broiler price  in the market",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control of rice hispa in paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "23 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the way improve crop growth in sugarcane",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses  to be applied in terms of per bigha of land for ridge gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "regarding leaf curl disease due to attack of aphids",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan payment status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "hello",
+    "language": "en",
+    "intent": "unknown"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control phytophthora leaf rot disease in betel vine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosages in terms of per tree and the procedure of application in the 5th year stage of his lemon trees.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "in the coming 5 days clear sky will prevail; no rainfall\nis predicted from 20th to 24\nth october, 2018. the\nmaximum temperature predicted is 28-30\n°c and\nminimum of 18-20\n°c. the expected morning and\nevening rh will be 69-89 % & 50-63 %, respectively.\nmostly north easterly wind with a speed of 6-9\nkmph is expected.",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "10 may rainfall(mm) : 0 temp(max/min):29.2  / 0.0  humidity(max/min)90.0  / 0.0  wind:3.7",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertlizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n07 apr\t0\t0  / 0\t0  / 0\t0\n07 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control of insect and fungal infection in black pepper",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the market price/quintal for  tomato in his district.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n16 feb\t0\t0  / 0\t0  / 0\t0\n17 feb\t49.0\t30.0  / 14.0\t41.0  / 0\t3.0\n18 feb\t39.0\t25.0  / 12.0\t62.0  / 0\t4.0\n19 feb\t52.0\t27.0  / 13.0\t50.0  / 0\t4.0\n20 feb\t46.0\t23.0  / 12.0\t65.0  / 0\t4.0\n21 feb\t3.0\t25.0  / 12.0\t64.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "want to know regarding blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for knol-khol crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "13 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about govt. scheme on various crop cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "artly cloudy sky with light to\n’2019. about\ndays. a easterly\nthe maximum temperature predicted as\nminimum temperature as 2\nmorning and evening relative humidity are\nrespectively.",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "control measure of bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n27 apr\t0\t0  / 0\t0  / 0\t0\n27 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the control measure against cut worms in potato crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure to control rice case worm pest infestation in paddy field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ಟೊಮೇಟೊಗೆ ಎಷ್ಟು ಗೊಬ್ಬರ ಹಾಕಬೇಕು",
+    "language": "kn",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the paddy cultivation practioces",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control rice caseworm infestation in boro rice cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the benefit of spraying urea solution in sali paddy seedling.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the recommended dose of manures and fertilizers in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "तापमान कितना है आज",
+    "language": "hi",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for bitter gourd crop cultivation and the procedure of its application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in cauliflower",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n27 apr\t0\t0  / 0\t0  / 0\t0\n28 apr\t0\t30.0  / 19.0\t42.0  / 0\t11.0\n29 apr\t3.0\t29.0  / 18.0\t51.0  / 0\t11.0\n30 apr\t10.0\t28.0  / 18.0\t54.0  / 0\t12.0\n01 may\t15.0\t27.0  / 19.0\t57.0  / 0\t4.0\n02 may\t61.0\t25.0  / 18.0\t59.0  / 0\t12.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the cultivation practices of paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses and its procedure of application in terms of per bigha of land for okra crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the amount of urea and mop for top dressing after 1 month where only dap was applied as basal dose in paddu.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the method tom reduce the excess amount of nitrogenous fertilizer in sali paddy.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding how yo apply for pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "farmer wants to know information about how to increase growth of  wheat crop ?",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n27 apr\t0\t0.0  / 22.9\t0.0  / 0.0\t0.0\n28 apr\t8.0\t30.0  / 19.0\t49.0  / 0\t10.0\n29 apr\t7.0\t29.0  / 18.0\t58.0  / 0\t9.0\n30 apr\t10.0\t28.0  / 18.0\t59.0  / 0\t9.0\n01 may\t15.0\t27.0  / 19.0\t62.0  / 0\t4.0\n02 may\t61.0\t25.0  / 18.0\t65.0  / 0\t10.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the fertilizer dose of urea for top dressing in mustard.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against bacterial wilt in tomato crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "is it good weather for harvesting this week",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about fertilizer doses for rice cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about control of sucking pests ( aphids and jassids ) in ridgegourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "white powder on tomato leaves",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the control of gundhi bug in rice cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure against rice stem borer infestation in boro paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "telling that he has 2 numbers of coconut trees and does not bear fruit and the trees which are in the 8th year stage suffering from crown rot disease. asking the remedy for the same.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for any crop booster chemical name to be sprayed in his ridge gourd crop cultivation for a better yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control phytophthora leaf rot disease in betelvine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the fertilizer dose for  standing rice crop of 20 days old where 6 kg dap,2 kg mop and 5 kg urea are applied",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses in terms of per bigha of land for spine gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "regarding blast disease in paddy crops",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "16 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control of stem rot disease in sponge gourd",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about chlorpyriphos 20ec trade name available in market",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of radish in terms of per bigha of land for its cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "organic fertilizer for vegetable garden",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control of pest in paddy field in harvesting stage",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the present status of pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the cultivation practices of sali rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the insects pestt problem in bhndi",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t0\t29.0  / 22.0\t54.0  / 0\t3.0\n07 may\t0\t33.0  / 21.0\t41.0  / 0\t2.0\n08 may\t0\t31.0  / 22.0\t50.0  / 0\t3.0\n09 may\t0\t32.0  / 23.0\t46.0  / 0\t4.0\n10 may\t0\t32.0  / 23.0\t44.0  / 0\t3.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the application of micro nutrient fertilizer for growth  in bottle gourd.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the cultivation of crop in  modified climate",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about top dressing of urea  and micronutrient application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control rice gall midge pest in sali rice cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for control of leaf curling disease by using biopesticides",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the application of crop booster for better growth in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for fertlizer doses in terms of per bigha of land for mustard crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the coconut fertilizer dose.\nfertilizer dose= urea-1.50 kg/ plant.\n                                    ssp-2.50 kg/ plant.\n                                      mop-1.75 kg/ plant.\n                                        borax-25 g/ plant. \nfrom 5th year onwards, full dose of fertilizer for bearing palm.\nfor arecanut ( tamul)=fertilizer dose= 20 kg fym/ plant/ year, n-100 g/ plant/ year, p2o5= 40 g/ pant/ year, k20-140g/plant/year.\napply 2 splits, march-april and sep to october. \nmicronutrient for arecanut= multiplex areca special @ 100 g per bearing palms and @ 50 g per non-bearing palm in two split doses.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query about land preparation and seed treatment for chilli planting.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about varieties and nutrient management of cucumber \nmanure and fertilizer: fym @ 3 t, urea  15 kg, ssp  38 kg and mop  18 kg/bigha . half of urea  with full doses of ssp and mop  should be applied as basal and the remaining half of urea to be top dressed at 30 days after emergence",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for any plant protection measures against late blight in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the pm kisan number",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against blast in the seedlings raised in the seed bed for cultivation as sali rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control of stem rot disease in watermelon",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control of leaf spot disease in paddy",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding manure and fertilizers application",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about late sown varietise of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control blight disease in tomato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking that he is not getting money of pm kisan for 4th, 5th, and 6th installment.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t29.8  / 22.4\t73.0  / 83.0\t7.4\n05 may\t152.0\t32.0  / 21.0\t54.0  / 0\t5.0\n06 may\t11.0\t26.0  / 21.0\t71.0  / 0\t7.0\n07 may\t9.0\t28.0  / 21.0\t61.0  / 0\t6.0\n08 may\t4.0\t30.0  / 21.0\t50.0  / 0\t6.0\n09 may\t14.0\t31.0  / 22.0\t51.0  / 0\t6.0date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t29.8  / 22.4\t73.0  / 83.0\t7.4\n05 may\t152.0\t32.0  / 21.0\t54.0  / 0\t5.0\n06 may\t11.0\t26.0  / 21.0\t71.0  / 0\t7.0\n07 may\t9.0\t28.0  / 21.0\t61.0  / 0\t6.0\n08 may\t4.0\t30.0  / 21.0\t50.0  / 0\t6.0\n09 may\t14.0\t31.0  / 22.0\t51.0  / 0\t6.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t34.2  / 21.4\t67.0  / 69.0\t3.7\n27 apr\t0\t35.0  / 21.0\t37.0  / 0\t5.0\n28 apr\t11.0\t32.0  / 21.0\t44.0  / 0\t5.0\n29 apr\t8.0\t31.0  / 19.0\t48.0  / 0\t6.0\n30 apr\t38.0\t30.0  / 19.0\t52.0  / 0\t6.0\n01 may\t31.0\t28.0  / 19.0\t56.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about cost price of different layer chick",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "how to grow wheat in dry land",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the sell procedure of rice at government rate.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about nutrient management and dose of fertilizers",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking the appropriate age of seedlings to be transplanted to the main field under sri method of cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the rain forecast",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure of late blight disease in poato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the way to improve crop growth in cucumber",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "querry regarding rainfall (mm)forecast in nalbari district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking the contact details of the chairman of assam state agricultural marketing board to get the market channel for selling his turmeric produce.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query regarding micronutrient fertilizer",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "giving complaint against the sellers who sells fertilizers at double the price of  mrp.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "what schemes are available for farmers",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n01 may\t0\t0  / 0\t0  / 0\t0\n01 may\t0\t0  / 0\t0  / 0\t0\nmandi details",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asked about how to correct his bank details in pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for brinjal crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages in terms of per bigha of land to cultivate knol-khol.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for any crop booster chemical name to be sprayed in his ridge gourd crop cultivation for a better yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure against  late blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "dhan ke liye khad kaun sa sahi hai",
+    "language": "hi",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pradhan mantri kisan maandhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "13 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding management of wilt disease.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about selling rate of jute",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the control measure against yellow vein mosaic disease in okra crop cultivation.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n29 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asked about number of rotation of eggs inside the incubator, whether vertical or horizontal rotation will be better under standard temperature and humidity.",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the paddy cultivation practices",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the selling of paddy.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about control of disease of brown spot",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking that he is not getting money of pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "my tomato leaves are turning yellow",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control root rot disease in cabbage.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the control measure against fruit borers in brinjal crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the reason for not availing pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in french bean",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n01 may\t8.0\t30.2  / 18.0\t84.0  / 99.0\t3.7\n02 may\t57.0\t29.0  / 21.0\t61.0  / 0\t6.0\n03 may\t25.0\t30.0  / 22.0\t48.0  / 0\t4.0\n04 may\t15.0\t31.0  / 22.0\t49.0  / 0\t3.0\n05 may\t67.0\t31.0  / 21.0\t59.0  / 0\t10.0\n06 may\t72.0\t29.0  / 20.0\t90.0  / 0\t3.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "control of blast in paddy seedling",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about fertilizer dose of urea",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses  to be applied in terms of per bigha of land for bitter gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "26 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about where to visit for the registration of pradhan mantri fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "07 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "rainfall(mm) forecast in lakhimpur district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about govt. scheme on paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "quality seed for bodo paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about market rate of fertilizers and seed treatment in cole crops",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about market price for arize 6441 gold",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the insects pest problem in bhindi",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n25 apr\t0\t34.8  / 19.5\t0.0  / 0.0\t0.0\n26 apr\t5.0\t34.0  / 21.0\t32.0  / 0\t4.0\n27 apr\t13.0\t34.0  / 21.0\t32.0  / 0\t4.0\n28 apr\t23.0\t32.0  / 20.0\t43.0  / 0\t2.0\n29 apr\t42.0\t25.0  / 19.0\t78.0  / 0\t3.0\n30 apr\t14.0\t20.0  / 18.0\t77.0  / 0\t2.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the toxic effect of urea fertilizers",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure against rice hispa infestation in sali paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control bud rot disease in coconut.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n29 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "want to know regarding blight disease in brinjal",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of jackfruit to be applied in the 10th yearof stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the recommended dose of manures and fertilizers in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the fertilizer doses in coconut and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the sowing time of raising seedling of sali rice (variety-ranjit).",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control fruit rot disease in bottle gourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control of leaf spot disease in onion",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control of leaf spot disease in banana",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for fertlizer doses in terms of per bigha of land for mustard crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose to be applied in the 4th year stage of his orange trees.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "regarding top dress of urea in paddy crop",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about training for crop cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "control of late blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about nutrient management of water melon and required amount of application of fertilizer and seed treatment  before sowing",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "informing that the goat has  consumed vegetables sprayed insecticides",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the market to sell bao paddy in higher rate.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure of late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding pm kisan status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the top dressing of urea and muriate of potash at the time of panicle initiation stage",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "कल मौसम कैसा रहेगा",
+    "language": "hi",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the control measure against rice bug in paddy crop.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "aasking for the manures and fertilizer dosages in terms of per bigha of land to cultivate turmeric.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "growth harmone for rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about seed stock variety for tea cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of brown spot in rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for plant protection of rice seedlings",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for control of yellow stem borer pest",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "fasal mein kide lag gaye kya karein",
+    "language": "hi",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses  to be applied in terms of per bigha of land for ridge gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "the farmer was supplied hybrid rice seed variety- arize6444 by the gram panchayat free of cost on august. he is asking whether he can sow the seed in this season .",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asked about nutrient management in potato\napply 19kg urea, 45 kg ssp and 12kg mop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "call related topm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for cucumber crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ಇಂದು ಮಳೆ ಬರುತ್ತದೆಯೇ",
+    "language": "kn",
+    "intent": "weather"
+  },
+  {
+    "text": "02 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan man dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asked about her present pm kisan status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against rice stem borer in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about hybrid seeds of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against leaf curl in chilli crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "06 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "control of leaf blast in paddy seedlings",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "thanks a lot",
+    "language": "en",
+    "intent": "unknown"
+  },
+  {
+    "text": "03 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm fasal bima yojana registration",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer dose of urea in sali paddy .",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n30 apr\t13.0\t29.0  / 18.0\t48.0  / 0\t3.0\n01 may\t15.0\t27.0  / 18.0\t53.0  / 0\t3.0\n02 may\t21.0\t26.0  / 18.0\t57.0  / 0\t4.0\n03 may\t33.0\t28.0  / 19.0\t61.0  / 0\t6.0\n04 may\t12.0\t26.0  / 19.0\t56.0  / 0\t2.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure against rice leaf folder infestation in sali paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the cultivation practices of boro rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ನಾಳೆ ಹವಾಮಾನ ಹೇಗಿರುತ್ತದೆ",
+    "language": "kn",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the cultivation practices of boro rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about approval of pm kisan samman nidhi installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the quantiy of urea,dap and mop in ridge gourd.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose to be applied in the 4th year stage of his orange trees.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "control of bud rot disease in coconut",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about fertilizer dose and micronutrient application",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "വിള എവിടെ വിൽക്കണം നല്ല വിലയ്ക്ക്",
+    "language": "ml",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about the control of leaf spot disease in papaya",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the recommended dose of manures and fertilizers in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the panama wilt disease of banana",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the market rate of ridomil mz 72",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "cultivation practices of sali rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about manure and fertilizer dose of papaya",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against fungal wilt in brinjal crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the pm kisan schemes",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "tomato ka rate kya hai mandi mein",
+    "language": "hi",
+    "intent": "market_price"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t19.0\t27.0  / 20.0\t60.0  / 0\t10.0\n07 may\t4.0\t29.0  / 21.0\t49.0  / 0\t12.0\n08 may\t3.0\t29.0  / 21.0\t47.0  / 0\t10.0\n09 may\t18.0\t29.0  / 21.0\t47.0  / 0\t10.0\n10 may\t13.0\t29.0  / 21.0\t52.0  / 0\t14.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t0  / 0\t0  / 0\t0\n27 apr\t7.0\t33.0  / 22.0\t36.0  / 0\t3.0\n28 apr\t11.0\t30.0  / 20.0\t57.0  / 0\t2.0\n29 apr\t15.0\t31.0  / 20.0\t51.0  / 0\t4.0\n30 apr\t39.0\t30.0  / 20.0\t54.0  / 0\t3.0\n01 may\t25.0\t29.0  / 19.0\t63.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan kcc",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about control of fungal disease in arecanut\n\nspray indofil m 45 @2gm/l water , 3 spray at 5 days interval.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "control measure of root rot disease in dolichos bean",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the market price of tractor",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "current mandi rate for paddy",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control  measure to control bacterial wilt disease in tomato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about control of root rot disease in cabbage",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for mustard crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "08 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for bitterr gourd crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "want to know regarding blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the cultivation process and seed treatment.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the mustard insects pest problem",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control  measure to control bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking that how to avail kisan credit card facility for paddy cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana. also asking about contact details of kvk dhubri",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about control of bacterial wilt in tomato and leaf spot in chilli",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about his pm kisan status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about control of poor growth and infection in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "best crop for clay soil in Karnataka",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ഉള്ളി വില എന്ത് ഇന്ന്",
+    "language": "ml",
+    "intent": "market_price"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t34.2  / 20.0\t70.0  / 85.0\t3.7\n27 apr\t7.0\t34.0  / 21.0\t32.0  / 0\t5.0\n28 apr\t12.0\t29.0  / 19.0\t55.0  / 0\t3.0\n29 apr\t12.0\t31.0  / 19.0\t47.0  / 0\t5.0\n30 apr\t25.0\t29.0  / 19.0\t57.0  / 0\t6.0\n01 may\t23.0\t28.0  / 19.0\t61.0  / 0\t7.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t34.5  / 21.5\t41.0  / 46.0\t16.7\n27 apr\t11.0\t36.0  / 22.0\t37.0  / 0\t3.0\n28 apr\t10.0\t33.0  / 21.0\t43.0  / 0\t2.0\n29 apr\t16.0\t29.0  / 20.0\t67.0  / 0\t3.0\n30 apr\t18.0\t29.0  / 20.0\t66.0  / 0\t2.0\n01 may\t21.0\t28.0  / 20.0\t69.0  / 0\t2.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "how to get best price for my produce",
+    "language": "en",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "kisaan credit card loan eligibility",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan beneficiary staus",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about source of seed of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the control measure against sheath blight in sali paddy crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding market price of small power tiller",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure to control phytophthora leaf rot disease in betelvine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control of brown spot of rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control of stem borer in rice cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the current wholesale market price of cauliflower in his district.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asked about updating of aadhar card for pm kisan samman nidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the ciontrol of fruit rot disease in pumkin",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "farmer asking query regarding selling centre for selling crude oil palm oil.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "ok thank you",
+    "language": "en",
+    "intent": "unknown"
+  },
+  {
+    "text": "theek hai",
+    "language": "hi",
+    "intent": "unknown"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan man dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "അടുത്ത മാർക്കറ്റ് ഏത് ഇവിടെ",
+    "language": "ml",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about the control of stem rot disease in bean",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "want to know regarding blight disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಭತ್ತ ಬೆಳೆ ಕಡಿಮೆ ಆಗಿದೆ",
+    "language": "kn",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "14 feb rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the fertilizer and micro nutrient application",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure of crown rot diseases of coconut.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure against rhizome rot disease in ginger.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for any plant protection measures to be adopted against late blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the fertilizers and manure doses in terms of per bigha of land to cultivate bitter goourd.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses and the process of its application in terms of per bigha of land for ridge gourd cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure against stem borer infestation in seedling stage in sali paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer dose for top dressing in paddy field as he has already applied urea 6 kg/bigha and mop 4 kg/bigha",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the seed treatment of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the dose of manures and fertilizers in terms of per bigha of land for potato crop cultivation along with the process of application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the market price of sandalwood in assam",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking minimum support price for paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "application of urea 30 dap",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about leaf eating insectpest in cabbage",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ഇലകളിൽ മഞ്ഞ പൊട്ടുകൾ ഉണ്ട്",
+    "language": "ml",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "sabse achha mandi kaunsa hai mere paas",
+    "language": "hi",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking for the control measure against late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about rice pest disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "06 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "ಈ ಋತುವಿನಲ್ಲಿ ಯಾವ ಬೆಳೆ ಬೆಳೆಯಬೇಕು",
+    "language": "kn",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ചെടിക്ക് രോഗം വന്നിട്ടുണ്ട്",
+    "language": "ml",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "query about selling of rice",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about manure and fertilizer dose of coriander",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against rice case worm in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about control of insect pest",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 3rd year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding pm kisan samman nidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against leaf eating caterpillars in cabbage crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "aasking for the manures and fertilizer dosages in terms of per bigha of land to cultivate turmeric.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about manures and fertilizer application in potato",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asked about selling of rice to government",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about nitrogen content in dap",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n06 may\t0\t0  / 0\t0  / 0\t0\n07 may\t14.0\t31.0  / 20.0\t61.0  / 0\t6.0\n08 may\t3.0\t32.0  / 21.0\t42.0  / 0\t5.0\n09 may\t12.0\t32.0  / 22.0\t42.0  / 0\t5.0\n10 may\t17.0\t30.0  / 21.0\t47.0  / 0\t4.0\n11 may\t29.0\t29.0  / 21.0\t56.0  / 0\t4.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t5.1\t0.0  / 0.0\t0.0  / 0.0\t0.0\n06 may\t9.0\t26.0  / 21.0\t60.0  / 0\t12.0\n07 may\t5.0\t28.0  / 21.0\t54.0  / 0\t12.0\n08 may\t6.0\t28.0  / 21.0\t51.0  / 0\t8.0\n09 may\t21.0\t28.0  / 21.0\t51.0  / 0\t13.0\n10 may\t20.0\t29.0  / 22.0\t55.0  / 0\t13.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure of late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "insect pest problem",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure of early blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure to control root rot disease in brinjal.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "querry regarding rainfall forecast in dibrugarh district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "ಭತ್ತಕ್ಕೆ ಯಾವ ಗೊಬ್ಬರ ಹಾಕಬೇಕು",
+    "language": "kn",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure of leaf rot disease in pine apple",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಭತ್ತದ ಬೆಲೆ ಎಷ್ಟು ಈ ವಾರ",
+    "language": "kn",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure against blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "03 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control of root rot disease in cabbage",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "നന്ദി",
+    "language": "ml",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking about the control measure  to control rice hispa pest attack in paddy field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses requirement in terms of per bearing tree of mango for its application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about control measure of brown spot",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about application of foliar spraynpk 19:19:19 and micronutrient isobion",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "compost manure preparation for farm",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "organic cultivation of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "04 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "want to know regarding rotting disease in potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n29 apr\t0\t0  / 0\t0  / 0\t0\n29 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the sri method for rice cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure against fruit rot disease in chilli.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the name of micronutrient fertilizer for bottle gourd",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "fasal bima kaise milega",
+    "language": "hi",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "farmer asked about information of pm kisan sanman nidhi yojana ?",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t5.0\t27.5  / 0.0\t68.0  / 0.0\t0.0\n06 may\t12.0\t27.0  / 20.0\t56.0  / 0\t9.0\n07 may\t4.0\t28.0  / 21.0\t43.0  / 0\t8.0\n08 may\t6.0\t29.0  / 21.0\t47.0  / 0\t7.0\n09 may\t19.0\t30.0  / 21.0\t48.0  / 0\t9.0\n10 may\t18.0\t29.0  / 21.0\t51.0  / 0\t10.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control phytophthora foot rot disease of betelvine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about commodity daily price rate",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease of potato",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the rain forecast of jorhat district",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query about about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the pm kisan schemes",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about fertilizers dose of urea in top dressing",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "aking about kisan maan dhan yojana.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer dose in paddy cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "control measure of late blight disease in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n06 may\t0\t0  / 0\t0  / 0\t0\n07 may\t14.0\t31.0  / 19.0\t61.0  / 0\t6.0\n08 may\t0\t31.0  / 21.0\t44.0  / 0\t6.0\n09 may\t0\t32.0  / 22.0\t43.0  / 0\t5.0\n10 may\t10.0\t29.0  / 20.0\t47.0  / 0\t5.0\n11 may\t7.0\t28.0  / 21.0\t55.0  / 0\t4.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asked about seed selling agency",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking control measure of brown spot in rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "11 may rainfall(mm) : 0 temp(max/min):30.2  / 0.0  humidity(max/min)80.0  / 0.0  wind:3.7",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the control measure against fruit and shoot borers in brinjal crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "13 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about selling process of pumpkin",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "rainfall forecast in kamrup",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the cultivation of paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "what should I plant this season",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for fertlizer and manures doses in terms of per bigha of land for rabi maize crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer dosages to be applied in terms of per tree of arecanut in the 3rd year stage.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the planting of joha rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for some semi dwarf variety names of sali rice suitable for cultivation in his zone.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about manure and fertilizer of banana plant.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosage in terms of per bigha of land to cultivate okra.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan man dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the application of micro nutrient fertilizer for increase production",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about market price of vegetables.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "who are the buyers for paddy in my area",
+    "language": "en",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "ഏത് വിള നടണം ഈ മഴക്കാലത്ത്",
+    "language": "ml",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manure and fertilizer dose in terms of per bigha of land for potato crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure of bud rot disease in coconut.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure of fruit rot disease in cucumber.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n06 may\t0\t0  / 0\t0  / 0\t0\n06 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the fertilizer urea in mustard",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n06 may\t0\t0  / 0\t0  / 0\t0\n07 may\t0\t31.0  / 21.0\t50.0  / 0\t6.0\n08 may\t0\t29.0  / 23.0\t48.0  / 0\t5.0\n09 may\t16.0\t30.0  / 22.0\t46.0  / 0\t6.0\n10 may\t17.0\t29.0  / 23.0\t55.0  / 0\t6.0\n11 may\t17.0\t29.0  / 23.0\t60.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding nutrient management in papaya npk  19:19:19",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the fertilizer dose of potash in rice",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding control measures of leaf eating caterpilar in paddy seedling",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "which fertilizer is best for rice crop",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya and the time of application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the rain forecast",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking how to conserve moisture in the nusery bed of cauliflower after sowing of seeds",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about fertilizer dose of sali rice regarding urea",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan maan-dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against rice case worm in paddy cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosages in terms of per bigha of land to cultivate brinjal crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan mann-dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "yes",
+    "language": "en",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in arecanut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for any crop booster chemical name to be sprayed in his chilli crop cultivation for a better yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about source of selling rice seedlings",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the preventive measure of rice seedling from insect infestation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "my crop has yellow spots on the leaves",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಖರೀದಿ ವ್ಯಾಪಾರಿ ಎಲ್ಲಿ ಸಿಗುತ್ತಾರೆ",
+    "language": "kn",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about control measure of brown spot in rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "insect pest problem",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "11 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "ಬೆಳೆ ವಿಮೆ ಮಾಹಿತಿ ಬೇಕು",
+    "language": "kn",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about selling the products to the government",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses of summer squash which he wants to cultivate.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for any crop booster chemical name to be sprayed in his tomato crop cultivation for a higher yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding  sowing time and seed rate of black gram.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dosages to be applied in terms of per tree of mango.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against cut worms in potato crop cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the recommended feertilizer dose for seedling nursery bed of sali rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure of phytophthora leaf rot disease in  betel vine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಹೆಚ್ಚು ಬೆಲೆ ಹೇಗೆ ಪಡೆಯಬಹುದು ಬೆಳೆಗೆ",
+    "language": "kn",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t29.8  / 22.4\t73.0  / 83.0\t7.4\n05 may\t152.0\t32.0  / 21.0\t54.0  / 0\t5.0\n06 may\t11.0\t26.0  / 21.0\t71.0  / 0\t7.0\n07 may\t9.0\t28.0  / 21.0\t61.0  / 0\t6.0\n08 may\t4.0\t30.0  / 21.0\t50.0  / 0\t6.0\n09 may\t14.0\t31.0  / 22.0\t51.0  / 0\t6.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about crops can be grown in this time",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses in terms of per bigha of land to cultivate ridge gourd crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding selling of paddy.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control of caterpillar in rice cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query related to insect pest attack in boro rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control  measure to control bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of radish in terms of per bigha of land for radish crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n07 apr\t0\t0  / 0\t0  / 0\t0\n07 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "08 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the fertilizer dose of dap and  its brand",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t0  / 0\t0  / 0\t0\n26 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the management of brown spot disease in rice.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t3.0\t25.2  / 19.0\t99.0  / 99.0\t3.7\n06 may\t17.0\t29.0  / 21.0\t64.0  / 0\t5.0\n07 may\t6.0\t32.0  / 21.0\t43.0  / 0\t6.0\n08 may\t11.0\t32.0  / 21.0\t45.0  / 0\t4.0\n09 may\t15.0\t32.0  / 22.0\t46.0  / 0\t5.0\n10 may\t26.0\t32.0  / 22.0\t52.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "want to know regarding disease in chilli and insect attack in watermelon",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about fertilizer dose of npk in mustard",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the cultivation practices of boro rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ഇന്നത്തെ താപനില എത്ര",
+    "language": "ml",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures & fertilizers doses in terms of per tree of papaya.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ಎಲೆಗಳ ಮೇಲೆ ಬಿಳಿ ಪುಡಿ ಕಾಣಿಸುತ್ತಿದೆ",
+    "language": "kn",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "04 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "PM കിസാൻ യോജന എങ്ങനെ അപേക്ഷിക്കണം",
+    "language": "ml",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n25 apr\t0\t0  / 0\t0  / 0\t0\n25 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the market price of urea",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "patte pe safed daag hai",
+    "language": "hi",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "ಟೊಮೇಟೊ ಎಲೆ ಹಳದಿ ಆಗಿದೆ",
+    "language": "kn",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about nutrient contact in dap with respect to urea and ssp",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "fruit rot/ vit. / pest control measure",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the insects pest problem in brinjal",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "what is the temperature forecast for next 3 days",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking use of growth promoter in chilli cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n27 apr\t0\t0  / 0\t0  / 0\t0\n28 apr\t10.0\t34.0  / 21.0\t44.0  / 0\t3.0\n29 apr\t11.0\t32.0  / 20.0\t50.0  / 0\t3.0\n30 apr\t21.0\t30.0  / 20.0\t52.0  / 0\t2.0\n01 may\t21.0\t31.0  / 19.0\t55.0  / 0\t3.0\n02 may\t17.0\t25.0  / 18.0\t78.0  / 0\t2.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "--asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "want to cultural practice involved in paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in brinjal.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for bitter gourd crop cultivation along with the process of application.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against sheath blight in sali paddy crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for trhe control measure against rice case worm in paddy cultivation.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure  of bud rot disease in coconut.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control of root rot disease in chinese cabbage",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for any crop booster chemical name to be sprayed in his ridge gourd crop cultivation for a better yield.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about yesterday's market price of vegetables of different district of assam",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "regarding control of stem rot disease in cauliflower",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t0  / 0\t0  / 0\t0\n26 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about of selling potato",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "24 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about fertilizer top dressing dose and micronutrient of rice",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the pm kisan schemes",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the fertilizer doses in ground nut apply urea-3kg, ssp-30kg, mop-6kg per bigha",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure against blast in paddy crop.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about preventive taken against late blight \n\nspray ridomil gold @2gm/l water , 1 spray as prophylactic measure",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose to be applied in the 5th year stage of orange trees.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure of phytophthora leaf rot disease in betel vine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query about aadhar update for pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "want to know regarding rotting disease in bean",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n25 apr\t0\t0  / 0\t0  / 0\t0\n25 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the control measure against aphids and saw fly in mustard crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure of bacterial leaf spot disease",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the website of pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the market prices of peas",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "want to know regarding brown spot in paddy",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "26 may rainfall(mm) : 0 temp(max/min):29.8  / 22.6  humidity(max/min)73.0  / 77.0  wind:7.4",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for potato crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "ಕೀಟ ದಾಳಿ ಆಗಿದೆ ಸಿಂಪಡಿ ಯಾವುದು",
+    "language": "kn",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses requirement for a seed bed of 10 metre in length & 1.25 metre in width to raise seedlings of boro rice.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about crops grown i kharif season",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asked about seed selling agency",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "gehu mein kitni urea daale",
+    "language": "hi",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "NPK ratio for paddy cultivation",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the assam lemon  fertilizer dose for  1 year old seedlings.\nassam lemon=1 st year old plant= fym=5 kg , \n                                           n=150 g\n                                            p205=100 g/ plant per year or apply npk19 all @ 5gm/ l of water , 2 spray at 15 daya interval.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure to control late blight disease of tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the non-availability of urea fertilizer.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asked about pm kisan samman nidhi yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "കർഷകർക്ക് ഏത് സ്കീം ഉണ്ട്",
+    "language": "ml",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against blast in paddy crop",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pest and disease control of cowpea.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rice rate in market",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about his pm kisan status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "ಟೊಮೇಟೊ ಮಾರುಕಟ್ಟೆ ದರ",
+    "language": "kn",
+    "intent": "market_price"
+  },
+  {
+    "text": "query about manure and fertilizer dose.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control of stem rot disease in bhindi",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rice plants are wilting in my field",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about cultivation practices of boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the market price of rice.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "16 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n03 may\t34.0\t26.0  / 20.0\t89.0  / 95.0\t11.1\n04 may\t22.0\t27.0  / 21.0\t69.0  / 0\t2.0\n05 may\t4.0\t30.0  / 23.0\t45.0  / 0\t4.0\n06 may\t43.0\t23.0  / 20.0\t79.0  / 0\t3.0\n07 may\t4.0\t25.0  / 19.0\t55.0  / 0\t3.0\n08 may\t0\t27.0  / 20.0\t43.0  / 0\t3.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "want to know regarding brown spot disease in paddy",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about post planting fertilizer application in rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n02 may\t0\t0  / 0\t0  / 0\t0\n02 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in brinjal.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "irrigation schedule for sugarcane crop",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the control measure to control rice case worm which is affecting his paddy cultivation very badly.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about seed treatment and  fertilizer dose \ndip the seeds in water indofil m 45 5g/lit of water than shade dry it for 48 hours then sow\nfertilizer dose urea 19 kg/bigha, ssp 45 kg/bigha and mop 13 kg/bigha",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure of phytophthora leaf rot disease in betel vine.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "06 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "08 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "16 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding pm kisan",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "is there any rain forecast this month",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the use of green harvest all crops.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land to cultivate radish crop.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about govermet schemes for selling chandan plants",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the mandi rate of cowpea",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the government scheme",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n04 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding fertiilizer dose of paddy rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "regarding pm kisan sammanidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "query regarding pm kisan beneficiary status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "how to transport crop to the mandi",
+    "language": "en",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the manures and fertilizer doses in terms of per bigha of land for chilli crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n06 may\t0\t0.0  / 0.0\t0.0  / 0.0\t0.0\n07 may\t0\t29.0  / 21.0\t47.0  / 0\t9.0\n08 may\t4.0\t28.0  / 22.0\t50.0  / 0\t8.0\n09 may\t21.0\t29.0  / 21.0\t47.0  / 0\t10.0\n10 may\t18.0\t28.0  / 22.0\t55.0  / 0\t13.0\n11 may\t18.0\t28.0  / 22.0\t58.0  / 0\t11.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "13 may rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "stated that the retail outlet of his locality selling fertlizer in high price",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the fertilizer doses and nutrient management in coconut",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "insect pest problem",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rice cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "27 may rainfall(mm) : 0 temp(max/min):28.1  / 23.9  humidity(max/min)84.0  / 92.0  wind:0.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure of phytophthora  leaf rot disease in betel vine",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about fertilizer dose\napply urea 12kg/bigha, ssp 30kg/bigha and mop 3 kg/bigha \ncrop booster  @ 25/10 lit of water 30 days after sowing",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "query regarding the sesame  selling",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "14 mar rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "askin for cultivation practices of boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the insects pest problem in ridge gourd",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking control measure of bacterial leaf blight in paddy cultivation",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control measure to control fruit rot disease of chilli.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "insect pest problem",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t0  / 0\t0  / 0\t0\n27 apr\t10.0\t31.0  / 23.0\t49.0  / 0\t3.0\n28 apr\t12.0\t28.0  / 21.0\t66.0  / 0\t4.0\n29 apr\t13.0\t27.0  / 21.0\t63.0  / 0\t5.0\n30 apr\t30.0\t27.0  / 21.0\t67.0  / 0\t4.0\n01 may\t23.0\t27.0  / 20.0\t72.0  / 0\t5.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about transplanting time of boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ನಮಸ್ಕಾರ",
+    "language": "kn",
+    "intent": "unknown"
+  },
+  {
+    "text": "asking about the insects pest problem in rice",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the cultivation practices of paddy",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control of fruit rot disease in pumkin",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the market  price of a incubator machine.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking for fertilizers brand of dap",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking for the procedure along with the time of application of fertilizers in the main filed for cultivation of boro rice with regard to irrigated areas.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "rainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t0  / 0\t0  / 0\t0\n26 apr\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n26 apr\t0\t0  / 0\t0  / 0\t0\n27 apr\t6.0\t35.0  / 21.0\t40.0  / 0\t4.0\n28 apr\t8.0\t33.0  / 21.0\t46.0  / 0\t5.0\n29 apr\t8.0\t31.0  / 19.0\t55.0  / 0\t6.0\n30 apr\t38.0\t30.0  / 19.0\t60.0  / 0\t5.0\n01 may\t28.0\t28.0  / 19.0\t61.0  / 0\t4.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the initaial treament of rice seedlings.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the control of leaf spot disease in capsicum",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the control measure against stem borers in maize crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the market price of rice.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about potato variety price in market",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure to control rice hispa pest attack in paddy field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "query regarding licence for selling of seed.",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the application of micro nutrient fertilizer in paddy to increase production in paddy",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n01 may\t0\t0  / 0\t0  / 0\t0\n02 may\t39.0\t28.0  / 20.0\t58.0  / 0\t13.0\n03 may\t19.0\t29.0  / 21.0\t47.0  / 0\t10.0\n04 may\t9.0\t29.0  / 22.0\t48.0  / 0\t6.0\n05 may\t22.0\t29.0  / 21.0\t52.0  / 0\t19.0\n06 may\t45.0\t23.0  / 19.0\t86.0  / 0\t3.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n06 may\t0\t0  / 0\t0  / 0\t0\n06 may\t0\t0  / 0\t0  / 0\t0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query about pm kisan samman nidhi.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n01 may\t0\t0  / 0\t0  / 0\t0\n02 may\t39.0\t27.0  / 20.0\t58.0  / 0\t11.0\n03 may\t22.0\t28.0  / 21.0\t49.0  / 0\t8.0\n04 may\t9.0\t29.0  / 22.0\t46.0  / 0\t6.0\n05 may\t17.0\t29.0  / 22.0\t45.0  / 0\t17.0\n06 may\t42.0\t24.0  / 20.0\t78.0  / 0\t3.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "query regarding pm kisan.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "fruit drop in coconut control measure & late blight & fungal wilt in brinjal",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure against rice stem borer infestation in boro paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "nearest market to Bangalore for vegetables",
+    "language": "en",
+    "intent": "selling_guidance"
+  },
+  {
+    "text": "asking about where to visit for the registration of pradhan mantri fasal bima yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the seedling treatment for boro rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ask about marketing of ornamental fish trade",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about the control measure to control fruit rot disease in pointed gourd.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about the market rate of arecanut/quintle",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan installment",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "15 mar rainfall(mm) : 0 temp(max/min):27.4  / 16.3  humidity(max/min)71.0  / 73.0  wind:5.6",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for tomato crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "organic khad kaunsa achha hai sabjiyon ke liye",
+    "language": "hi",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the control measure against blight disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure of late blight disease attack in potato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about market information for selling paddy",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "pm kisan samman nidhi scheme related query",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "market price of mustard",
+    "language": "en",
+    "intent": "market_price"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi beneficiary status",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n05 may\t0\t0  / 0\t0  / 0\t0\n06 may\t12.0\t27.0  / 21.0\t61.0  / 0\t7.0\n07 may\t4.0\t28.0  / 21.0\t53.0  / 0\t8.0\n08 may\t5.0\t29.0  / 22.0\t47.0  / 0\t6.0\n09 may\t19.0\t30.0  / 22.0\t45.0  / 0\t7.0\n10 may\t18.0\t29.0  / 23.0\t49.0  / 0\t8.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about control measure of brown spot",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking about the control measure to control rice case worm pest infestation in paddy field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "06 jun rainfall(mm) : 0 temp(max/min):0  / 0  humidity(max/min)0  / 0  wind:0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the control measure to control bacterial wilt disease in tomato.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose of cabbage in terms of per bigha of land for cabbage crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "cultivation practices of hybrid rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "इस मौसम में कौन सी फसल लगाएं",
+    "language": "hi",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the management of insect pest in tea plantation.",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "asking for the manures and fertilizers doses and its procedure of application in terms of per bigha of land for okra crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about the sources of seedling of rice",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the manures and fertilizers dose in terms of per bigha of land for cucumber crop cultivation.",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "date\trainfall\n(mm)\ttemp\n(max/min)\thumidity \n(max/min)\twind\n04 may\t0\t0  / 0\t0  / 0\t0\n05 may\t119.0\t31.0  / 20.0\t48.0  / 0\t4.0\n06 may\t12.0\t27.0  / 21.0\t63.0  / 0\t13.0\n07 may\t5.0\t28.0  / 21.0\t54.0  / 0\t10.0\n08 may\t6.0\t29.0  / 21.0\t45.0  / 0\t12.0\n09 may\t16.0\t29.0  / 22.0\t47.0  / 0\t10.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about the cultivation practices of paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "ಪ್ರಧಾನ ಮಂತ್ರಿ ಕಿಸಾನ್ ಯೋಜನೆ ಮಾಹಿತಿ",
+    "language": "kn",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "31 may rainfall(mm) : 6.0 temp(max/min):33.5  / 19.0  humidity(max/min)70.0  / 89.0  wind:1.9",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about seed treatment of rice.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking for the control measure against rice stem borer in paddy.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "വിള ഇൻഷുറൻസ് പദ്ധതി",
+    "language": "ml",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "fungus and mold on wheat crop",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "enquired about the fertilizer dose of urea in rice",
+    "language": "en",
+    "intent": "fertilizer_guidance"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi yojona.",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "07 jun rainfall(mm) : 0 temp(max/min):33.0  / 26.0  humidity(max/min)92.0  / 92.0  wind:0.0",
+    "language": "en",
+    "intent": "weather"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojna",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan samman nidhi",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking for the control measure against yellow mites in jute crop cultivation field.",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about late sown variety of mustard and its seed rate",
+    "language": "en",
+    "intent": "crop_advisory"
+  },
+  {
+    "text": "asking about the control measure to control fungal wilt disease in brinjal",
+    "language": "en",
+    "intent": "disease_symptoms"
+  },
+  {
+    "text": "PMFBY fasal bima how to register",
+    "language": "en",
+    "intent": "government_scheme"
+  },
+  {
+    "text": "asking about pm kisan maan dhan yojana",
+    "language": "en",
+    "intent": "government_scheme"
+  }
+]

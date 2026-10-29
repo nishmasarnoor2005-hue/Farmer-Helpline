@@ -2,19 +2,21 @@
 Intent Classifier Service
 --------------------------
 Rule-based intent detection for farmer voice queries.
-
-DATASET_STATUS: Hand-crafted dataset available (80+ examples).
-All classification is rule-based (keyword matching).
+ML model (LogisticRegression+TF-IDF) is loaded when available and used as the
+primary classifier; rule-based keyword matching serves as fallback.
 """
 
 from __future__ import annotations
 import json
+import logging
 import os
+
+logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------
 # Dataset status — checked by tests and the forecast service
 # ---------------------------------------------------------------
-DATASET_STATUS = "Hand-crafted dataset: 80+ examples, 8 intents, 4 languages. Rule-based classifier, not ML-trained."
+DATASET_STATUS = "ML model: LogisticRegression+TF-IDF. Rule-based fallback if model unavailable."
 
 # Path to the hand-crafted training dataset
 _DATASET_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "intent_training_data.json")
@@ -95,6 +97,26 @@ def evaluate(test_fraction: float = 0.2) -> dict:
         "test_examples": n_test,
         "method": "rule_based_evaluation",
     }
+
+
+# ---------------------------------------------------------------
+# ML model loading
+# ---------------------------------------------------------------
+
+def load_ml_model():
+    """Load the trained ML model. Returns None if not found."""
+    import joblib
+    model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models', 'intent_classifier.joblib')
+    try:
+        if os.path.exists(model_path):
+            return joblib.load(model_path)
+    except Exception as e:
+        logger.warning('Could not load ML intent model: %s', e)
+    return None
+
+
+_ml_model = load_ml_model()
+
 
 # ---------------------------------------------------------------
 # Intent keyword definitions
@@ -298,10 +320,29 @@ class IntentClassifier:
         -------
         dict with keys:
             intent      : str   — one of the defined intent names or 'unknown'
-            confidence  : float — 1.0 (strong), 0.6 (weak), 0.0 (unknown)
-            method      : str   — always 'rule_based'
-            match_count : int   — number of matched keywords
+            confidence  : float — probability (ML) or 1.0/0.6/0.0 (rule-based)
+            method      : str   — 'ml' or 'rule_based'
+            match_count : int   — keyword match count (0 when ML path taken)
         """
+        # --- ML path ---
+        if _ml_model is not None:
+            try:
+                vec = _ml_model['vectorizer'].transform([text])
+                proba = _ml_model['classifier'].predict_proba(vec)[0]
+                top_idx = int(proba.argmax())
+                top_class = _ml_model['classes'][top_idx]
+                top_prob = float(proba[top_idx])
+                if top_prob > 0.6:
+                    return {
+                        "intent":      top_class,
+                        "confidence":  top_prob,
+                        "method":      "ml",
+                        "match_count": 0,
+                    }
+            except Exception as e:
+                logger.warning("ML classify failed, falling back to rule-based: %s", e)
+
+        # --- Rule-based fallback ---
         text_lower = text.lower()
         best_intent = "unknown"
         best_count = 0
