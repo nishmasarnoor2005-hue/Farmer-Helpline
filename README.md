@@ -133,3 +133,57 @@ See `.env.example` for a full annotated list. Required at minimum:
 - A startup warning is emitted when `FLASK_SECRET_KEY` is weak or default.
 - Session cookies are `HttpOnly` and `SameSite=Lax`.
 - Admin routes are protected with `@login_required`.
+
+---
+
+## Real-Time Voice Mode
+
+### Feature Overview
+The AI Farmer Helpline includes an optional real-time voice mode that provides lower-latency responses through sentence-by-sentence (chunked) TTS streaming.
+
+**Honest capability assessment**: This is NOT true real-time streaming. Whisper, Gemini, and Edge TTS all require complete data before they respond. "Real-time" means:
+- MediaRecorder audio transport with echo/noise cancellation
+- Silero VAD barge-in (interrupt playback mid-sentence)
+- Sentence-by-sentence chunked TTS playback
+
+True real-time speech-to-speech (OpenAI Realtime API) is stubbed but BLOCKED_PENDING_CREDENTIALS.
+
+### Enabling Real-Time Mode
+
+In `.env`:
+```
+REALTIME_VOICE_ENABLED=true
+```
+
+The "⚡ Real-Time Mode" panel will appear in the web UI.
+
+### How It Works
+
+1. Browser requests mic permission and creates a MediaRecorder session
+2. Silero VAD (or SimpleSilenceDetector fallback) detects speech
+3. On speech end: audio blob sent to `POST /realtime/audio` via SSE
+4. Server pipeline: Whisper transcription → Gemini reply → Edge TTS sentence-by-sentence
+5. Audio chunks streamed back as base64 SSE events; played sequentially in browser
+6. Barge-in: VAD detects new speech during playback → pauses audio → cancels server generation → restarts
+
+### Barge-In
+
+While the assistant is speaking, you can start talking to interrupt. The current sentence stops immediately, and your new utterance is processed. There is a 300ms cooldown after each barge-in.
+
+### OpenAI Realtime API (BLOCKED)
+
+Set `OPENAI_API_KEY` in `.env` to enable the OpenAI Realtime API stub. Currently raises `NotImplementedError` — implementation is pending credentials.
+
+### Configuration
+
+All settings have safe defaults:
+```
+REALTIME_SESSION_TTL_SECONDS=300
+REALTIME_RATE_LIMIT=5           # sessions per minute per IP
+REALTIME_VAD_THRESHOLD=0.5
+REALTIME_VAD_MIN_SPEECH_MS=250
+REALTIME_VAD_MIN_SILENCE_MS=400
+REALTIME_VAD_PRE_SPEECH_PAD_MS=100
+REALTIME_BARGE_IN_DEBOUNCE_MS=180
+REALTIME_BARGE_IN_COOLDOWN_MS=300
+```

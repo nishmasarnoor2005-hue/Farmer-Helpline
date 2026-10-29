@@ -1208,6 +1208,8 @@ def realtime_audio():
 
     def _sse_generator():
         final_status = "success"
+        chunk_count = 0
+        _MAX_AUDIO_CHUNKS = 50
         try:
             for event_dict in provider.process_audio_stream(
                 audio_bytes, session_id, language_code
@@ -1222,6 +1224,14 @@ def realtime_audio():
                     }) + "\n\n"
                     final_status = "interrupted"
                     return
+
+                # Audio buffer bound: cap at 50 audio_chunks per turn
+                if event_dict.get("type") == "audio_chunk":
+                    chunk_count += 1
+                    if chunk_count > _MAX_AUDIO_CHUNKS:
+                        provider.cancel_response(session_id)
+                        yield "data: " + json.dumps({"type": "done"}) + "\n\n"
+                        return
 
                 # Update language cache after transcription
                 if event_dict.get("type") == "transcript":

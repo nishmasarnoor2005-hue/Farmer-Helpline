@@ -234,3 +234,26 @@ Then open `http://127.0.0.1:5000` in a browser.
 4. **GPU deployment** (CUDA) to reduce Whisper latency from ~15 s to ~2 s.
 5. **HTTPS + reverse proxy** (nginx or Caddy) to enable `SESSION_COOKIE_SECURE`
    and a public Twilio webhook endpoint.
+
+---
+
+## Real-Time Voice Upgrade (M0–M8)
+
+### Summary
+Implemented chunked TTS streaming with barge-in support as an optional feature (REALTIME_VOICE_ENABLED=false by default).
+
+### Files Changed
+- `app.py`: Added /realtime/session, /realtime/audio, /realtime/cancel, DELETE /realtime/session, GET /realtime/config routes; session token management; background expiry thread
+- `services/realtime/`: New package — base_provider.py, chunked_tts_provider.py, openai_realtime_provider.py, provider_factory.py
+- `voice/text_to_speech.py`: Added speak_to_bytes() helper
+- `static/js/realtime_voice.js`: Full browser-side state machine (11 states, barge-in, VAD, SSE consumer)
+- `templates/index.html`: Optional real-time panel (hidden by default)
+- `backend/database.py`: Added update_interaction_status()
+- `tests/`: test_realtime_provider.py, test_realtime_routes.py, test_realtime_streaming.py, test_realtime_config.py, test_barge_in.py
+- `docs/`: REALTIME_VOICE_BASELINE.md, REALTIME_VOICE_TEST_REPORT.md
+
+### Architecture Decisions
+- Callback injection pattern to avoid circular imports between app.py and services/realtime/
+- Feature flag (REALTIME_VOICE_ENABLED) gates all new functionality
+- Legacy /process_audio pipeline completely unchanged
+- OpenAI Realtime API stubbed as BLOCKED_PENDING_CREDENTIALS
