@@ -1299,23 +1299,28 @@ def realtime_end_session():
 
 @app.route("/realtime/config", methods=["GET"])
 def realtime_config():
-    """
-    Return current realtime voice configuration (no auth required).
-    VAD and barge-in parameters are read from environment with safe defaults.
-    streaming_honest documents that this provider does NOT do true streaming.
-    """
+    """Return VAD and audio configuration from env vars. No secrets exposed."""
+    from services.realtime.provider_factory import get_provider
+    provider = get_provider()
+    if provider is not None:
+        from services.realtime.chunked_tts_provider import ChunkedTTSProvider
+        from services.realtime.openai_realtime_provider import OpenAIRealtimeProvider
+        if isinstance(provider, OpenAIRealtimeProvider):
+            provider_name = "openai_realtime"
+        else:
+            provider_name = "chunked_tts"
+    else:
+        provider_name = "none"
     return jsonify({
-        "provider":               os.environ.get("REALTIME_PROVIDER", "chunked_tts"),
-        "vad_threshold":          float(os.environ.get("REALTIME_VAD_THRESHOLD", "0.5")),
-        "min_speech_ms":          int(os.environ.get("REALTIME_VAD_MIN_SPEECH_MS", "250")),
-        "min_silence_ms":         int(os.environ.get("REALTIME_VAD_MIN_SILENCE_MS", "400")),
-        "pre_speech_pad_ms":      int(os.environ.get("REALTIME_VAD_PRE_SPEECH_PAD_MS", "100")),
-        "barge_in_debounce_ms":   int(os.environ.get("REALTIME_BARGE_IN_DEBOUNCE_MS", "180")),
-        "barge_in_cooldown_ms":   int(os.environ.get("REALTIME_BARGE_IN_COOLDOWN_MS", "300")),
-        "session_ttl_seconds":    _REALTIME_SESSION_TTL,
-        "streaming_honest":       False,
-        "realtime_voice_enabled": os.environ.get("REALTIME_VOICE_ENABLED", "false").lower() == "true",
-    }), 200
+        "vad_threshold":        float(os.getenv("REALTIME_VAD_THRESHOLD", "0.5")),
+        "min_speech_ms":        int(os.getenv("REALTIME_VAD_MIN_SPEECH_MS", "250")),
+        "min_silence_ms":       int(os.getenv("REALTIME_VAD_MIN_SILENCE_MS", "400")),
+        "pre_speech_pad_ms":    int(os.getenv("REALTIME_VAD_PRE_SPEECH_PAD_MS", "100")),
+        "barge_in_debounce_ms": int(os.getenv("REALTIME_BARGE_IN_DEBOUNCE_MS", "180")),
+        "barge_in_cooldown_ms": int(os.getenv("REALTIME_BARGE_IN_COOLDOWN_MS", "300")),
+        "provider":             provider_name,
+        "streaming_honest":     False,
+    })
 
 
 # =========================================================
