@@ -6,6 +6,11 @@ Note: This is historical sample data based on AGMARKNET published ranges.
       For live prices visit https://agmarknet.gov.in
 """
 
+# AGMARKNET live API: blocked pending registration at data.gov.in
+# Register at: https://data.gov.in/user/register
+# Set DATA_GOV_IN_API_KEY in .env once registered
+# Falls back to CSV data until then
+
 import csv
 import os
 

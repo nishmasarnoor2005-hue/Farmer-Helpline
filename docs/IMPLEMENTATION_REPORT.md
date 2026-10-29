@@ -58,6 +58,18 @@
 
 ## Blocked Features
 
+### AGMARKNET live API (FR-11)
+
+- **Status:** BLOCKED — AGMARKNET live API requires registration at data.gov.in.
+- **API endpoint tested:** `https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070`
+- **Test result:** Connection timed out (no response within 10 s with `demo_key`).
+  The endpoint is inaccessible without a registered API key.
+- **Resolution:** Register at <https://data.gov.in/user/register> to obtain a key,
+  then set `DATA_GOV_IN_API_KEY` in `.env`. Until then the service falls back to
+  the existing CSV sample data (`data/market_prices_sample.csv`).
+- **Code note:** A comment has been added to `services/market_service.py` documenting
+  this status and the registration URL.
+
 ### Price forecasting
 
 - **Reason:** No adequate historical price dataset exists in the repository.
