@@ -177,19 +177,202 @@ class ChunkedTTSProvider(RealtimeProvider):
         language_code: str,
     ) -> Generator[dict, None, None]:
         """
-        Placeholder generator.
+        Sentence-chunked STT → Gemini → per-sentence Edge TTS streaming pipeline.
 
-        This stub yields a single ``done`` event. The full implementation
-        (sentence-chunked STT → Gemini → per-sentence Edge TTS) is added in
-        FEAT-002/003, which build on this scaffolding.
+        Flow
+        ----
+        1. Reset cancellation flag for this new turn.
+        2. Write audio_bytes to a temp file for Whisper.
+        3. Check cancel → detect language (cached) → transcribe with Whisper.
+        4. Yield a ``transcript`` event.
+        5. Check cancel → classify intent → look up services → call Gemini.
+        6. Split reply into sentences.
+        7. For each sentence: check cancel → synthesise TTS bytes → yield
+           ``audio_chunk`` event with base64-encoded audio.
+        8. Yield ``done``.
+        9. Clean up temp file in finally block.
 
-        Callers must handle ``type == "done"`` as end-of-turn.
+        On cancellation at any checkpoint, yields ``{"type":"error","data":
+        "cancelled","turn_id":turn_id}`` and returns.
+
+        Callers must handle ``type == "done"`` as end-of-turn and discard any
+        chunk whose ``turn_id`` does not match the expected value.
         """
-        # Reset the cancel flag for this new turn
-        flag = self._get_cancel_flag(session_id)
-        flag.clear()
+        import base64
+        import os
+        import tempfile
+        import uuid as _uuid
 
-        yield {"type": "done", "data": None, "turn_id": ""}
+        # Assign a unique turn_id for this invocation so callers can discard
+        # stale chunks from previously cancelled turns.
+        turn_id = _uuid.uuid4().hex
+
+        # Prepare the cancel flag for this new turn.
+        # If cancel_response() was called before this turn started (pre-cancel),
+        # the flag is already set — honour that cancellation immediately.
+        flag = self._get_cancel_flag(session_id)
+        pre_cancelled = flag.is_set()
+        if not pre_cancelled:
+            flag.clear()  # Reset from any previous turn's cancellation
+
+        tmp_path = None
+        try:
+            # ------------------------------------------------------------------
+            # 1. Persist audio bytes to a temporary file for Whisper
+            # ------------------------------------------------------------------
+            with tempfile.NamedTemporaryFile(suffix=".webm", delete=False) as tmp:
+                tmp.write(audio_bytes)
+                tmp_path = tmp.name
+
+            # ------------------------------------------------------------------
+            # 2. Check cancel before expensive STT
+            # ------------------------------------------------------------------
+            if flag.is_set():
+                yield {"type": "error", "data": "cancelled", "turn_id": turn_id, "interrupted": True}
+                return
+
+            # ------------------------------------------------------------------
+            # 3. Language detection — use cached value or fall back to
+            #    the language_code argument supplied by the caller
+            # ------------------------------------------------------------------
+            cached_lang = self._get_lang_cb(session_id)
+            effective_lang = cached_lang if cached_lang else language_code
+
+            # ------------------------------------------------------------------
+            # 4. Whisper transcription
+            # ------------------------------------------------------------------
+            try:
+                transcript_text, _ = self._whisper_cb(tmp_path)
+            except Exception as exc:
+                yield {"type": "error", "data": f"transcription_failed: {exc}", "turn_id": turn_id}
+                return
+
+            if not transcript_text or not transcript_text.strip():
+                yield {"type": "error", "data": "empty_transcript", "turn_id": turn_id}
+                return
+
+            # ------------------------------------------------------------------
+            # 5. Yield transcript event
+            # ------------------------------------------------------------------
+            yield {"type": "transcript", "data": transcript_text, "turn_id": turn_id}
+
+            # ------------------------------------------------------------------
+            # 6. Check cancel before LLM call
+            # ------------------------------------------------------------------
+            if flag.is_set():
+                yield {"type": "error", "data": "cancelled", "turn_id": turn_id, "interrupted": True}
+                return
+
+            # ------------------------------------------------------------------
+            # 7. Intent classification + optional service lookups
+            # ------------------------------------------------------------------
+            text_lower = transcript_text.lower()
+            context_data = None
+
+            try:
+                intent_result = self._classify_intent_cb(transcript_text, effective_lang)
+                detected_intent = (
+                    intent_result.get("intent", "unknown")
+                    if isinstance(intent_result, dict)
+                    else str(intent_result)
+                )
+            except Exception:
+                detected_intent = "unknown"
+
+            # Weather lookup
+            if detected_intent == "weather" or any(
+                kw in text_lower for kw in ("weather", "rain", "temperature", "forecast")
+            ):
+                try:
+                    weather_result = self._weather_cb(transcript_text)
+                    if weather_result:
+                        context_data = {"weather": weather_result}
+                except Exception:
+                    pass
+
+            # Market price lookup
+            if detected_intent == "market_price" or any(
+                kw in text_lower for kw in ("price", "market", "rate", "mandi")
+            ):
+                try:
+                    market_result = self._market_cb(transcript_text, None)
+                    if market_result:
+                        context_data = context_data or {}
+                        context_data["market_data"] = market_result
+                except Exception:
+                    pass
+
+            # Scheme lookup
+            if detected_intent == "government_scheme" or any(
+                kw in text_lower for kw in ("scheme", "yojana", "subsidy", "loan")
+            ):
+                try:
+                    scheme_result = self._scheme_cb(text_lower)
+                    if scheme_result:
+                        context_data = context_data or {}
+                        context_data["scheme_data"] = scheme_result
+                except Exception:
+                    pass
+
+            # ------------------------------------------------------------------
+            # 8. Gemini reply
+            # ------------------------------------------------------------------
+            if flag.is_set():
+                yield {"type": "error", "data": "cancelled", "turn_id": turn_id, "interrupted": True}
+                return
+
+            try:
+                reply_text = self._gemini_cb(transcript_text, effective_lang, context_data)
+            except Exception as exc:
+                yield {"type": "error", "data": f"llm_failed: {exc}", "turn_id": turn_id}
+                return
+
+            if not reply_text or not str(reply_text).strip():
+                yield {"type": "error", "data": "empty_reply", "turn_id": turn_id}
+                return
+
+            # ------------------------------------------------------------------
+            # 9. Split reply into sentences for chunked TTS
+            # ------------------------------------------------------------------
+            sentences = split_into_sentences(str(reply_text))
+
+            # ------------------------------------------------------------------
+            # 10. Per-sentence TTS synthesis → yield audio_chunk events
+            # ------------------------------------------------------------------
+            for sentence in sentences:
+                if flag.is_set():
+                    yield {"type": "error", "data": "cancelled", "turn_id": turn_id, "interrupted": True}
+                    return
+
+                if not sentence.strip():
+                    continue
+
+                try:
+                    audio_bytes_chunk = self._speak_bytes_cb(sentence, effective_lang)
+                except Exception as exc:
+                    yield {"type": "error", "data": f"tts_failed: {exc}", "turn_id": turn_id}
+                    return
+
+                if audio_bytes_chunk:
+                    encoded = base64.b64encode(audio_bytes_chunk).decode("ascii")
+                    yield {
+                        "type":    "audio_chunk",
+                        "data":    encoded,
+                        "turn_id": turn_id,
+                    }
+
+            # ------------------------------------------------------------------
+            # 11. Done
+            # ------------------------------------------------------------------
+            yield {"type": "done", "data": None, "turn_id": turn_id}
+
+        finally:
+            # Always clean up the temp audio file
+            if tmp_path:
+                try:
+                    os.unlink(tmp_path)
+                except OSError:
+                    pass
 
     def cancel_response(self, session_id: str) -> None:
         """
@@ -198,6 +381,15 @@ class ChunkedTTSProvider(RealtimeProvider):
         Safe to call even if no response is in progress or the session is unknown.
         Sets the threading.Event so any in-progress process_audio_stream() loop
         can check ``flag.is_set()`` and exit early.
+
+        If the session has not started yet, creates a pre-set flag so that any
+        subsequent process_audio_stream() call exits immediately.
         """
-        flag = self._get_cancel_flag(session_id)
-        flag.set()
+        with self._flags_lock:
+            if session_id in self._cancel_flags:
+                self._cancel_flags[session_id].set()
+            else:
+                # Create and immediately set the flag for sessions that haven't started yet
+                flag = threading.Event()
+                flag.set()
+                self._cancel_flags[session_id] = flag
