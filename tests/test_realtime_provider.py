@@ -83,12 +83,13 @@ class TestFactoryDisabled:
 
 class TestFactoryChunkedProvider:
     def test_returns_chunked_provider_when_enabled_no_openai(self):
-        """get_provider() returns ChunkedTTSProvider when enabled and OPENAI_API_KEY absent."""
+        """get_provider() returns ChunkedTTSProvider when enabled, no OPENAI key, no OPENROUTER key."""
         from services.realtime.chunked_tts_provider import ChunkedTTSProvider
 
         env_overrides = {
             "REALTIME_VOICE_ENABLED": "true",
             "OPENAI_API_KEY": "",
+            "OPENROUTER_API_KEY": "",   # also clear OpenRouter so ChunkedTTS is selected
         }
 
         # We need to stub the lazy 'import app' inside provider_factory

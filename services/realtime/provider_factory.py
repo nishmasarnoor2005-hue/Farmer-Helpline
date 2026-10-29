@@ -13,7 +13,11 @@ Selection logic
    Note: currently BLOCKED_PENDING_CREDENTIALS — is_available() returns True
    but all operational methods raise NotImplementedError.
 
-3. Otherwise return ChunkedTTSProvider with all service callbacks injected
+3. If OPENROUTER_API_KEY is set (non-empty) and openai package is installed,
+   return OpenRouterProvider — uses free OpenRouter models for LLM inference
+   with existing Whisper STT and Edge TTS.
+
+4. Otherwise return ChunkedTTSProvider with all service callbacks injected
    from the existing service modules (lazy imports to avoid circular imports).
 
 Lazy imports
@@ -27,17 +31,91 @@ modules are fully loaded.
 
 from __future__ import annotations
 
+import logging
 import os
 
 from services.realtime.base_provider import RealtimeProvider
+
+_log = logging.getLogger(__name__)
+
+
+def _build_callbacks():
+    """
+    Build and return all service callbacks needed by any provider.
+    Kept in one place so both OpenRouterProvider and ChunkedTTSProvider
+    receive the same injected dependencies.
+    """
+    import app as _app  # noqa: PLC0415 — intentional lazy import
+
+    from services.assistant import get_reply as _gemini_cb_raw      # noqa: PLC0415
+    from voice.text_to_speech import speak as _speak_raw             # noqa: PLC0415
+    from services.intent_service import classify_intent as _intent_cb # noqa: PLC0415
+    from services import weather_service as _ws                       # noqa: PLC0415
+    from services import market_service as _ms                        # noqa: PLC0415
+    from services import scheme_service as _ss                        # noqa: PLC0415
+
+    def whisper_cb(audio_path: str):
+        segments, info = _app.whisper_model.transcribe(
+            audio_path, beam_size=3, vad_filter=True,
+        )
+        text = " ".join(seg.text.strip() for seg in segments).strip()
+        return text, info.language
+
+    def gemini_cb(text: str, language: str, context_data):
+        return _gemini_cb_raw(text, language, context_data)
+
+    def speak_bytes_cb(text: str, language: str):
+        import tempfile, os as _os  # noqa: E401
+        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            result = _speak_raw(text, language, output_path=tmp_path)
+            if result and _os.path.exists(tmp_path):
+                with open(tmp_path, "rb") as f:
+                    return f.read()
+            return None
+        finally:
+            try:
+                _os.unlink(tmp_path)
+            except OSError:
+                pass
+
+    def get_lang_cb(session_id: str) -> str:
+        return _app._session_language_cache.get(session_id, "kn")
+
+    def weather_cb(location: str):
+        try:
+            return _ws.get_weather(location)
+        except Exception:
+            return None
+
+    def market_cb(crop: str, location=None):
+        try:
+            return _ms.get_market_prices(crop, location)
+        except Exception:
+            return []
+
+    def scheme_cb(query: str):
+        try:
+            return _ss.get_schemes(query)
+        except Exception:
+            return []
+
+    return dict(
+        whisper_cb=whisper_cb,
+        gemini_cb=gemini_cb,
+        speak_bytes_cb=speak_bytes_cb,
+        get_lang_cb=get_lang_cb,
+        classify_intent_cb=_intent_cb,
+        weather_cb=weather_cb,
+        market_cb=market_cb,
+        scheme_cb=scheme_cb,
+    )
 
 
 def get_provider() -> "RealtimeProvider | None":
     """
     Return the configured RealtimeProvider, or None if real-time mode is disabled.
-
-    Returns:
-        A RealtimeProvider instance if REALTIME_VOICE_ENABLED=true, else None.
 
     Never raises — all import/construction errors are caught and logged; on
     failure the function returns None so the legacy pipeline handles the request.
@@ -47,91 +125,63 @@ def get_provider() -> "RealtimeProvider | None":
         return None
 
     try:
-        # --- OpenAI Realtime (BLOCKED_PENDING_CREDENTIALS) ---
-        openai_key = os.getenv("OPENAI_API_KEY", "").strip()
-        if openai_key:
+        # ------------------------------------------------------------------
+        # 1. OpenAI Realtime (BLOCKED_PENDING_CREDENTIALS)
+        # ------------------------------------------------------------------
+        if os.getenv("OPENAI_API_KEY", "").strip():
             from services.realtime.openai_realtime_provider import OpenAIRealtimeProvider
             return OpenAIRealtimeProvider()
 
-        # --- Chunked TTS (existing pipeline, always available) ---
+        # ------------------------------------------------------------------
+        # Build shared callbacks (used by both OpenRouter and ChunkedTTS)
+        # ------------------------------------------------------------------
+        cbs = _build_callbacks()
+
+        # ------------------------------------------------------------------
+        # 2. OpenRouter — free models, preferred when OPENROUTER_API_KEY is set
+        # ------------------------------------------------------------------
+        if os.getenv("OPENROUTER_API_KEY", "").strip():
+            try:
+                import openai  # noqa: F401 — availability check only
+                from services.realtime.openrouter_provider import OpenRouterProvider
+                provider = OpenRouterProvider(
+                    whisper_cb=cbs["whisper_cb"],
+                    speak_bytes_cb=cbs["speak_bytes_cb"],
+                    get_lang_cb=cbs["get_lang_cb"],
+                    classify_intent_cb=cbs["classify_intent_cb"],
+                    weather_cb=cbs["weather_cb"],
+                    market_cb=cbs["market_cb"],
+                    scheme_cb=cbs["scheme_cb"],
+                )
+                if provider.is_available():
+                    _log.info(
+                        "provider_factory: using OpenRouterProvider (model=%s)",
+                        os.getenv("OPENROUTER_MODEL", "nvidia/nemotron-3-ultra-550b-a55b:free"),
+                    )
+                    return provider
+            except Exception as exc:
+                _log.warning(
+                    "provider_factory: OpenRouter unavailable (%s), "
+                    "falling back to ChunkedTTS", exc
+                )
+
+        # ------------------------------------------------------------------
+        # 3. ChunkedTTSProvider — always available, uses Gemini for LLM
+        # ------------------------------------------------------------------
         from services.realtime.chunked_tts_provider import ChunkedTTSProvider
-
-        # Lazy-import existing service modules to avoid circular imports
-        import app as _app  # noqa: PLC0415 — intentional lazy import
-
-        def _whisper_cb(audio_path: str):
-            """Transcribe audio file using the app's shared Whisper model."""
-            segments, info = _app.whisper_model.transcribe(
-                audio_path,
-                beam_size=3,
-                vad_filter=True,
-            )
-            text = " ".join(seg.text.strip() for seg in segments).strip()
-            return text, info.language
-
-        from services.assistant import get_reply as _gemini_cb_raw  # noqa: PLC0415
-        from voice.text_to_speech import speak as _speak_raw  # noqa: PLC0415
-        from services.intent_service import classify_intent as _intent_cb  # noqa: PLC0415
-        from services import weather_service as _ws  # noqa: PLC0415
-        from services import market_service as _ms  # noqa: PLC0415
-        from services import scheme_service as _ss  # noqa: PLC0415
-
-        def _speak_bytes_cb(text: str, language: str) -> bytes | None:
-            """
-            Synthesise speech and return raw MP3 bytes.
-            Uses a temporary file since Edge TTS saves to disk.
-            """
-            import tempfile, os as _os  # noqa: PLC0415, E401
-            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
-                tmp_path = tmp.name
-            try:
-                result = _speak_raw(text, language, output_path=tmp_path)
-                if result and _os.path.exists(tmp_path):
-                    with open(tmp_path, "rb") as f:
-                        return f.read()
-                return None
-            finally:
-                try:
-                    _os.unlink(tmp_path)
-                except OSError:
-                    pass
-
-        def _get_lang_cb(session_id: str) -> str:
-            """Return cached language for session, defaulting to 'kn'."""
-            return _app._session_language_cache.get(session_id, "kn")
-
-        def _weather_cb(location: str) -> dict | None:
-            try:
-                return _ws.get_weather(location)
-            except Exception:
-                return None
-
-        def _market_cb(crop: str, location: str | None = None) -> list:
-            try:
-                return _ms.get_market_prices(crop, location)
-            except Exception:
-                return []
-
-        def _scheme_cb(query: str) -> list:
-            try:
-                return _ss.get_schemes(query)
-            except Exception:
-                return []
-
         return ChunkedTTSProvider(
-            whisper_cb=_whisper_cb,
-            gemini_cb=_gemini_cb_raw,
-            speak_bytes_cb=_speak_bytes_cb,
-            get_lang_cb=_get_lang_cb,
-            classify_intent_cb=_intent_cb,
-            weather_cb=_weather_cb,
-            market_cb=_market_cb,
-            scheme_cb=_scheme_cb,
+            whisper_cb=cbs["whisper_cb"],
+            gemini_cb=cbs["gemini_cb"],
+            speak_bytes_cb=cbs["speak_bytes_cb"],
+            get_lang_cb=cbs["get_lang_cb"],
+            classify_intent_cb=cbs["classify_intent_cb"],
+            weather_cb=cbs["weather_cb"],
+            market_cb=cbs["market_cb"],
+            scheme_cb=cbs["scheme_cb"],
         )
 
-    except Exception as exc:  # pragma: no cover — import errors at startup
-        import logging
-        logging.getLogger(__name__).error(
+    except Exception as exc:  # pragma: no cover
+        _log.error(
             "provider_factory: failed to construct provider: %s", exc, exc_info=True
         )
         return None
