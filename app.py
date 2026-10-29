@@ -865,72 +865,133 @@ def health():
 
 
 # =========================================================
-# TELEPHONY ROUTES (Mock adapter — real Twilio pending credentials)
+# TELEPHONY ROUTES
+# TELEPHONY_PROVIDER env var controls which adapter is used:
+#   "twilio"  → TwilioAdapter (requires SID + token; phone number optional)
+#   anything else (default) → MockAdapter
 # See docs/TELEPHONY_SETUP.md
 # =========================================================
+
+# In-process session store keyed by session_id / CallSid.
+_telephony_sessions: dict = {}
+
+
+def _get_telephony_provider() -> str:
+    """Return the configured telephony provider name (lowercase)."""
+    return os.environ.get("TELEPHONY_PROVIDER", "mock").strip().lower()
+
 
 @app.route("/telephony/status", methods=["GET"])
 def telephony_status():
     """Report telephony provider status (no auth required)."""
+    provider = _get_telephony_provider()
+    account_sid = os.environ.get("TWILIO_ACCOUNT_SID", "")
+    phone_number = os.environ.get("TWILIO_PHONE_NUMBER", "")
+
+    if provider == "twilio":
+        status = "ready" if (account_sid and phone_number) else "awaiting_phone_number"
+    else:
+        status = "active"
+
     return jsonify({
-        "provider": "mock",
-        "status": "active",
-        "note": (
-            "Real telephony pending Twilio credentials — "
-            "see docs/TELEPHONY_SETUP.md"
-        ),
+        "provider": provider,
+        "account_sid_configured": bool(account_sid),
+        "phone_number_configured": bool(phone_number),
+        "status": status,
     })
 
 
 @app.route("/telephony/incoming", methods=["POST"])
 def telephony_incoming():
     """
-    Start a new mock call session.
+    Handle an incoming call.
 
-    Accepts optional JSON body with caller metadata.
-    Returns the session_id for subsequent /telephony/respond calls.
+    When TELEPHONY_PROVIDER=twilio:
+      - Validates X-Twilio-Signature; returns 403 on failure.
+      - Returns TwiML (Content-Type: text/xml).
+
+    Otherwise (mock):
+      - Accepts optional JSON body; returns JSON session_id.
     """
-    from services.telephony.mock_adapter import MockAdapter
+    provider = _get_telephony_provider()
 
-    call_data = request.get_json(silent=True) or {}
-    adapter = MockAdapter()
-    session_id = adapter.handle_incoming_call(call_data)
+    if provider == "twilio":
+        from services.telephony.twilio_adapter import TwilioAdapter  # noqa: PLC0415
 
-    # Store the adapter in app context keyed by session_id so /respond can use it.
-    # We use a simple module-level dict as a lightweight in-process store.
-    _telephony_sessions[session_id] = adapter
+        adapter = TwilioAdapter()
+        signature = request.headers.get("X-Twilio-Signature", "")
+        if not adapter.verify_webhook(request.url, request.form.to_dict(), signature):
+            return ("Forbidden — invalid Twilio signature", 403)
 
-    return jsonify({
-        "session_id": session_id,
-        "status": "active",
-        "message": "Mock call started",
-    })
+        call_data = request.form.to_dict()
+        twiml = adapter.handle_incoming_call(call_data)
+        call_sid = call_data.get("CallSid", "unknown")
+        _telephony_sessions[call_sid] = adapter
+        return app.response_class(twiml, status=200, mimetype="text/xml")
+
+    else:
+        from services.telephony.mock_adapter import MockAdapter  # noqa: PLC0415
+
+        call_data = request.get_json(silent=True) or {}
+        adapter = MockAdapter()
+        session_id = adapter.handle_incoming_call(call_data)
+        _telephony_sessions[session_id] = adapter
+        return jsonify({
+            "session_id": session_id,
+            "status": "active",
+            "message": "Mock call started",
+        })
 
 
 @app.route("/telephony/respond", methods=["POST"])
 def telephony_respond():
     """
-    Send a text message into a mock call session and receive an echo response.
+    Handle a recording callback (Twilio) or a text message (mock).
 
-    Request body: {"session_id": str, "message": str}
+    When TELEPHONY_PROVIDER=twilio:
+      - Validates X-Twilio-Signature; returns 403 on failure.
+      - Expects RecordingUrl and CallSid in the POST form.
+      - Runs the voice pipeline and returns TwiML.
+
+    Otherwise (mock):
+      - Request body: {"session_id": str, "message": str}
+      - Returns JSON echo response.
     """
-    data = request.get_json(silent=True) or {}
-    session_id = data.get("session_id", "")
-    message = data.get("message", "")
+    provider = _get_telephony_provider()
 
-    if session_id not in _telephony_sessions:
-        return jsonify({"error": "Unknown session_id"}), 400
+    if provider == "twilio":
+        from services.telephony.twilio_adapter import TwilioAdapter  # noqa: PLC0415
 
-    return jsonify({
-        "session_id": session_id,
-        "response": f"Mock response: {message}",
-        "note": "Real audio pipeline pending telephony integration",
-    })
+        signature = request.headers.get("X-Twilio-Signature", "")
+        form_params = request.form.to_dict()
 
+        # Re-use a cached adapter instance if available, else create a new one.
+        call_sid = form_params.get("CallSid", "unknown")
+        adapter = _telephony_sessions.get(call_sid)
+        if adapter is None or not isinstance(adapter, TwilioAdapter):
+            adapter = TwilioAdapter()
+            _telephony_sessions[call_sid] = adapter
 
-# In-process session store for mock telephony adapter instances.
-# Keyed by session_id; populated by /telephony/incoming.
-_telephony_sessions: dict = {}
+        if not adapter.verify_webhook(request.url, form_params, signature):
+            return ("Forbidden — invalid Twilio signature", 403)
+
+        recording_url = form_params.get("RecordingUrl", "")
+        twiml = adapter.process_recording(call_sid, recording_url, call_sid)
+        return app.response_class(twiml, status=200, mimetype="text/xml")
+
+    else:
+        data = request.get_json(silent=True) or {}
+        session_id = data.get("session_id", "")
+        message = data.get("message", "")
+
+        if session_id not in _telephony_sessions:
+            return jsonify({"error": "Unknown session_id"}), 400
+
+        return jsonify({
+            "session_id": session_id,
+            "response": f"Mock response: {message}",
+            "note": "Real audio pipeline pending telephony integration",
+        })
 
 
 # =========================================================

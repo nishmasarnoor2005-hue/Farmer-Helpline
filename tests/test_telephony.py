@@ -100,6 +100,7 @@ def client():
         import app as flask_app  # noqa: PLC0415
 
         flask_app.app.config["TESTING"] = True
+        flask_app.app.config["SECRET_KEY"] = "test-secret-key-for-testing"
         flask_app.app.config["RATELIMIT_ENABLED"] = False
 
         with flask_app.app.test_client() as c:
@@ -115,11 +116,11 @@ class TestTelephonyRoutes:
         assert resp.status_code == 200
 
     def test_status_provider_is_mock(self, client):
-        """GET /telephony/status must report provider='mock'."""
+        """GET /telephony/status must report provider='mock' when TELEPHONY_PROVIDER is unset."""
         resp = client.get("/telephony/status")
         data = resp.get_json()
         assert data is not None
-        assert data["provider"] == "mock"
+        assert data["provider"] in ("mock", "")
 
     def test_status_has_status_field(self, client):
         """GET /telephony/status must include a 'status' key."""

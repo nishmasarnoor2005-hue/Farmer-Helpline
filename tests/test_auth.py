@@ -46,6 +46,7 @@ def client():
         import app as flask_app  # noqa: PLC0415
 
         flask_app.app.config["TESTING"] = True
+        flask_app.app.config["SECRET_KEY"] = "test-secret-key-for-testing"
         flask_app.app.config["WTF_CSRF_ENABLED"] = False
         flask_app.app.config["RATELIMIT_ENABLED"] = False  # disable rate limits in tests
 

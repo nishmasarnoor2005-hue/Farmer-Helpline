@@ -1,121 +1,106 @@
 # Telephony Setup Guide
 
-**Current status: BLOCKED — no Twilio credentials configured.**
+## Current Status
 
-The telephony layer is implemented with a mock adapter for local testing.
-Real phone-call support requires a Twilio account and a purchased number.
+- ✅ TWILIO_ACCOUNT_SID configured
+- ✅ TWILIO_AUTH_TOKEN configured
+- ⏳ TWILIO_PHONE_NUMBER: NOT YET PURCHASED
 
----
-
-## Required credentials
-
-Add the following to your `.env` file (never commit real values):
-
-```
-TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-TWILIO_AUTH_TOKEN=your_auth_token_here
-TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
-```
+The server starts and the `/telephony/*` routes are active.  
+Real inbound calls require purchasing a phone number (step 1 below).
 
 ---
 
-## Step-by-step Twilio setup
+## Next Steps to Enable Live Calls
 
-### 1. Create a Twilio account
+### 1. Purchase an Indian phone number
 
-Sign up at <https://www.twilio.com/try-twilio> (free trial available).
+Go to: <https://console.twilio.com/us1/develop/phone-numbers/search>  
+Search for India (+91). Purchase a number that supports Voice.  
+Copy the number in E.164 format (e.g. `+918XXXXXXXXX`).
 
-### 2. Buy a phone number
-
-In the Twilio Console go to **Phone Numbers → Manage → Buy a number**.
-Choose a number with Voice capability in your target region.
-
-### 3. Install the Twilio Python package
+### 2. Set the phone number in `.env`
 
 ```
-pip install twilio
+TWILIO_PHONE_NUMBER=+918XXXXXXXXX
+TELEPHONY_PROVIDER=twilio
 ```
 
-Add `twilio` to `requirements.txt`.
+Restart the Flask server after editing `.env`.
 
-### 4. Set the inbound webhook
+### 3. Set the webhook URL
 
-In the Twilio Console, open your phone number's configuration page.
-Under **Voice & Fax → A call comes in**, set:
+In Twilio Console → Phone Numbers → Your Number → Configure:
 
-- Webhook: `https://<your-domain>/telephony/incoming`
-- HTTP method: `POST`
+- **Voice webhook**: `https://{your-cloudflare-url}/telephony/incoming`
+- **Method**: POST
+- **Recording status callback**: `https://{your-cloudflare-url}/telephony/respond`
 
-### 5. Expose your local server for testing
-
-`cloudflared.exe` is already present in the workspace root.
-
-**Start a tunnel:**
+### 4. Start the Cloudflare tunnel
 
 ```cmd
 cloudflared.exe tunnel --url http://localhost:5000
 ```
 
-Cloudflared will print a public `https://*.trycloudflare.com` URL.
-Use that URL as the webhook in the Twilio Console instead of `<your-domain>`.
+Cloudflared will print a public `https://*.trycloudflare.com` URL.  
+Use that URL as the webhook in the Twilio Console.
 
-**Alternative — ngrok:**
+### 5. Test
 
-```cmd
-ngrok http 5000
-```
-
-### 6. Add credentials to `.env`
-
-```
-TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-TWILIO_AUTH_TOKEN=your_auth_token_here
-TWILIO_PHONE_NUMBER=+1XXXXXXXXXX
-```
-
-Restart the Flask server after editing `.env`.
-
-### 7. Switch to TwilioAdapter in app.py
-
-Once credentials are confirmed, open `app.py` and replace the
-`MockAdapter` references with `TwilioAdapter`:
-
-```python
-from services.telephony.twilio_adapter import TwilioAdapter
-telephony_adapter = TwilioAdapter()
-```
-
-### 8. Verify a real call
-
-1. Start the server: `python app.py`
-2. Start the cloudflared tunnel.
-3. Call your Twilio number from a mobile phone.
-4. Check the server logs for `handle_incoming_call` output.
-5. Confirm the caller hears the greeting and recording prompt.
+Call your purchased number. You should hear the Kannada greeting:  
+*"ನಮಸ್ಕಾರ, ನೀವು AI ಕೃಷಿ ಸಹಾಯವಾಣಿಗೆ ಕರೆ ಮಾಡಿದ್ದೀರಿ. ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಹೇಳಿ."*
 
 ---
 
-## Environment variables summary
+## Environment variables
 
-| Variable | Required | Description |
-|---|---|---|
-| `TWILIO_ACCOUNT_SID` | Yes | Found in Twilio Console dashboard |
-| `TWILIO_AUTH_TOKEN` | Yes | Found in Twilio Console dashboard |
-| `TWILIO_PHONE_NUMBER` | Yes | E.164 format, e.g. `+14155551234` |
+| Variable              | Required | Description                                       |
+|-----------------------|----------|---------------------------------------------------|
+| `TWILIO_ACCOUNT_SID`  | Yes      | Found in Twilio Console dashboard                 |
+| `TWILIO_AUTH_TOKEN`   | Yes      | Found in Twilio Console dashboard                 |
+| `TWILIO_PHONE_NUMBER` | Yes*     | E.164 format, e.g. `+918XXXXXXXXX`. *Required for inbound calls |
+| `TELEPHONY_PROVIDER`  | No       | Set to `twilio` to activate TwilioAdapter (default: `mock`) |
 
 ---
 
-## Current mock endpoints
+## How the adapter works
 
-These work right now without any credentials:
+```
+Caller dials number
+    │
+    ▼
+Twilio → POST /telephony/incoming
+    │  (X-Twilio-Signature verified)
+    ▼
+TwilioAdapter.handle_incoming_call()
+    │  Returns TwiML: <Say> greeting + <Record>
+    ▼
+Caller speaks their question
+    │
+    ▼
+Twilio → POST /telephony/respond  (with RecordingUrl)
+    │  (X-Twilio-Signature verified)
+    ▼
+TwilioAdapter.process_recording()
+    ├─ Download WAV from Twilio
+    ├─ Transcribe with faster-whisper
+    ├─ Get AI reply via services.assistant.get_reply()
+    ├─ Generate TTS via voice.text_to_speech.speak()
+    └─ Return TwiML: <Say> reply + <Record> (loop)
+```
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/telephony/status` | Reports provider and status |
-| `POST` | `/telephony/incoming` | Starts a mock call session |
-| `POST` | `/telephony/respond` | Sends a text message, gets echo response |
+**Note on audio playback**: TTS audio is saved locally but cannot be served
+directly to Twilio without a public URL. Until a public static file server is
+configured, the AI reply is delivered via Twilio's `<Say>` verb instead of
+`<Play>`. This works fully but uses Twilio's built-in TTS voice rather than
+the Edge TTS voice.
 
-Test with curl (Windows CMD):
+---
+
+## Local / mock mode
+
+Without `TELEPHONY_PROVIDER=twilio` the server uses MockAdapter, which works
+entirely without Twilio credentials.
 
 ```cmd
 curl http://localhost:5000/telephony/status
@@ -133,11 +118,12 @@ curl -X POST http://localhost:5000/telephony/respond ^
 
 ## Blocking items
 
-- [ ] Twilio account created
-- [ ] Phone number purchased
-- [ ] `TWILIO_ACCOUNT_SID` set in `.env`
-- [ ] `TWILIO_AUTH_TOKEN` set in `.env`
-- [ ] `TWILIO_PHONE_NUMBER` set in `.env`
-- [ ] `twilio` package installed (`pip install twilio`)
+- [x] Twilio account SID configured
+- [x] Twilio auth token configured
+- [x] `twilio` Python package installed (v9.12.0)
+- [x] TwilioAdapter implemented with webhook verification
+- [x] `/telephony/incoming` and `/telephony/respond` routes updated
+- [ ] **TWILIO_PHONE_NUMBER purchased** ← next action
+- [ ] `TELEPHONY_PROVIDER=twilio` set in `.env`
 - [ ] Webhook URL configured in Twilio Console
 - [ ] Live call tested end-to-end
