@@ -11,8 +11,15 @@ Note: This is historical sample data based on AGMARKNET published ranges.
 # Set DATA_GOV_IN_API_KEY in .env once registered
 # Falls back to CSV data until then
 
+# LIVE API: data.gov.in timed out/errored from this network. API key is configured. Try from a different network.
+
 import csv
+import logging
 import os
+
+import requests
+
+logger = logging.getLogger(__name__)
 
 # =========================================================
 # CSV PATH
@@ -23,9 +30,30 @@ _CSV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file_
 
 _NOTE = "Historical sample data — for live prices visit agmarknet.gov.in"
 
+_AGMARKNET_API_URL = (
+    "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"
+)
 
 # =========================================================
-# LOAD AT MODULE LEVEL
+# STARTUP VALIDATION
+# =========================================================
+
+def _check_api_key() -> None:
+    """Warn at module import if DATA_GOV_IN_API_KEY is not configured."""
+    from dotenv import load_dotenv  # noqa: PLC0415
+    load_dotenv()
+    if not os.getenv("DATA_GOV_IN_API_KEY"):
+        logger.warning(
+            "DATA_GOV_IN_API_KEY is not set. Live AGMARKNET prices will be unavailable; "
+            "falling back to CSV data."
+        )
+
+
+_check_api_key()
+
+
+# =========================================================
+# LOAD CSV AT MODULE LEVEL
 # =========================================================
 
 def load_market_data() -> list:
@@ -69,6 +97,85 @@ _MARKET_DATA: list = load_market_data()
 
 
 # =========================================================
+# LIVE API
+# =========================================================
+
+def fetch_live_prices(
+    crop: str,
+    state: str = "Karnataka",
+    limit: int = 5,
+) -> list:
+    """
+    Fetch live market prices from data.gov.in (AGMARKNET dataset).
+
+    Returns a list of dicts with keys:
+        crop, market, district, state, min_price, max_price, modal_price,
+        unit, data_date, source_url, is_live=True
+
+    On ANY failure (timeout, bad key, HTTP error, empty response) logs a
+    warning and returns [] — never raises an exception.
+    """
+    from dotenv import load_dotenv  # noqa: PLC0415
+    load_dotenv()
+    api_key = os.getenv("DATA_GOV_IN_API_KEY")
+
+    if not api_key:
+        logger.warning("fetch_live_prices: DATA_GOV_IN_API_KEY not set; skipping live fetch.")
+        return []
+
+    params = {
+        "api-key": api_key,
+        "format": "json",
+        "limit": limit,
+        "filters[Commodity.keyword]": crop,
+        "filters[State.keyword]": state,
+    }
+
+    try:
+        response = requests.get(_AGMARKNET_API_URL, params=params, timeout=10)
+        response.raise_for_status()
+        payload = response.json()
+    except requests.Timeout:
+        logger.warning("fetch_live_prices: request timed out for crop='%s' state='%s'.", crop, state)
+        return []
+    except requests.RequestException as exc:
+        logger.warning("fetch_live_prices: HTTP error for crop='%s' state='%s': %s", crop, state, exc)
+        return []
+    except ValueError as exc:
+        logger.warning("fetch_live_prices: JSON decode error: %s", exc)
+        return []
+
+    records_raw = payload.get("records") or payload.get("data") or []
+    if not records_raw:
+        logger.warning(
+            "fetch_live_prices: empty records for crop='%s' state='%s'. "
+            "Payload keys: %s",
+            crop,
+            state,
+            list(payload.keys()),
+        )
+        return []
+
+    results = []
+    for rec in records_raw:
+        results.append({
+            "crop":        rec.get("Commodity") or rec.get("commodity") or crop,
+            "market":      rec.get("Market") or rec.get("market", ""),
+            "district":    rec.get("District") or rec.get("district", ""),
+            "state":       rec.get("State") or rec.get("state", state),
+            "min_price":   rec.get("Min Price") or rec.get("min_price", ""),
+            "max_price":   rec.get("Max Price") or rec.get("max_price", ""),
+            "modal_price": rec.get("Modal Price") or rec.get("modal_price", ""),
+            "unit":        rec.get("unit", "Quintal"),
+            "data_date":   rec.get("Arrival Date") or rec.get("date", ""),
+            "source_url":  _AGMARKNET_API_URL,
+            "is_live":     True,
+        })
+
+    return results
+
+
+# =========================================================
 # PUBLIC API
 # =========================================================
 
@@ -76,12 +183,34 @@ def get_market_price(crop: str, district: str = None, state: str = "Karnataka") 
     """
     Return price info for a crop, optionally filtered by district and state.
 
+    Tries live AGMARKNET API first; falls back to CSV on failure.
+
     Returns a dict with:
         crop, market, district, state, min_price, max_price, modal_price,
         unit, data_date, source_url, is_live, note
 
     Returns {available: False, reason: '...'} if no matching record found.
     """
+    # --- Try live API first ---
+    live_results = fetch_live_prices(crop, state=state)
+    if live_results:
+        r = live_results[0]
+        return {
+            "crop":        r.get("crop"),
+            "market":      r.get("market"),
+            "district":    r.get("district"),
+            "state":       r.get("state"),
+            "min_price":   r.get("min_price"),
+            "max_price":   r.get("max_price"),
+            "modal_price": r.get("modal_price"),
+            "unit":        r.get("unit"),
+            "data_date":   r.get("data_date"),
+            "source_url":  r.get("source_url"),
+            "is_live":     True,
+            "note":        "Live data from data.gov.in (AGMARKNET)",
+        }
+
+    # --- Fall back to CSV ---
     crop_lower = crop.strip().lower()
     state_lower = state.strip().lower()
 

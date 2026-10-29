@@ -2,15 +2,47 @@
 Tests for M5: market price service and government scheme catalogue.
 """
 
+import json
 import pytest
 import sys
 import os
+from unittest.mock import MagicMock, patch
+
+import requests as _requests_module
 
 # Ensure project root is on the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from services.market_service import load_market_data, get_market_price, search_market_prices
+from services.market_service import (
+    load_market_data,
+    get_market_price,
+    search_market_prices,
+    fetch_live_prices,
+)
 from services.scheme_service import load_schemes, search_schemes, format_scheme_response
+
+
+# =========================================================
+# HELPERS
+# =========================================================
+
+def _make_agmarknet_response(commodity: str = "Tomato", state: str = "Karnataka") -> dict:
+    """Return a minimal AGMARKNET-style JSON payload."""
+    return {
+        "records": [
+            {
+                "Commodity": commodity,
+                "Market": "Kolar",
+                "District": "Kolar",
+                "State": state,
+                "Min Price": "800",
+                "Max Price": "1200",
+                "Modal Price": "1000",
+                "unit": "Quintal",
+                "Arrival Date": "2024-01-15",
+            }
+        ]
+    }
 
 
 # =========================================================
@@ -75,9 +107,97 @@ class TestMarketService:
 
     def test_get_market_price_is_live_false(self):
         """is_live must be False — this is historical data, not live prices."""
-        result = get_market_price("tomato")
+        # Patch fetch_live_prices to always return [] so CSV path is exercised
+        with patch("services.market_service.fetch_live_prices", return_value=[]):
+            result = get_market_price("tomato")
         if result.get("available") is not False:
             assert result.get("is_live") is False, "is_live must be False for sample data"
+
+
+# =========================================================
+# LIVE API TESTS (fetch_live_prices)
+# =========================================================
+
+class TestFetchLivePrices:
+
+    def test_returns_is_live_true_on_200(self):
+        """fetch_live_prices returns list with is_live=True when API succeeds."""
+        fake_response = MagicMock()
+        fake_response.raise_for_status = MagicMock()
+        fake_response.json.return_value = _make_agmarknet_response("Tomato", "Karnataka")
+
+        with patch("services.market_service.requests.get", return_value=fake_response):
+            results = fetch_live_prices("Tomato", "Karnataka")
+
+        assert isinstance(results, list)
+        assert len(results) == 1
+        assert results[0]["is_live"] is True
+        assert results[0]["crop"] == "Tomato"
+        assert results[0]["market"] == "Kolar"
+        assert results[0]["modal_price"] == "1000"
+
+    def test_returns_empty_list_on_timeout(self):
+        """fetch_live_prices returns [] when requests.get raises Timeout."""
+        with patch(
+            "services.market_service.requests.get",
+            side_effect=_requests_module.Timeout("timed out"),
+        ):
+            results = fetch_live_prices("Tomato", "Karnataka")
+
+        assert results == []
+
+    def test_returns_empty_list_on_http_error(self):
+        """fetch_live_prices returns [] on a non-200 HTTP error."""
+        fake_response = MagicMock()
+        fake_response.raise_for_status.side_effect = _requests_module.HTTPError("403")
+
+        with patch("services.market_service.requests.get", return_value=fake_response):
+            results = fetch_live_prices("Tomato", "Karnataka")
+
+        assert results == []
+
+    def test_returns_empty_list_on_empty_records(self):
+        """fetch_live_prices returns [] when API returns empty records list."""
+        fake_response = MagicMock()
+        fake_response.raise_for_status = MagicMock()
+        fake_response.json.return_value = {"records": []}
+
+        with patch("services.market_service.requests.get", return_value=fake_response):
+            results = fetch_live_prices("Tomato", "Karnataka")
+
+        assert results == []
+
+    def test_get_market_price_uses_live_when_available(self):
+        """get_market_price returns is_live=True when fetch_live_prices returns data."""
+        live_data = [{
+            "crop": "Tomato",
+            "market": "Kolar",
+            "district": "Kolar",
+            "state": "Karnataka",
+            "min_price": "800",
+            "max_price": "1200",
+            "modal_price": "1000",
+            "unit": "Quintal",
+            "data_date": "2024-01-15",
+            "source_url": "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070",
+            "is_live": True,
+        }]
+
+        with patch("services.market_service.fetch_live_prices", return_value=live_data):
+            result = get_market_price("Tomato", state="Karnataka")
+
+        assert result["is_live"] is True
+        assert result["crop"] == "Tomato"
+
+    def test_get_market_price_falls_back_to_csv_when_live_empty(self):
+        """get_market_price falls back to CSV when fetch_live_prices returns []."""
+        with patch("services.market_service.fetch_live_prices", return_value=[]):
+            result = get_market_price("paddy", state="Karnataka")
+
+        # CSV has paddy data; should find it with is_live=False
+        assert isinstance(result, dict)
+        if result.get("available") is not False:
+            assert result.get("is_live") is False
 
 
 # =========================================================
