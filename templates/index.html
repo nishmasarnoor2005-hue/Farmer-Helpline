@@ -316,6 +316,87 @@
 
         input:checked + .slider { background: #2e7d32; }
         input:checked + .slider::before { transform: translateX(16px); }
+
+        /* ---- Repeat Last Answer button (FR-18) ---- */
+        #repeatBtn {
+            display: none;
+            margin: 0 auto 8px;
+            padding: 6px 16px;
+            border: none;
+            border-radius: 20px;
+            background: #e8f5e9;
+            color: #1b5e20;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            transition: background 0.2s;
+        }
+        #repeatBtn:hover { background: #c8e6c9; }
+
+        /* ---- Language override (FR-18) ---- */
+        .lang-override-wrap {
+            display: inline-block;
+            position: relative;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        #wrongLangLink {
+            font-size: 11px;
+            color: rgba(255,255,255,0.75);
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        #wrongLangLink:hover { color: #fff; }
+        #langOverrideBox {
+            display: none;
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            padding: 8px;
+            z-index: 100;
+            min-width: 150px;
+        }
+        #langOverrideBox select {
+            width: 100%;
+            padding: 4px 6px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+        #langOverrideConfirm {
+            display: block;
+            font-size: 11px;
+            color: #2e7d32;
+            margin-top: 4px;
+            min-height: 14px;
+        }
+
+        /* ---- Error display (FR-18) ---- */
+        #errorDisplay {
+            display: none;
+            margin: 0 16px 8px;
+            padding: 10px 14px;
+            background: #ffebee;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #b71c1c;
+        }
+        #errorDisplay .error-msg { margin-bottom: 6px; }
+        #retryBtn {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 12px;
+            background: #c62828;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        #retryBtn:hover { background: #b71c1c; }
     </style>
 </head>
 
@@ -327,6 +408,20 @@
         <h1>🌾 AI Farmer Helpline</h1>
         <div class="subtitle">Speak in your language — we understand</div>
         <div class="lang-badge" id="langBadge">🌐 Ready</div>
+        <div class="lang-override-wrap">
+            <span id="wrongLangLink" title="Override detected language">Wrong language?</span>
+            <div id="langOverrideBox">
+                <select id="langOverrideSelect">
+                    <option value="">— select —</option>
+                    <option value="kn">Kannada</option>
+                    <option value="hi">Hindi</option>
+                    <option value="ml">Malayalam</option>
+                    <option value="en">English</option>
+                    <option value="auto">Auto-detect</option>
+                </select>
+                <span id="langOverrideConfirm"></span>
+            </div>
+        </div>
     </div>
 
     <!-- Avatar -->
@@ -344,6 +439,15 @@
 
     <!-- Conversation -->
     <div class="conversation" id="conversation"></div>
+
+    <!-- Error display (FR-18) -->
+    <div id="errorDisplay">
+        <div class="error-msg" id="errorMsg"></div>
+        <button id="retryBtn">🔄 Retry</button>
+    </div>
+
+    <!-- Repeat Last Answer (FR-18) -->
+    <button id="repeatBtn">🔁 Repeat Last Answer</button>
 
     <!-- Auto-listen toggle -->
     <div class="auto-toggle" id="autoToggleRow">
@@ -374,6 +478,7 @@ let callActive    = false;
 let isRecording   = false;
 let isProcessing  = false;
 let currentAudio  = null;
+let lastAudioUrl  = null;  // FR-18: stores last AI audio URL for repeat
 
 const avatar      = document.getElementById("avatar");
 const statusText  = document.getElementById("statusText");
@@ -387,12 +492,92 @@ const micBtn      = document.getElementById("micBtn");
 const endBtn      = document.getElementById("endBtn");
 const autoToggle  = document.getElementById("autoListen");
 const autoRow     = document.getElementById("autoToggleRow");
+const repeatBtn   = document.getElementById("repeatBtn");       // FR-18
+const errorDisplay= document.getElementById("errorDisplay");    // FR-18
+const errorMsg    = document.getElementById("errorMsg");        // FR-18
+const retryBtn    = document.getElementById("retryBtn");        // FR-18
 
 const LANG_NAMES = {
     kn:"ಕನ್ನಡ", hi:"हिन्दी", ml:"മലയാളം",
     en:"English", ta:"தமிழ்", te:"తెలుగు",
     mr:"मराठी", ur:"اردو"
 };
+
+// =============================================================
+// FR-18: REPEAT LAST ANSWER
+// =============================================================
+repeatBtn.addEventListener("click", () => {
+    if (!lastAudioUrl) return;
+    const audio = new Audio(lastAudioUrl);
+    audio.play().catch(() => {});
+});
+
+// =============================================================
+// FR-18: ERROR DISPLAY helpers
+// =============================================================
+function showError(msg) {
+    errorMsg.textContent = "⚠️ " + (msg || "Something went wrong");
+    errorDisplay.style.display = "block";
+}
+
+function hideError() {
+    errorDisplay.style.display = "none";
+    errorMsg.textContent = "";
+}
+
+retryBtn.addEventListener("click", () => {
+    hideError();
+    enableMic();
+});
+
+// =============================================================
+// FR-18: LANGUAGE OVERRIDE — "Wrong language?" link
+// =============================================================
+const wrongLangLink    = document.getElementById("wrongLangLink");
+const langOverrideBox  = document.getElementById("langOverrideBox");
+const langOverrideSel  = document.getElementById("langOverrideSelect");
+const langOverrideCfm  = document.getElementById("langOverrideConfirm");
+
+wrongLangLink.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const visible = langOverrideBox.style.display === "block";
+    langOverrideBox.style.display = visible ? "none" : "block";
+});
+
+// Close the dropdown when clicking outside
+document.addEventListener("click", (e) => {
+    if (!langOverrideBox.contains(e.target) && e.target !== wrongLangLink) {
+        langOverrideBox.style.display = "none";
+    }
+});
+
+langOverrideSel.addEventListener("change", async () => {
+    const lang = langOverrideSel.value;
+    if (!lang) return;
+
+    try {
+        const res  = await fetch("/set_language", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({language: lang})
+        });
+        const data = await res.json();
+        if (data.success) {
+            const displayNames = {
+                kn: "Kannada", hi: "Hindi", ml: "Malayalam",
+                en: "English", auto: "Auto-detect"
+            };
+            langOverrideCfm.textContent = "✓ Language set to " + (displayNames[lang] || lang);
+            setTimeout(() => {
+                langOverrideCfm.textContent = "";
+                langOverrideBox.style.display = "none";
+                langOverrideSel.value = "";
+            }, 1800);
+        }
+    } catch (err) {
+        langOverrideCfm.textContent = "⚠️ Failed to set language";
+    }
+});
 
 // =============================================================
 // START CALL
@@ -432,6 +617,10 @@ micBtn.addEventListener("click", () => {
 
 function startRecording() {
     if (!callActive || !stream) return;
+
+    // Hide repeat button and error when a new recording starts (FR-18)
+    repeatBtn.style.display = "none";
+    hideError();
 
     // Stop any playing audio
     if (currentAudio) {
@@ -487,11 +676,16 @@ async function sendToAI() {
         micBtn.disabled = false;
 
         if (!data.success) {
-            setStatus("⚠️ " + (data.error || "Could not understand"), "Please speak again clearly");
+            // FR-18: show actual error message with retry button
+            showError(data.error || "Could not understand audio");
+            setStatus("⚠️ Error", "Please speak again clearly");
             avatar.textContent = "🤔";
             enableMic();
             return;
         }
+
+        // FR-18: hide any previous error
+        hideError();
 
         // Update language badge
         const langCode = data.language_code;
@@ -506,13 +700,17 @@ async function sendToAI() {
 
         // Play AI audio — pass filename for server-side cleanup
         const audioFilename = data.audio_url.split("/").pop().split("?")[0];
-        playAIAudio(data.audio_url + "?t=" + Date.now(), audioFilename);
+        const audioUrlWithTs = data.audio_url + "?t=" + Date.now();
+        lastAudioUrl = audioUrlWithTs;  // FR-18: store for repeat
+        playAIAudio(audioUrlWithTs, audioFilename);
 
     } catch (err) {
         console.error(err);
         spinner.classList.remove("active");
         isProcessing = false;
         micBtn.disabled = false;
+        // FR-18: show actual error with retry
+        showError("Server error — please try again");
         setStatus("❌ Server error", "Please try again");
         enableMic();
     }
@@ -532,6 +730,9 @@ function playAIAudio(url, filename) {
         currentAudio = null;
         avatar.className  = "avatar";
         avatar.textContent = "🤖";
+
+        // FR-18: show repeat button after AI finishes speaking
+        if (lastAudioUrl) repeatBtn.style.display = "block";
 
         // Clean up the audio file on the server
         if (filename) {
@@ -589,6 +790,11 @@ function endCall() {
     endBtn.hidden  = true;
     autoRow.classList.remove("visible");
 
+    // FR-18: hide repeat button and error on call end
+    repeatBtn.style.display = "none";
+    lastAudioUrl = null;
+    hideError();
+
     avatar.className  = "avatar";
     avatar.textContent = "📞";
     waveform.classList.remove("active");
@@ -603,6 +809,22 @@ function endCall() {
 
     fetch("/reset_call", { method: "POST" });
 }
+
+// =============================================================
+// FR-18: KEYBOARD SHORTCUT — Space bar toggles mic
+// =============================================================
+document.addEventListener("keydown", (e) => {
+    if (e.key !== " ") return;
+    if (!callActive) return;
+    const tag = document.activeElement.tagName.toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select") return;
+
+    e.preventDefault();  // prevent page scroll
+
+    if (isProcessing) return;
+    if (isRecording) stopRecording();
+    else             startRecording();
+});
 
 // =============================================================
 // HELPERS

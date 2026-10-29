@@ -504,14 +504,21 @@ def process_audio():
 
         # -------------------------------------------------
         # STEP 1 — Gemini identifies language from audio
+        #           (skipped if language_override is set)
         # -------------------------------------------------
 
         t0 = time.perf_counter()
 
-        print("⏳ Step 1: Detecting language from audio (Gemini)...")
-        language_code = detect_language_from_audio(input_path)
-        language_name = get_language_name(language_code)
-        print(f"   Language confirmed: {language_code} ({language_name})")
+        language_override = session.get("language_override", "auto")
+        if language_override and language_override != "auto":
+            language_code = language_override
+            language_name = get_language_name(language_code)
+            print(f"⏳ Step 1: Language override in effect — using {language_code} ({language_name})")
+        else:
+            print("⏳ Step 1: Detecting language from audio (Gemini)...")
+            language_code = detect_language_from_audio(input_path)
+            language_name = get_language_name(language_code)
+            print(f"   Language confirmed: {language_code} ({language_name})")
 
         t1 = time.perf_counter()
 
@@ -691,6 +698,30 @@ def process_audio():
                 os.remove(input_path)
             except Exception:
                 pass
+
+
+# =========================================================
+# SET LANGUAGE OVERRIDE (FR-18)
+# =========================================================
+
+_VALID_LANGUAGE_OVERRIDES = {"kn", "hi", "ml", "en", "auto"}
+
+
+@app.route("/set_language", methods=["POST"])
+def set_language():
+    """
+    Accept a language override from the browser.
+    Body: {"language": "kn"|"hi"|"ml"|"en"|"auto"}
+    Stores in session so /process_audio skips Gemini language detection.
+    """
+    data = request.get_json(silent=True) or {}
+    lang = data.get("language", "")
+
+    if lang not in _VALID_LANGUAGE_OVERRIDES:
+        return jsonify({"success": False, "error": f"Invalid language: {lang}"}), 400
+
+    session["language_override"] = lang
+    return jsonify({"success": True, "language": lang})
 
 
 # =========================================================
