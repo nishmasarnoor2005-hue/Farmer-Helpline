@@ -1197,6 +1197,7 @@ def realtime_audio():
             assistant_response="",
             status="processing",
             latency_dict={},
+            interaction_id=interaction_id,
         )
     except Exception:
         pass
@@ -1222,6 +1223,14 @@ def realtime_audio():
                     final_status = "interrupted"
                     return
 
+                # Update language cache after transcription
+                if event_dict.get("type") == "transcript":
+                    detected_lang = event_dict.get("language_code")
+                    if detected_lang:
+                        with _rt_sessions_lock:
+                            if token in _rt_sessions:
+                                _rt_sessions[token]["language_code"] = detected_lang
+
                 if event_dict.get("type") == "error":
                     final_status = "interrupted" if event_dict.get("data") == "cancelled" else "error"
 
@@ -1238,15 +1247,7 @@ def realtime_audio():
         finally:
             # Update DB status (non-fatal)
             try:
-                db.log_interaction(
-                    session_id=session_id,
-                    language=language_code,
-                    transcript="",
-                    intent="realtime",
-                    assistant_response="",
-                    status=final_status,
-                    latency_dict={},
-                )
+                db.update_interaction_status(interaction_id, final_status)
             except Exception:
                 pass
 

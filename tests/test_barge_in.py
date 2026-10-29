@@ -131,8 +131,9 @@ def client_barge_in(app_module_barge_in):
 class TestDbStatusInterrupted:
     def test_interrupted_status_written_to_db(self, client_barge_in, app_module_barge_in):
         """
-        When the provider yields a cancelled event, the SSE generator must call
-        db.log_interaction with status='interrupted'.
+        When the provider yields a cancelled event, the SSE generator must record
+        status='interrupted' in the DB via update_interaction_status (M7: the route
+        logs once at start with 'processing', then updates status in finally).
         """
         # Create a valid session
         with patch.dict("os.environ", {"REALTIME_VOICE_ENABLED": "true"}, clear=False):
@@ -146,16 +147,18 @@ class TestDbStatusInterrupted:
         ])
         mock_provider.cancel_response = MagicMock()
 
-        # Capture db.log_interaction calls
-        logged_statuses = []
+        # Capture update_interaction_status calls (M7: finally block uses this)
+        updated_statuses = []
 
-        original_log = None
-
-        def capturing_log(**kwargs):
-            logged_statuses.append(kwargs.get("status"))
+        def capturing_update(interaction_id, status):
+            updated_statuses.append(status)
 
         with patch.object(app_module_barge_in, "_get_rt_provider", return_value=mock_provider):
-            with patch.object(app_module_barge_in.db, "log_interaction", side_effect=capturing_log):
+            with patch.object(
+                app_module_barge_in.db,
+                "update_interaction_status",
+                side_effect=capturing_update,
+            ):
                 resp = client_barge_in.post(
                     "/realtime/audio",
                     headers={"X-Session-Token": token},
@@ -165,9 +168,9 @@ class TestDbStatusInterrupted:
                 # Consume the entire response so the generator runs to completion
                 _ = resp.data
 
-        # The finally-block log_interaction should have status="interrupted"
-        assert "interrupted" in logged_statuses, (
-            f"Expected 'interrupted' in logged statuses, got: {logged_statuses}"
+        # The finally-block update_interaction_status should have status="interrupted"
+        assert "interrupted" in updated_statuses, (
+            f"Expected 'interrupted' in updated statuses, got: {updated_statuses}"
         )
 
 

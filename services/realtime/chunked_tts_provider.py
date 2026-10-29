@@ -241,8 +241,11 @@ class ChunkedTTSProvider(RealtimeProvider):
             # ------------------------------------------------------------------
             # 4. Whisper transcription
             # ------------------------------------------------------------------
+            detected_lang = effective_lang
             try:
-                transcript_text, _ = self._whisper_cb(tmp_path)
+                transcript_text, whisper_lang = self._whisper_cb(tmp_path)
+                if whisper_lang:
+                    detected_lang = whisper_lang
             except Exception as exc:
                 yield {"type": "error", "data": f"transcription_failed: {exc}", "turn_id": turn_id}
                 return
@@ -252,9 +255,14 @@ class ChunkedTTSProvider(RealtimeProvider):
                 return
 
             # ------------------------------------------------------------------
-            # 5. Yield transcript event
+            # 5. Yield transcript event (include detected language for caller caching)
             # ------------------------------------------------------------------
-            yield {"type": "transcript", "data": transcript_text, "turn_id": turn_id}
+            yield {
+                "type": "transcript",
+                "data": transcript_text,
+                "turn_id": turn_id,
+                "language_code": detected_lang,
+            }
 
             # ------------------------------------------------------------------
             # 6. Check cancel before LLM call

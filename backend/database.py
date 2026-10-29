@@ -146,16 +146,18 @@ def log_interaction(
     status: str,
     latency_dict: dict,
     error_category: str = None,
+    interaction_id: str = None,
 ) -> bool:
     """
     Persist a single voice exchange to the interactions table.
     latency_dict keys: total_latency_ms, gemini_detect_ms, whisper_ms,
                        gemini_reply_ms, tts_ms
-    Returns True on success, False on failure (never raises).
+    If interaction_id is provided it is used as the row id; otherwise a new
+    UUID is generated.  Returns True on success, False on failure (never raises).
     """
     try:
         now = datetime.now(timezone.utc).isoformat()
-        interaction_id = uuid.uuid4().hex
+        iid = interaction_id if interaction_id else uuid.uuid4().hex
         with _get_conn() as conn:
             conn.execute(
                 """
@@ -167,7 +169,7 @@ def log_interaction(
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
-                    interaction_id,
+                    iid,
                     session_id,
                     now,
                     language,
@@ -187,6 +189,23 @@ def log_interaction(
     except Exception as exc:
         logger.error("log_interaction failed (session_id=%s): %s", session_id, exc)
         return False
+
+
+def update_interaction_status(interaction_id: str, status: str) -> None:
+    """
+    Update the status of an existing interaction record.
+
+    Non-fatal — any failure is logged as a warning and silently ignored
+    so callers never need to handle exceptions from this function.
+    """
+    try:
+        with _get_conn() as conn:
+            conn.execute(
+                "UPDATE interactions SET status = ? WHERE id = ?",
+                (status, interaction_id),
+            )
+    except Exception as exc:
+        logger.warning("update_interaction_status failed (id=%s): %s", interaction_id, exc)
 
 
 # ---------------------------------------------------------------------------
