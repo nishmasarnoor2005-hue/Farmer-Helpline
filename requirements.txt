@@ -20,6 +20,10 @@ gtts==2.5.4
 # Location / geo
 geopy==2.5.0
 
+# WebSocket support for VoiceLink integration
+flask-sock==0.7.0
+simple-websocket==1.1.0
+
 # Heavy ML packages — NOT pinned (Windows/CUDA version conflicts)
 # torch
 # numpy
