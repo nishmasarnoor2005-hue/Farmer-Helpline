@@ -29,6 +29,13 @@ gunicorn==23.0.0
 gevent==24.11.1          # Async worker for WebSocket support on gunicorn
 gevent-websocket==0.10.1 # Gevent WebSocket worker class
 
+# ML intent classifier
+scikit-learn==1.6.1
+joblib==1.4.2
+
+# Audio conversion for VoiceLink PCMA (requires ffmpeg on the server)
+pydub==0.25.1
+
 # Heavy ML packages — NOT pinned (Windows/CUDA version conflicts)
 # torch
 # numpy

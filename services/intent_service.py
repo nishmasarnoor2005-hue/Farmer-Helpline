@@ -104,18 +104,28 @@ def evaluate(test_fraction: float = 0.2) -> dict:
 # ---------------------------------------------------------------
 
 def load_ml_model():
-    """Load the trained ML model. Returns None if not found."""
-    import joblib
+    """Load the trained ML model. Returns None if not found or joblib unavailable."""
+    try:
+        import joblib
+    except ImportError:
+        logger.warning('joblib not installed — ML intent model disabled, using rule-based fallback')
+        return None
     model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models', 'intent_classifier.joblib')
     try:
         if os.path.exists(model_path):
             return joblib.load(model_path)
+        else:
+            logger.info('ML intent model file not found at %s — using rule-based fallback', model_path)
     except Exception as e:
         logger.warning('Could not load ML intent model: %s', e)
     return None
 
 
-_ml_model = load_ml_model()
+_ml_model = None
+try:
+    _ml_model = load_ml_model()
+except Exception as _e:
+    logger.warning('ML intent model not loaded at startup: %s', _e)
 
 
 # ---------------------------------------------------------------

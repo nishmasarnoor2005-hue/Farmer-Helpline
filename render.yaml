@@ -2,7 +2,7 @@ services:
   - type: web
     name: ai-farmer-helpline
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: apt-get install -y ffmpeg 2>/dev/null || true && pip install -r requirements.txt
     startCommand: gunicorn app:app --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --workers 1 --bind 0.0.0.0:$PORT --timeout 120
     envVars:
       - key: GEMINI_API_KEY
