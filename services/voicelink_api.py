@@ -176,7 +176,10 @@ def setup_voicelink_bot(
     """
     username = os.getenv("VOICELINK_USERNAME", "")
     password = os.getenv("VOICELINK_PASSWORD", "")
-    did_id_str = os.getenv("VOICELINK_PHONE_NUMBER", "")
+    # VOICELINK_DID_ID is the integer DID ID from the VoiceLink portal.
+    # (not the telephone number — use GET /reseller/did/purchased to find it)
+    # Falls back to VOICELINK_PHONE_NUMBER for backward compatibility.
+    did_id_str = os.getenv("VOICELINK_DID_ID", "") or os.getenv("VOICELINK_PHONE_NUMBER", "")
 
     if not username or not password:
         raise EnvironmentError(
