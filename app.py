@@ -23,6 +23,7 @@ from flask_login import (
 )
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_sock import Sock
 from faster_whisper import WhisperModel
 from google import genai
 from google.genai import types
@@ -93,6 +94,8 @@ limiter = Limiter(
 # Initialise DB tables (preserves existing records)
 db.init_db()
 
+sock = Sock(app)
+
 # =========================================================
 # REAL-TIME VOICE — SESSION STORE
 # Keys are short-lived opaque tokens (never logged).
@@ -140,6 +143,44 @@ AUDIO_FOLDER  = os.path.join(BASE_DIR, "audio")
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(AUDIO_FOLDER,  exist_ok=True)
+
+# =========================================================
+# PRE-GENERATE "PLEASE WAIT" AUDIO — one per language
+# These are played immediately when the farmer stops speaking
+# so the conversation feels instant while Whisper processes.
+# =========================================================
+
+WAIT_MESSAGES = {
+    "kn": "ಒಂದು ಕ್ಷಣ, ನಾನು ನೋಡುತ್ತೇನೆ.",           # Kannada: One moment, let me check.
+    "hi": "एक पल, मैं देखता हूँ।",                    # Hindi
+    "ml": "ഒരു നിമിഷം, ഞാൻ നോക്കട്ടെ.",              # Malayalam
+    "en": "One moment, let me check.",                  # English
+    "ta": "ஒரு நிமிடம், நான் பார்க்கிறேன்.",          # Tamil
+    "te": "ఒక్క క్షణం, నేను చూస్తాను.",               # Telugu
+    "mr": "एक क्षण, मी पाहतो.",                        # Marathi
+    "ur": "ایک لمحہ، میں دیکھتا ہوں۔",               # Urdu
+}
+
+WAIT_AUDIO_DIR = os.path.join(BASE_DIR, "static", "wait_audio")
+os.makedirs(WAIT_AUDIO_DIR, exist_ok=True)
+
+
+def _generate_wait_audio():
+    """Pre-generate wait audio files at startup. Runs in background thread."""
+    from voice.text_to_speech import speak as _speak
+    for lang_code, message in WAIT_MESSAGES.items():
+        out_path = os.path.join(WAIT_AUDIO_DIR, f"wait_{lang_code}.mp3")
+        if not os.path.exists(out_path):
+            try:
+                _speak(message, lang_code, output_path=out_path)
+                print(f"   ✅ Wait audio generated: {lang_code}")
+            except Exception as e:
+                print(f"   ⚠️  Wait audio failed for {lang_code}: {e}")
+
+
+# Generate wait audio in background so startup isn't delayed
+if not app.config.get("TESTING", False):
+    threading.Thread(target=_generate_wait_audio, daemon=True, name="wait-audio-gen").start()
 
 # =========================================================
 # WHISPER MODEL
@@ -348,18 +389,20 @@ def transcribe_with_language(audio_path: str, language_code: str) -> str:
     """
     segments, _ = whisper_model.transcribe(
         audio_path,
-        beam_size=5,
+        beam_size=5,               # keep at 5 — beam_size=1 causes hallucinations on noisy audio
         vad_filter=True,
         vad_parameters=dict(
-            min_silence_duration_ms=400,
-            speech_pad_ms=200,
+            min_silence_duration_ms=300,   # tighter — don't wait long for silence
+            speech_pad_ms=100,             # less padding
+            min_speech_duration_ms=100,    # ignore very short noise bursts
         ),
         condition_on_previous_text=False,
-        language=language_code,   # FORCED — no guessing
+        language=language_code,
         temperature=0.0,
-        no_speech_threshold=NO_SPEECH_THRESHOLD,   # noise gate
-        compression_ratio_threshold=2.0,            # filter hallucinations
-        log_prob_threshold=-0.8,                    # filter low-confidence output
+        no_speech_threshold=NO_SPEECH_THRESHOLD,
+        compression_ratio_threshold=2.4,
+        log_prob_threshold=-1.0,
+        word_timestamps=False,             # skip alignment step — saves ~500ms
     )
 
     clean_parts = []
@@ -577,7 +620,12 @@ def process_audio():
             })
 
         # -------------------------------------------------
-        # STEP 1 — Language detection (cached after first turn)
+        # STEP 1+2 — Language detection + Whisper in PARALLEL
+        #
+        # On first turn: Gemini detects language from audio AND Whisper
+        # transcribes with a best-guess language simultaneously. If Gemini
+        # returns a different language, we re-transcribe (rare after first turn).
+        # On subsequent turns: language is cached — skip Gemini entirely.
         # -------------------------------------------------
 
         t0 = time.perf_counter()
@@ -586,34 +634,64 @@ def process_audio():
         cached_lang = _get_cached_language(call_session_id)
 
         if language_override and language_override != "auto":
-            # Manual override from UI
+            # Manual override — just transcribe directly
             language_code = language_override
             language_name = get_language_name(language_code)
-            print(f"⏳ Step 1: Language override — {language_code} ({language_name})")
+            print(f"⏳ Steps 1+2: Language override {language_code} — transcribing...")
+            text = transcribe_with_language(input_path, language_code)
+            t1 = time.perf_counter()
+            t2 = t1
+
         elif cached_lang:
-            # Already detected in a previous turn of this call — skip Gemini
+            # Subsequent turn — language known, skip Gemini entirely
             language_code = cached_lang
             language_name = get_language_name(language_code)
-            print(f"⏳ Step 1: Language cached — {language_code} ({language_name}) [skipping Gemini detect]")
+            print(f"⏳ Steps 1+2: Cached lang={language_code} — transcribing (no Gemini detect)...")
+            text = transcribe_with_language(input_path, language_code)
+            t1 = time.perf_counter()
+            t2 = t1
+
         else:
-            # First turn — ask Gemini
-            print("⏳ Step 1: Detecting language from audio (Gemini)...")
-            language_code = detect_language_from_audio(input_path)
+            # First turn — run Gemini detect AND Whisper in parallel threads
+            print("⏳ Steps 1+2: First turn — Gemini detect + Whisper running in parallel...")
+            gemini_lang_result  = [None]
+            whisper_text_result = [None]
+
+            def _gemini_detect():
+                gemini_lang_result[0] = detect_language_from_audio(input_path)
+
+            def _whisper_transcribe_auto():
+                # Transcribe with Kannada as best-guess (most common language)
+                whisper_text_result[0] = transcribe_with_language(input_path, "kn")
+
+            t_gemini_thread  = threading.Thread(target=_gemini_detect,          daemon=True)
+            t_whisper_thread = threading.Thread(target=_whisper_transcribe_auto, daemon=True)
+
+            t_gemini_thread.start()
+            t_whisper_thread.start()
+            t_gemini_thread.join(timeout=15)
+            t_whisper_thread.join(timeout=30)
+
+            t1 = time.perf_counter()
+
+            language_code = gemini_lang_result[0] or "kn"
             language_name = get_language_name(language_code)
             _cache_language(call_session_id, language_code)
-            print(f"   Language confirmed: {language_code} ({language_name})")
+            print(f"   Gemini detected: {language_code} ({language_name})")
 
-        t1 = time.perf_counter()
+            # If Gemini confirmed same language as our guess, use whisper result
+            if language_code == "kn" and whisper_text_result[0]:
+                text = whisper_text_result[0]
+                print(f"   Using parallel Whisper result (lang matched)")
+            else:
+                # Language differs — re-transcribe with confirmed language
+                print(f"   Re-transcribing with confirmed lang={language_code}...")
+                text = transcribe_with_language(input_path, language_code)
 
-        # -------------------------------------------------
-        # STEP 2 — Whisper transcribes with forced language + noise gate
-        # -------------------------------------------------
+            t2 = time.perf_counter()
 
-        print(f"⏳ Step 2: Transcribing as {language_name} (Whisper)...")
-        text = transcribe_with_language(input_path, language_code)
-        print(f"   Raw transcription: {text[:80]}")
-
-        t2 = time.perf_counter()
+        print(f"   Raw transcription: {text[:80] if text else 'EMPTY'}")
+        print(f"   ⏱ Detect+STT total: {(t2-t0)*1000:.0f}ms")
 
         if not text:
             return jsonify({
@@ -856,6 +934,25 @@ def get_audio(filename):
     return send_from_directory(AUDIO_FOLDER, filename)
 
 
+@app.route("/wait_audio/<lang>")
+def get_wait_audio(lang):
+    """Serve the pre-generated 'please wait' audio for a given language."""
+    # Clamp to supported languages — default to English
+    safe_lang = lang if lang in WAIT_MESSAGES else "en"
+    filename   = f"wait_{safe_lang}.mp3"
+    wait_path  = os.path.join(WAIT_AUDIO_DIR, filename)
+
+    if os.path.exists(wait_path):
+        return send_from_directory(WAIT_AUDIO_DIR, filename)
+
+    # File not ready yet (still generating) — return English fallback
+    en_path = os.path.join(WAIT_AUDIO_DIR, "wait_en.mp3")
+    if os.path.exists(en_path):
+        return send_from_directory(WAIT_AUDIO_DIR, "wait_en.mp3")
+
+    return jsonify({"error": "wait audio not ready"}), 404
+
+
 # =========================================================
 # ADMIN AUTHENTICATION & DASHBOARD
 # =========================================================
@@ -913,8 +1010,6 @@ def health():
     Returns component status without exposing env values, stack traces,
     or internal paths.
     """
-    from datetime import datetime as _datetime
-
     # --- DB check ---
     try:
         import sqlite3 as _sqlite3
@@ -948,7 +1043,7 @@ def health():
         "gemini_key": gemini_key_status,
         "edge_tts":   edge_tts_status,
         "whisper":    whisper_status,
-        "timestamp":  _datetime.utcnow().isoformat() + "Z",
+        "timestamp":  datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f") + "Z",
     })
 
 
@@ -1332,6 +1427,42 @@ def realtime_config():
         "provider":             provider_name,
         "streaming_honest":     False,
     })
+
+
+# =========================================================
+# VOICELINK WEBSOCKET BOT ROUTES (FEAT-003)
+# Feature-flagged behind VOICELINK_ENABLED=true.
+# VoiceLink connects TO this endpoint when a call arrives.
+# Protocol: base64-encoded PCMA audio, JSON control messages.
+# =========================================================
+
+@sock.route("/integrations/voicelink/ws")
+def voicelink_ws(ws):
+    """WebSocket endpoint for VoiceLink bot connections.
+    VoiceLink connects here when a call arrives on the configured DID.
+    Protocol: base64-encoded PCMA audio, JSON control messages.
+    """
+    if not os.getenv("VOICELINK_ENABLED", "false").lower() == "true":
+        ws.close()
+        return
+    from services.telephony.voicelink_adapter import VoiceLinkAdapter  # noqa: PLC0415
+    adapter = VoiceLinkAdapter()
+    adapter.handle_ws_connection(ws)
+
+
+@app.route("/integrations/voicelink/webhook", methods=["POST"])
+def voicelink_webhook():
+    """Receives lifecycle events from VoiceLink (call.initiated, call.answered,
+    call.ended, call.completed)."""
+    payload = request.get_json(silent=True) or {}
+    signature = request.headers.get("X-VoiceLink-Signature", "")
+    secret = os.getenv("VOICELINK_WEBHOOK_SECRET", "")
+    # Log event type only — never log full payload (may contain caller numbers)
+    event_type = payload.get("event", "unknown")
+    print(f"VoiceLink webhook: {event_type}")
+    from services.telephony.voicelink_adapter import VoiceLinkAdapter  # noqa: PLC0415
+    result = VoiceLinkAdapter.process_webhook(payload, signature, secret)
+    return jsonify({"received": True, "event": event_type})
 
 
 # =========================================================
