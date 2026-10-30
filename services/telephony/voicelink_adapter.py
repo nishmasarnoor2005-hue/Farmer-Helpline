@@ -346,8 +346,8 @@ class VoiceLinkAdapter:
         reply_audio_path = None
 
         try:
-            # Step 1: Send wait audio immediately
-            wait_pcma = _load_wait_audio_pcma(lang="en")
+            # Step 1: Send wait audio immediately (Kannada default, corrected after STT)
+            wait_pcma = _load_wait_audio_pcma(lang="kn")
             if wait_pcma:
                 self._send_mark(ws, "wait_start")
                 self._send_media(ws, wait_pcma)
@@ -373,6 +373,7 @@ class VoiceLinkAdapter:
                 tmp.write(wav_bytes)
                 tmp_path = tmp.name
 
+            detected_lang = "kn"  # default for this helpline's audience
             try:
                 from faster_whisper import WhisperModel  # lazy
                 # Re-use the app-level Whisper model if available via import,
@@ -382,15 +383,21 @@ class VoiceLinkAdapter:
                 except ImportError:
                     _whisper = WhisperModel("small", device="cpu", compute_type="int8")
 
-                segments, _ = _whisper.transcribe(
+                segments, info = _whisper.transcribe(
                     tmp_path,
                     beam_size=5,
                     vad_filter=True,
                     condition_on_previous_text=False,
-                    language=None,  # auto-detect
+                    language=None,  # auto-detect on first turn
                     temperature=0.0,
                 )
                 transcript = " ".join(s.text.strip() for s in segments).strip()
+                # Use Whisper's detected language as a best-guess; Gemini
+                # language detection from audio bytes is not feasible here
+                # because we have raw PCMA not the original WebM.
+                if info and info.language:
+                    from app import SUPPORTED_CODES
+                    detected_lang = info.language if info.language in SUPPORTED_CODES else "kn"
             finally:
                 try:
                     os.unlink(tmp_path)
@@ -403,19 +410,19 @@ class VoiceLinkAdapter:
 
             logger.info("VoiceLink: transcribed (len=%d)", len(transcript))
 
-            # Step 4: AI reply
+            # Step 4: AI reply — use detected language
             try:
                 from services.assistant import get_reply  # lazy
-                reply = get_reply(transcript, "en", None)
+                reply = get_reply(transcript, detected_lang, None)
             except Exception as exc:
                 logger.error("VoiceLink: AI reply failed: %s", exc)
 
-            # Step 5: Edge TTS → MP3
+            # Step 5: Edge TTS → MP3 — use detected language
             try:
                 from voice.text_to_speech import speak  # lazy
                 with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tf:
                     reply_audio_path = tf.name
-                speak(reply, "en", output_path=reply_audio_path)
+                speak(reply, detected_lang, output_path=reply_audio_path)
             except Exception as exc:
                 logger.error("VoiceLink: TTS failed: %s", exc)
 
@@ -443,7 +450,7 @@ class VoiceLinkAdapter:
                 if self.session_id:
                     db.log_interaction(
                         session_id=self.session_id,
-                        language="en",
+                        language=detected_lang,
                         transcript=transcript,
                         intent="voicelink",
                         assistant_response=reply,
