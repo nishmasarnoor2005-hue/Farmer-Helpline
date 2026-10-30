@@ -55,7 +55,7 @@ def _build_callbacks():
     from services import scheme_service as _ss                        # noqa: PLC0415
 
     def whisper_cb(audio_path: str):
-        segments, info = _app.whisper_model.transcribe(
+        segments, info = _app._get_whisper().transcribe(
             audio_path, beam_size=3, vad_filter=True,
         )
         text = " ".join(seg.text.strip() for seg in segments).strip()

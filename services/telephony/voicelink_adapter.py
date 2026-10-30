@@ -379,7 +379,8 @@ class VoiceLinkAdapter:
                 # Re-use the app-level Whisper model if available via import,
                 # fall back to loading a new instance if not (e.g. during tests)
                 try:
-                    from app import whisper_model as _whisper
+                    from app import _get_whisper
+                    _whisper = _get_whisper()
                 except ImportError:
                     _whisper = WhisperModel("small", device="cpu", compute_type="int8")
 

@@ -186,14 +186,27 @@ if not app.config.get("TESTING", False):
 # WHISPER MODEL
 # =========================================================
 
-print("Loading Whisper small model...")
-whisper_model = WhisperModel(
-    "small",          # small = 3-5s on CPU vs 8-20s for medium
-    device="cpu",
-    compute_type="int8",
-    cpu_threads=4
-)
-print("Whisper model loaded!")
+# Whisper is loaded lazily on first use to keep startup fast on Render.
+# This avoids the 30-second startup timeout on free-tier instances.
+whisper_model = None
+_whisper_lock = threading.Lock()
+
+
+def _get_whisper():
+    """Load Whisper model on first call (thread-safe lazy initialisation)."""
+    global whisper_model
+    if whisper_model is None:
+        with _whisper_lock:
+            if whisper_model is None:
+                print("Loading Whisper small model...")
+                whisper_model = WhisperModel(
+                    "small",
+                    device="cpu",
+                    compute_type="int8",
+                    cpu_threads=4,
+                )
+                print("Whisper model loaded!")
+    return whisper_model
 
 # =========================================================
 # GEMINI CLIENT
@@ -387,7 +400,7 @@ def transcribe_with_language(audio_path: str, language_code: str) -> str:
     Filters out background noise using Whisper's no_speech_prob score.
     Returns clean transcribed text.
     """
-    segments, _ = whisper_model.transcribe(
+    segments, _ = _get_whisper().transcribe(
         audio_path,
         beam_size=5,               # keep at 5 — beam_size=1 causes hallucinations on noisy audio
         vad_filter=True,
@@ -1035,7 +1048,7 @@ def health():
         edge_tts_status = "error"
 
     # --- Whisper check ---
-    whisper_status = "loaded" if whisper_model is not None else "error"
+    whisper_status = "loaded" if whisper_model is not None else "not_loaded_yet"
 
     return jsonify({
         "status":     "ok",

@@ -112,11 +112,11 @@ class TestHealthKeys:
         assert data["timestamp"].endswith("Z")
 
     def test_whisper_value_is_valid(self, client):
-        """whisper field must be either 'loaded' or 'error'."""
+        """whisper field must be a known status string."""
         with patch("sqlite3.connect", return_value=_make_sqlite_mock().connect()):
             resp = client.get("/health")
         data = json.loads(resp.data)
-        assert data["whisper"] in ("loaded", "error")
+        assert data["whisper"] in ("loaded", "error", "not_loaded_yet")
 
     def test_db_value_is_valid(self, client):
         """db field must be either 'ok' or 'error'."""

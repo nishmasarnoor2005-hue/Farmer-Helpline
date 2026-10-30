@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: ai-farmer-helpline
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --worker-class geventwebsocket.gunicorn.workers.GeventWebSocketWorker --workers 1 --bind 0.0.0.0:$PORT --timeout 120
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FLASK_SECRET_KEY
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_MODEL
+        value: nvidia/nemotron-3-ultra-550b-a55b:free
+      - key: REALTIME_VOICE_ENABLED
+        value: "false"
+      - key: VOICELINK_ENABLED
+        value: "false"
+      - key: VOICELINK_USERNAME
+        sync: false
+      - key: VOICELINK_PASSWORD
+        sync: false
+      - key: VOICELINK_WEBHOOK_SECRET
+        sync: false
+      - key: VOICELINK_BOT_WEBSOCKET_URL
+        sync: false
+      - key: VOICELINK_BOT_WEBHOOK_URL
+        sync: false
+      - key: RATE_LIMIT_PROCESS
+        value: "10 per minute"

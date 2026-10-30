@@ -24,6 +24,11 @@ geopy==2.5.0
 flask-sock==0.7.0
 simple-websocket==1.1.0
 
+# Production WSGI server (required for Render deployment)
+gunicorn==23.0.0
+gevent==24.11.1          # Async worker for WebSocket support on gunicorn
+gevent-websocket==0.10.1 # Gevent WebSocket worker class
+
 # Heavy ML packages — NOT pinned (Windows/CUDA version conflicts)
 # torch
 # numpy
