@@ -8,15 +8,8 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-# =========================================================
-# GEVENT MONKEY-PATCH — must happen before ALL other imports
-# when running under gunicorn with GeventWebSocketWorker.
-# The gevent worker already calls monkey.patch_all() itself.
-# We do NOT call it again here to avoid the double-patch warning.
-# This block is intentionally left as a no-op — gevent patching
-# is handled entirely by the gunicorn worker.
-# =========================================================
-# (gevent monkey-patching handled by GeventWebSocketWorker)
+# NOTE: gevent monkey-patching is done in wsgi.py BEFORE this module is
+# imported, so by the time we reach here ssl/socket are already patched.
 
 # Load .env FIRST — before any other project imports read os.environ
 from dotenv import load_dotenv
