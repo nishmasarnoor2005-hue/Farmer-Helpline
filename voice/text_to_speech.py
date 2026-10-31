@@ -69,7 +69,13 @@ def speak(text: str, language: str = "en", output_path: str = None) -> str | Non
     voice     = VOICE_MAP.get(lang_key, VOICE_MAP["en"])
 
     try:
-        asyncio.run(_synthesize(text, voice, save_path))
+        # Use new_event_loop (not asyncio.run) to avoid conflicts with
+        # gevent's monkey-patched event loop under gunicorn GeventWebSocketWorker
+        loop = asyncio.new_event_loop()
+        try:
+            loop.run_until_complete(_synthesize(text, voice, save_path))
+        finally:
+            loop.close()
         print(f"✅ Edge TTS saved: {os.path.basename(save_path)} ({voice})")
         return save_path
 
