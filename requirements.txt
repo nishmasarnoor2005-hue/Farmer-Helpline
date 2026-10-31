@@ -34,9 +34,11 @@ scikit-learn==1.6.1
 joblib==1.4.2
 
 # Audio / video decoding (for faster-whisper)
-# av>=19 removed metadata_errors= from av.open() which faster-whisper 1.2.1 uses.
-# Pin to the last version that supports this parameter.
-av==13.0.0
+# Do NOT pin av here — PyAV removes old binary wheels from PyPI, so
+# pinning to older versions forces source compilation which fails
+# without FFmpeg system libraries on Render.
+# The av.open() metadata_errors= incompatibility is handled in app.py
+# by monkey-patching faster_whisper.audio at startup.
 audioop-lts==0.2.1  # audioop backport for Python 3.13+ (removed from stdlib)
 
 # Heavy ML packages — NOT pinned (Windows/CUDA version conflicts)

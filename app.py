@@ -48,6 +48,49 @@ from services.assistant import get_reply, reset_history
 from services import location_extractor
 from services import weather_service
 from services import market_service
+
+# =========================================================
+# FASTER-WHISPER / AV COMPATIBILITY PATCH
+# faster-whisper 1.2.1 calls av.open(..., metadata_errors="ignore")
+# but av>=14 removed that keyword argument.
+# Patch decode_audio to strip the unsupported kwarg at runtime.
+# =========================================================
+try:
+    import av as _av
+    import faster_whisper.audio as _fw_audio
+    import inspect as _inspect
+
+    _orig_decode_audio = _fw_audio.decode_audio
+
+    def _patched_decode_audio(input_file, sampling_rate=16000, split_stereo=False):
+        """Wrapper that calls av.open without metadata_errors on av>=14."""
+        try:
+            return _orig_decode_audio(input_file,
+                                      sampling_rate=sampling_rate,
+                                      split_stereo=split_stereo)
+        except TypeError as _e:
+            if "metadata_errors" not in str(_e):
+                raise
+            # av>=14: metadata_errors kwarg was removed — patch av.open directly
+            _real_av_open = _av.open
+
+            def _av_open_compat(file, *args, **kwargs):
+                kwargs.pop("metadata_errors", None)
+                return _real_av_open(file, *args, **kwargs)
+
+            _av.open = _av_open_compat
+            try:
+                return _orig_decode_audio(input_file,
+                                          sampling_rate=sampling_rate,
+                                          split_stereo=split_stereo)
+            finally:
+                _av.open = _real_av_open  # restore after the call
+
+    _fw_audio.decode_audio = _patched_decode_audio
+    print("✅ faster-whisper/av compatibility patch applied")
+except Exception as _patch_err:
+    print(f"⚠️  Could not apply faster-whisper/av patch: {_patch_err}")
+
 from services import scheme_service
 from services.intent_service import classify_intent
 from services.forecast_service import get_price_forecast, _MARKET_DATA as _FORECAST_DATA
