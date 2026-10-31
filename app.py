@@ -8,6 +8,18 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+# =========================================================
+# GEVENT MONKEY-PATCH — must happen before ALL other imports
+# when running under gunicorn with GeventWebSocketWorker.
+# Without this, ssl/socket/threading are not patched and
+# network calls (Edge TTS, Gemini, OpenRouter) may hang.
+# =========================================================
+try:
+    from gevent import monkey as _gevent_monkey
+    _gevent_monkey.patch_all(thread=False)  # thread=False: keep real threads for Whisper
+except ImportError:
+    pass  # Not running under gevent (local dev with flask run)
+
 # Load .env FIRST — before any other project imports read os.environ
 from dotenv import load_dotenv
 _ENV_FILE = Path(__file__).resolve().parent / ".env"
@@ -187,7 +199,14 @@ if not app.config.get("TESTING", False):
 # =========================================================
 
 # Whisper is loaded lazily on first use to keep startup fast on Render.
-# This avoids the 30-second startup timeout on free-tier instances.
+# Model size is configurable via WHISPER_MODEL_SIZE env var.
+# Render free tier: 512 MB RAM.  Approximate RAM per model:
+#   tiny  ~200 MB  — fast, lower accuracy
+#   base  ~290 MB  — good balance (default for Render)
+#   small ~500 MB  — OOM on 512 MB free tier
+# Set WHISPER_MODEL_SIZE=small in Render env only on paid (2 GB) plans.
+_WHISPER_MODEL_SIZE = os.getenv("WHISPER_MODEL_SIZE", "base")
+
 whisper_model = None
 _whisper_lock = threading.Lock()
 
@@ -198,12 +217,12 @@ def _get_whisper():
     if whisper_model is None:
         with _whisper_lock:
             if whisper_model is None:
-                print("Loading Whisper small model...")
+                print(f"Loading Whisper {_WHISPER_MODEL_SIZE} model...")
                 whisper_model = WhisperModel(
-                    "small",
+                    _WHISPER_MODEL_SIZE,
                     device="cpu",
                     compute_type="int8",
-                    cpu_threads=4,
+                    cpu_threads=2,  # 2 threads saves ~100 MB vs 4
                 )
                 print("Whisper model loaded!")
     return whisper_model
@@ -860,8 +879,15 @@ def process_audio():
         })
 
     except Exception as e:
-        print(f"\n❌ SERVER ERROR: {e}")
-        return jsonify({"success": False, "error": str(e)})
+        print(f"\n❌ SERVER ERROR in /process_audio: {type(e).__name__}: {e}")
+        # Always return JSON — never let Flask return an HTML 500 page
+        # which would cause "SyntaxError: Unexpected end of JSON input" in the browser
+        try:
+            return jsonify({"success": False, "error": "Server error — please try again"}), 500
+        except Exception:
+            from flask import Response as _Response
+            return _Response('{"success":false,"error":"Server error"}',
+                             status=500, mimetype="application/json")
 
     finally:
         # Release the per-session concurrency lock (only if we acquired it)

@@ -701,6 +701,26 @@ function stopRecording() {
 }
 
 // =============================================================
+// PLAY "PLEASE WAIT" AUDIO
+// Plays immediately when farmer stops speaking — instant feedback
+// while Whisper + AI processes in the background.
+// =============================================================
+let _waitAudio = null;
+
+function _playWaitAudio(langCode) {
+    const safe = ['kn','hi','ml','en','ta','te','mr','ur'].includes(langCode)
+        ? langCode : 'en';
+    // Stop any previous wait audio
+    if (_waitAudio) { _waitAudio.pause(); _waitAudio = null; }
+    _waitAudio = new Audio(`/wait_audio/${safe}?t=${Date.now()}`);
+    _waitAudio.play().catch(() => {}); // silent if browser blocks autoplay
+}
+
+function _stopWaitAudio() {
+    if (_waitAudio) { _waitAudio.pause(); _waitAudio = null; }
+}
+
+// =============================================================
 // SEND AUDIO → SERVER
 // =============================================================
 async function sendToAI() {
@@ -708,15 +728,50 @@ async function sendToAI() {
     const form = new FormData();
     form.append("audio", blob, "farmer.webm");
 
+    // ── Play "please wait" audio immediately so the farmer gets
+    //    instant feedback while Whisper + AI processes ──────────
+    const detectedLang = langBadge.textContent.match(/[a-z]{2}$/) ?
+        langBadge.textContent.match(/[a-z]{2}$/)[0] : "en";
+    const waitLang = langBadge.dataset.langCode || "en";
+    _playWaitAudio(waitLang);
+
     try {
         const res  = await fetch("/process_audio", { method: "POST", body: form });
-        const data = await res.json();
+
+        // Guard: if server returns non-JSON (502, 503, nginx error page),
+        // parse safely instead of letting .json() throw SyntaxError
+        let data;
+        const contentType = res.headers.get("content-type") || "";
+        if (!res.ok && !contentType.includes("application/json")) {
+            // 502/503/504 or HTML error page — treat as server error
+            spinner.classList.remove("active");
+            isProcessing = false;
+            micBtn.disabled = false;
+            _stopWaitAudio();
+            showError(`Server error (HTTP ${res.status}) — please try again`);
+            setStatus("❌ Server error", "Please try again");
+            enableMic();
+            return;
+        }
+        try {
+            data = await res.json();
+        } catch (jsonErr) {
+            spinner.classList.remove("active");
+            isProcessing = false;
+            micBtn.disabled = false;
+            _stopWaitAudio();
+            showError("Server returned an invalid response — please try again");
+            setStatus("❌ Server error", "Please try again");
+            enableMic();
+            return;
+        }
 
         spinner.classList.remove("active");
         isProcessing = false;
         micBtn.disabled = false;
 
         if (!data.success) {
+            _stopWaitAudio();
             // FR-18: show actual error message with retry button
             showError(data.error || "Could not understand audio");
             setStatus("⚠️ Error", "Please speak again clearly");
@@ -732,6 +787,7 @@ async function sendToAI() {
         const langCode = data.language_code;
         const langName = LANG_NAMES[langCode] || data.language;
         langBadge.textContent = `🌐 ${langName}`;
+        langBadge.dataset.langCode = langCode;  // store for wait audio
 
         // Show farmer bubble
         addBubble("farmer", data.text, "You");
@@ -743,6 +799,7 @@ async function sendToAI() {
         const audioFilename = data.audio_url.split("/").pop().split("?")[0];
         const audioUrlWithTs = data.audio_url + "?t=" + Date.now();
         lastAudioUrl = audioUrlWithTs;  // FR-18: store for repeat
+        _stopWaitAudio();  // stop wait audio before playing real reply
         playAIAudio(audioUrlWithTs, audioFilename);
 
     } catch (err) {
