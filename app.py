@@ -1129,12 +1129,20 @@ def debug_whisper_test():
             sz = _os.path.getsize(p)
             _os.unlink(p)
             return sz
-        loop = asyncio.new_event_loop()
-        try:
-            sz = loop.run_until_complete(_tts_test())
-            results["edge_tts"] = f"ok, {sz} bytes"
-        finally:
-            loop.close()
+
+        # Run in OS thread — gevent's event loop can't interfere there
+        from concurrent.futures import ThreadPoolExecutor
+        def _run_in_thread():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                return loop.run_until_complete(_tts_test())
+            finally:
+                loop.close()
+                asyncio.set_event_loop(None)
+        with ThreadPoolExecutor(max_workers=1) as ex:
+            sz = ex.submit(_run_in_thread).result(timeout=30)
+        results["edge_tts"] = f"ok, {sz} bytes"
     except Exception as e:
         results["edge_tts"] = f"FAIL: {e}\n{_tb.format_exc()[-500:]}"
 
