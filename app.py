@@ -603,6 +603,7 @@ def process_audio():
     input_path     = os.path.join(UPLOAD_FOLDER, f"farmer_voice_{request_id}.webm")
     audio_filename = f"farmer_reply_{request_id}.mp3"
     audio_dest     = os.path.join(AUDIO_FOLDER, audio_filename)
+    print(f"\n📥 /process_audio called [{request_id[:8]}]")
 
     # We need the session-based ID early so we can acquire its lock.
     # Flask's `session` is only available inside a request context, which we
@@ -913,9 +914,10 @@ def process_audio():
         })
 
     except Exception as e:
+        import traceback as _tb
         print(f"\n❌ SERVER ERROR in /process_audio: {type(e).__name__}: {e}")
+        print(_tb.format_exc())
         # Always return JSON — never let Flask return an HTML 500 page
-        # which would cause "SyntaxError: Unexpected end of JSON input" in the browser
         try:
             return jsonify({"success": False, "error": "Server error — please try again"}), 500
         except Exception:
