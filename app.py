@@ -11,14 +11,17 @@ from pathlib import Path
 # =========================================================
 # GEVENT MONKEY-PATCH — must happen before ALL other imports
 # when running under gunicorn with GeventWebSocketWorker.
-# Without this, ssl/socket/threading are not patched and
-# network calls (Edge TTS, Gemini, OpenRouter) may hang.
+# The gevent worker already calls monkey.patch_all() itself,
+# so we only patch if running outside gunicorn (local dev).
 # =========================================================
 try:
     from gevent import monkey as _gevent_monkey
-    _gevent_monkey.patch_all(thread=False)  # thread=False: keep real threads for Whisper
+    if not _gevent_monkey.is_module_patched("socket"):
+        # Not yet patched — patch now (local dev / non-gevent server)
+        _gevent_monkey.patch_all(thread=False)
+    # If already patched by gunicorn worker, skip to avoid double-patch warning
 except ImportError:
-    pass  # Not running under gevent (local dev with flask run)
+    pass  # Not running under gevent
 
 # Load .env FIRST — before any other project imports read os.environ
 from dotenv import load_dotenv

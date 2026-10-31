@@ -33,8 +33,10 @@ gevent-websocket==0.10.1 # Gevent WebSocket worker class
 scikit-learn==1.6.1
 joblib==1.4.2
 
-# Audio conversion for VoiceLink PCMA (requires ffmpeg on the server)
-pydub==0.25.1
+# Audio / video decoding (for faster-whisper)
+# av>=19 removed metadata_errors= from av.open() which faster-whisper 1.2.1 uses.
+# Pin to the last version that supports this parameter.
+av==13.0.0
 audioop-lts==0.2.1  # audioop backport for Python 3.13+ (removed from stdlib)
 
 # Heavy ML packages — NOT pinned (Windows/CUDA version conflicts)
