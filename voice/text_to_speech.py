@@ -1,25 +1,33 @@
+"""
+voice/text_to_speech.py
+
+Text-to-speech using Edge TTS neural voices.
+
+On Render (gunicorn + gevent + Python 3.14) gevent monkey-patches asyncio
+so deeply that asyncio.new_event_loop() raises RuntimeError even inside
+ThreadPoolExecutor threads. The only reliable escape is a subprocess.
+
+speak() spawns tts_worker.py as a separate Python process — completely
+outside gevent's reach — and falls back to gTTS if that fails.
+"""
+
 import os
-import asyncio
-import edge_tts
+import subprocess
+import sys
 
 # =========================================================
-# NEURAL VOICE MAP — one natural voice per language
+# NEURAL VOICE MAP
 # =========================================================
 
 VOICE_MAP = {
-    # Major languages
-    "kn": "kn-IN-SapnaNeural",        # Kannada — female, natural
-    "hi": "hi-IN-SwaraNeural",         # Hindi — female, natural
-    "ml": "ml-IN-SobhanaNeural",       # Malayalam — female, natural
-    "en": "en-IN-NeerjaNeural",        # English (Indian accent) — female
-
-    # Minor languages
-    "ta": "ta-IN-PallaviNeural",       # Tamil — female, natural
-    "te": "te-IN-ShrutiNeural",        # Telugu — female, natural
-    "mr": "mr-IN-AarohiNeural",        # Marathi — female, natural
-    "ur": "ur-PK-UzmaNeural",          # Urdu — female, natural
-
-    # Aliases (full language names)
+    "kn": "kn-IN-SapnaNeural",
+    "hi": "hi-IN-SwaraNeural",
+    "ml": "ml-IN-SobhanaNeural",
+    "en": "en-IN-NeerjaNeural",
+    "ta": "ta-IN-PallaviNeural",
+    "te": "te-IN-ShrutiNeural",
+    "mr": "mr-IN-AarohiNeural",
+    "ur": "ur-PK-UzmaNeural",
     "kannada":   "kn-IN-SapnaNeural",
     "hindi":     "hi-IN-SwaraNeural",
     "malayalam": "ml-IN-SobhanaNeural",
@@ -30,177 +38,122 @@ VOICE_MAP = {
     "urdu":      "ur-PK-UzmaNeural",
 }
 
-# Default fallback path (used when no output_path is provided)
 _DEFAULT_OUTPUT = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "farmer_reply.mp3"
 )
 
+# Path to the subprocess worker script
+_WORKER_SCRIPT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "tts_worker.py")
 
-# =========================================================
-# ASYNC CORE
-# =========================================================
-
-async def _synthesize(text: str, voice: str, output_path: str):
-    """Generate speech using Edge TTS and save to file."""
-    communicate = edge_tts.Communicate(text, voice)
-    await communicate.save(output_path)
+# Python executable to use for the subprocess (same venv as current process)
+_PYTHON = sys.executable
 
 
 # =========================================================
-# PUBLIC FUNCTION
+# INTERNAL: gTTS fallback (synchronous, no asyncio)
+# =========================================================
+
+def _gtts_speak(text: str, lang_key: str, save_path: str) -> bool:
+    """Try gTTS as a fallback. Returns True on success."""
+    gtts_map = {
+        "kn": "kn", "hi": "hi", "ml": "ml",
+        "ta": "ta", "te": "te", "mr": "mr",
+        "en": "en", "ur": "ur",
+    }
+    try:
+        from gtts import gTTS
+        gtts_lang = gtts_map.get(lang_key, "en")
+        gTTS(text=str(text), lang=gtts_lang, slow=False).save(save_path)
+        print(f"⚠️  gTTS fallback used ({gtts_lang})")
+        return True
+    except Exception as e:
+        print(f"❌ gTTS fallback failed: {e}")
+        return False
+
+
+# =========================================================
+# PUBLIC: speak()
 # =========================================================
 
 def speak(text: str, language: str = "en", output_path: str = None) -> str | None:
     """
-    Convert text to speech using Edge TTS neural voices.
+    Convert text to speech.
+
+    Tries Edge TTS via subprocess (avoids gevent asyncio conflict),
+    falls back to gTTS if subprocess fails.
 
     Args:
-        text:        The text to speak.
-        language:    ISO language code (e.g. 'kn', 'hi') or full name.
-        output_path: Where to save the MP3. Uses a default path if not given.
-                     Pass a per-request unique path to avoid race conditions.
+        text:        Text to speak.
+        language:    ISO language code or full name.
+        output_path: Output MP3 path. Auto-generated if not given.
 
     Returns:
-        Path to the saved MP3 file, or None on failure.
+        Path to saved MP3, or None on total failure.
     """
     save_path = output_path or _DEFAULT_OUTPUT
     lang_key  = str(language).lower().strip()
     voice     = VOICE_MAP.get(lang_key, VOICE_MAP["en"])
 
+    # --- Attempt 1: Edge TTS via subprocess ---
     try:
-        # Run Edge TTS in a ThreadPoolExecutor thread.
-        # This is necessary under gevent: gevent monkey-patches asyncio and
-        # runs its own event loop. asyncio.new_event_loop().run_until_complete()
-        # raises "Cannot run the event loop while another loop is running"
-        # because gevent's loop is already active in the current greenlet.
-        # A real OS thread (via ThreadPoolExecutor) has its own event loop
-        # that gevent cannot interfere with.
-        from concurrent.futures import ThreadPoolExecutor
+        result = subprocess.run(
+            [_PYTHON, _WORKER_SCRIPT, voice, save_path, text],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode == 0 and os.path.exists(save_path) and os.path.getsize(save_path) > 100:
+            print(f"✅ Edge TTS saved: {os.path.basename(save_path)} ({voice})")
+            return save_path
+        else:
+            err = result.stderr.strip()[:200] if result.stderr else "empty output"
+            print(f"❌ Edge TTS subprocess failed (rc={result.returncode}): {err}")
+    except subprocess.TimeoutExpired:
+        print("❌ Edge TTS subprocess timed out")
+    except Exception as e:
+        print(f"❌ Edge TTS subprocess error: {e}")
 
-        def _tts_in_thread():
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            try:
-                loop.run_until_complete(_synthesize(text, voice, save_path))
-            finally:
-                loop.close()
-                asyncio.set_event_loop(None)
-
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_tts_in_thread)
-            future.result(timeout=30)  # wait up to 30s
-
-        print(f"✅ Edge TTS saved: {os.path.basename(save_path)} ({voice})")
+    # --- Attempt 2: gTTS fallback ---
+    if _gtts_speak(text, lang_key, save_path):
         return save_path
 
-    except Exception as edge_error:
-        print(f"❌ Edge TTS error: {edge_error}")
+    return None
 
-        # Fallback to gTTS
-        try:
-            from gtts import gTTS
-            gtts_map = {
-                "kn": "kn", "hi": "hi", "ml": "ml",
-                "ta": "ta", "te": "te", "mr": "mr",
-                "en": "en", "ur": "ur",
-            }
-            gtts_lang = gtts_map.get(lang_key, "en")
-            gTTS(text=str(text), lang=gtts_lang, slow=False).save(save_path)
-            print(f"⚠️  Fell back to gTTS ({gtts_lang})")
-            return save_path
 
-        except Exception as fallback_error:
-            print(f"❌ gTTS fallback also failed: {fallback_error}")
-            return None
-
+# =========================================================
+# PUBLIC: speak_to_bytes()
+# =========================================================
 
 def speak_to_bytes(text: str, language_code: str) -> bytes:
     """
-    Synthesise speech and return the raw MP3 bytes.
-
-    Uses asyncio.new_event_loop() (not asyncio.run()) to avoid event-loop
-    nesting when called from a Flask route that may already be inside an
-    async context.  A named temp file is used because Edge TTS requires a
-    file path rather than an in-memory stream.
-
-    Falls back to gTTS if Edge TTS fails.
-
-    Args:
-        text:          The text to synthesise.
-        language_code: ISO-639-1 language code (e.g. 'kn', 'hi', 'en').
+    Synthesise speech and return raw MP3 bytes.
+    Uses speak() internally with a temp file.
 
     Returns:
-        Raw MP3 bytes.  Never returns None or empty bytes on success.
+        Raw MP3 bytes.
 
     Raises:
         RuntimeError: if both Edge TTS and gTTS fail.
     """
     import tempfile
 
-    lang_key = str(language_code).lower().strip()
-    voice    = VOICE_MAP.get(lang_key, VOICE_MAP["en"])
+    with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
+        tmp_path = tmp.name
 
-    # Use a NamedTemporaryFile with delete=False so we can reliably read it
-    # after the async save and delete it in the finally block.
-    tmp_path = None
     try:
-        with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
-            tmp_path = tmp.name
-
-        # Run in a real OS thread so gevent's event loop doesn't interfere
-        from concurrent.futures import ThreadPoolExecutor
-
-        def _tts_bytes_in_thread():
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            try:
-                loop.run_until_complete(_synthesize(text, voice, tmp_path))
-            finally:
-                loop.close()
-                asyncio.set_event_loop(None)
-
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            executor.submit(_tts_bytes_in_thread).result(timeout=30)
-
-        with open(tmp_path, "rb") as f:
-            audio_bytes = f.read()
-
-        if audio_bytes:
-            return audio_bytes
-
-        raise RuntimeError("Edge TTS produced an empty file")
-
-    except Exception as edge_error:
-        print(f"⚠️  speak_to_bytes: Edge TTS error ({edge_error}); falling back to gTTS")
-        try:
-            import io as _io
-            from gtts import gTTS
-            gtts_map = {
-                "kn": "kn", "hi": "hi", "ml": "ml",
-                "ta": "ta", "te": "te", "mr": "mr",
-                "en": "en", "ur": "ur",
-            }
-            gtts_lang = gtts_map.get(lang_key, "en")
-            buf = _io.BytesIO()
-            gTTS(text=str(text), lang=gtts_lang, slow=False).write_to_fp(buf)
-            audio_bytes = buf.getvalue()
+        result = speak(text, language_code, output_path=tmp_path)
+        if result and os.path.exists(tmp_path):
+            with open(tmp_path, "rb") as f:
+                audio_bytes = f.read()
             if audio_bytes:
                 return audio_bytes
-            raise RuntimeError("gTTS produced empty bytes")
-        except Exception as gtts_error:
-            raise RuntimeError(
-                f"speak_to_bytes: both Edge TTS and gTTS failed. "
-                f"Edge TTS: {edge_error}; gTTS: {gtts_error}"
-            ) from gtts_error
-
+        raise RuntimeError(f"speak() produced no audio for language={language_code}")
     finally:
-        if tmp_path:
-            try:
-                import os as _os
-                _os.unlink(tmp_path)
-            except OSError:
-                pass
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
 
 
 if __name__ == "__main__":

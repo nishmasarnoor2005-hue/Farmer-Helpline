@@ -1118,33 +1118,21 @@ def debug_whisper_test():
     except Exception as e:
         results["whisper"] = f"FAIL: {e}\n{_tb.format_exc()}"
 
-    # Test 4: Edge TTS
+    # Test 4: Edge TTS via subprocess (only method that works under gevent Python 3.14)
     try:
-        import asyncio, edge_tts, tempfile, os as _os
-        async def _tts_test():
-            comm = edge_tts.Communicate("test", "en-IN-NeerjaNeural")
-            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
-                p = f.name
-            await comm.save(p)
-            sz = _os.path.getsize(p)
-            _os.unlink(p)
-            return sz
-
-        # Run in OS thread — gevent's event loop can't interfere there
-        from concurrent.futures import ThreadPoolExecutor
-        def _run_in_thread():
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            try:
-                return loop.run_until_complete(_tts_test())
-            finally:
-                loop.close()
-                asyncio.set_event_loop(None)
-        with ThreadPoolExecutor(max_workers=1) as ex:
-            sz = ex.submit(_run_in_thread).result(timeout=30)
-        results["edge_tts"] = f"ok, {sz} bytes"
+        import tempfile as _tf
+        from voice.text_to_speech import speak as _speak
+        with _tf.NamedTemporaryFile(suffix=".mp3", delete=False) as _f:
+            _tts_out = _f.name
+        _r = _speak("test", "en", output_path=_tts_out)
+        if _r and os.path.exists(_tts_out):
+            _sz = os.path.getsize(_tts_out)
+            os.unlink(_tts_out)
+            results["edge_tts"] = f"ok, {_sz} bytes"
+        else:
+            results["edge_tts"] = "FAIL: speak() returned None or empty file"
     except Exception as e:
-        results["edge_tts"] = f"FAIL: {e}\n{_tb.format_exc()[-500:]}"
+        results["edge_tts"] = f"FAIL: {e}\n{_tb.format_exc()[-300:]}"
 
     # Test 5: Gemini key
     results["gemini_key"] = "configured" if os.getenv("GEMINI_API_KEY") else "MISSING"
