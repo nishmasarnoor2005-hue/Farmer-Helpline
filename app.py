@@ -1078,6 +1078,82 @@ def admin_dashboard():
 # HEALTH ENDPOINT (FR-17)
 # =========================================================
 
+@app.route("/debug/whisper_test", methods=["GET"])
+def debug_whisper_test():
+    """
+    Quick test endpoint — runs the full pipeline steps without audio.
+    Returns detailed error info so we can see what's failing on Render.
+    NOT for production use — returns internal error details.
+    """
+    import traceback as _tb
+    results = {}
+
+    # Test 1: av import and av.open signature
+    try:
+        import av
+        results["av_version"] = str(av.__version__)
+        # Check if metadata_errors is supported
+        import inspect
+        try:
+            sig = str(inspect.signature(av.open))
+            results["av_open_sig"] = sig[:200]
+        except Exception:
+            results["av_open_sig"] = "cannot inspect (C extension)"
+        results["av"] = "ok"
+    except Exception as e:
+        results["av"] = f"FAIL: {e}"
+
+    # Test 2: faster-whisper patch
+    try:
+        import faster_whisper.audio as _fwa
+        results["fw_decode_audio"] = str(_fwa.decode_audio)[:100]
+        results["fw_patch"] = "ok"
+    except Exception as e:
+        results["fw_patch"] = f"FAIL: {e}"
+
+    # Test 3: Whisper model load (lazy)
+    try:
+        wm = _get_whisper()
+        results["whisper"] = f"loaded: {type(wm).__name__}"
+    except Exception as e:
+        results["whisper"] = f"FAIL: {e}\n{_tb.format_exc()}"
+
+    # Test 4: Edge TTS
+    try:
+        import asyncio, edge_tts, tempfile, os as _os
+        async def _tts_test():
+            comm = edge_tts.Communicate("test", "en-IN-NeerjaNeural")
+            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as f:
+                p = f.name
+            await comm.save(p)
+            sz = _os.path.getsize(p)
+            _os.unlink(p)
+            return sz
+        loop = asyncio.new_event_loop()
+        try:
+            sz = loop.run_until_complete(_tts_test())
+            results["edge_tts"] = f"ok, {sz} bytes"
+        finally:
+            loop.close()
+    except Exception as e:
+        results["edge_tts"] = f"FAIL: {e}\n{_tb.format_exc()[-500:]}"
+
+    # Test 5: Gemini key
+    results["gemini_key"] = "configured" if os.getenv("GEMINI_API_KEY") else "MISSING"
+
+    # Test 6: UPLOAD_FOLDER writable
+    try:
+        test_path = os.path.join(UPLOAD_FOLDER, "_test.tmp")
+        with open(test_path, "w") as f:
+            f.write("test")
+        os.remove(test_path)
+        results["upload_folder"] = "writable"
+    except Exception as e:
+        results["upload_folder"] = f"FAIL: {e}"
+
+    return jsonify(results)
+
+
 @app.route("/health", methods=["GET"])
 def health():
     """
