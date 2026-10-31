@@ -69,13 +69,28 @@ def speak(text: str, language: str = "en", output_path: str = None) -> str | Non
     voice     = VOICE_MAP.get(lang_key, VOICE_MAP["en"])
 
     try:
-        # Use new_event_loop (not asyncio.run) to avoid conflicts with
-        # gevent's monkey-patched event loop under gunicorn GeventWebSocketWorker
-        loop = asyncio.new_event_loop()
-        try:
-            loop.run_until_complete(_synthesize(text, voice, save_path))
-        finally:
-            loop.close()
+        # Run Edge TTS in a ThreadPoolExecutor thread.
+        # This is necessary under gevent: gevent monkey-patches asyncio and
+        # runs its own event loop. asyncio.new_event_loop().run_until_complete()
+        # raises "Cannot run the event loop while another loop is running"
+        # because gevent's loop is already active in the current greenlet.
+        # A real OS thread (via ThreadPoolExecutor) has its own event loop
+        # that gevent cannot interfere with.
+        from concurrent.futures import ThreadPoolExecutor
+
+        def _tts_in_thread():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                loop.run_until_complete(_synthesize(text, voice, save_path))
+            finally:
+                loop.close()
+                asyncio.set_event_loop(None)
+
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_tts_in_thread)
+            future.result(timeout=30)  # wait up to 30s
+
         print(f"✅ Edge TTS saved: {os.path.basename(save_path)} ({voice})")
         return save_path
 
@@ -133,12 +148,20 @@ def speak_to_bytes(text: str, language_code: str) -> bytes:
         with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as tmp:
             tmp_path = tmp.name
 
-        # Use a fresh event loop to avoid nesting asyncio.run() calls.
-        loop = asyncio.new_event_loop()
-        try:
-            loop.run_until_complete(_synthesize(text, voice, tmp_path))
-        finally:
-            loop.close()
+        # Run in a real OS thread so gevent's event loop doesn't interfere
+        from concurrent.futures import ThreadPoolExecutor
+
+        def _tts_bytes_in_thread():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                loop.run_until_complete(_synthesize(text, voice, tmp_path))
+            finally:
+                loop.close()
+                asyncio.set_event_loop(None)
+
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            executor.submit(_tts_bytes_in_thread).result(timeout=30)
 
         with open(tmp_path, "rb") as f:
             audio_bytes = f.read()
