@@ -11,17 +11,12 @@ from pathlib import Path
 # =========================================================
 # GEVENT MONKEY-PATCH — must happen before ALL other imports
 # when running under gunicorn with GeventWebSocketWorker.
-# The gevent worker already calls monkey.patch_all() itself,
-# so we only patch if running outside gunicorn (local dev).
+# The gevent worker already calls monkey.patch_all() itself.
+# We do NOT call it again here to avoid the double-patch warning.
+# This block is intentionally left as a no-op — gevent patching
+# is handled entirely by the gunicorn worker.
 # =========================================================
-try:
-    from gevent import monkey as _gevent_monkey
-    if not _gevent_monkey.is_module_patched("socket"):
-        # Not yet patched — patch now (local dev / non-gevent server)
-        _gevent_monkey.patch_all(thread=False)
-    # If already patched by gunicorn worker, skip to avoid double-patch warning
-except ImportError:
-    pass  # Not running under gevent
+# (gevent monkey-patching handled by GeventWebSocketWorker)
 
 # Load .env FIRST — before any other project imports read os.environ
 from dotenv import load_dotenv
