@@ -25,9 +25,9 @@ flask-sock==0.7.0
 simple-websocket==1.1.0
 
 # Production WSGI server (required for Render deployment)
+# gthread worker supports flask-sock WebSockets natively without gevent.
+# gevent 24.11.1 explicitly asserts sys.version_info < (3,13) and crashes on Python 3.14.
 gunicorn==23.0.0
-gevent==24.11.1          # Async worker for WebSocket support on gunicorn
-gevent-websocket==0.10.1 # Gevent WebSocket worker class
 
 # ML intent classifier
 scikit-learn==1.6.1
